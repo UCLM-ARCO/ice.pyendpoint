@@ -7,7 +7,8 @@ import Ice
 
 class Client(Ice.Application):
     def run(self, args):
-        pass
+        ic = self.communicator()
+        proxy = ic.stringToProxy("ObjectId -o:example -h 127.0.0.1 -p 9999")
 
 
 if __name__ == "__main__":

@@ -1,16 +1,18 @@
 # -*- mode: makefile-gmake; coding: utf-8 -*-
 
-CXX     = g++
-LDFLAGS = -L.
+CXX      = g++
+CXXFLAGS = -ggdb
+LDFLAGS  = -L.
 
-LIB     = libIcePyEndpoint.so.34
+OBJS     = PluginI.o Instance.o EndpointI.o
+LIB      = libIcePyEndpoint.so.34
 
 
 all: $(LIB)
 
-$(LIB): PluginI.cpp
+$(LIB): $(OBJS)
 	$(CXX) -o $@ -fPIC -shared $^
-	ln -s $@ $(LIB:%.34=%)
+	ln -sf $@ $(LIB:%.34=%)
 
 
 .PHONY: clean

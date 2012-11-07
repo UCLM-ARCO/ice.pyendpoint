@@ -1,2 +1,2 @@
 # -*- mode: conf; coding: utf-8 -*-
-Ice.Plugin.PyEndpoint = PyEndpoint:addPyEndpointSupport
+Ice.Plugin.PyEndpoint = IcePyEndpoint:addPyEndpointSupport

@@ -1,0 +1,10 @@
+You will need to build the library:
+
+ $ make
+ [...]
+
+And set the LD_LIBRARY_PATH:
+
+ $ cd src/
+ $ export LD_LIBRARY_PATH=$(pwd)
+
