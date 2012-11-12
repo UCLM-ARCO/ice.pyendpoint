@@ -60,11 +60,8 @@ PyEndpoint::EndpointFactoryI::protocol() const {
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::create(const std::string& info, bool oaEndpoint) const {
 
-    // return new EndpointI(_instance, str, oaEndpoint);
-    std::cout << "ARG: " << info << std::endl;
-    std::cout << "OA: " << oaEndpoint << std::endl;
-
-    return NULL;
+    PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "create", args);
+    //return new EndpointI(pyEndpoint, _instance, info, oaEndpoint);
 }
 
 IceInternal::EndpointIPtr

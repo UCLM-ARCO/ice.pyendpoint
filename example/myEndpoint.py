@@ -11,4 +11,8 @@ class EndpointFactory(object):
         print "PYTHON EndpointFactory.protocol()"
         return "example"
 
+    def create(self, info, oaEndpoint):
+        print "PYTHON EndpointFactory.create()"
+
+
 
