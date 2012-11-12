@@ -1,0 +1,102 @@
+// -*- mode: c++; coding: utf-8 -*-
+
+//
+// Copyright (c) 2012 Oscar Aceña. All rights reserved.
+//
+// This file is part of PyEndpoint
+//
+// PyEndpoint is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// PyEndpoint is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with PyEndpoint.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+#include <Python.h>
+#include "PyFunctions.h"
+
+PyObjectPtr
+PyFunc::importModule(std::string name) {
+    PyObjectPtr nameObj = PyString_FromString(name.c_str());
+    PyObjectPtr moduleObj = PyImport_Import(nameObj);
+
+    if (not moduleObj) {
+	PyErr_Print();
+	throw RuntimeError();
+    }
+
+    return moduleObj;
+}
+
+PyObjectPtr
+PyFunc::getClass(PyObjectPtr module, std::string name) {
+    PyObjectPtr classObj = PyObject_GetAttrString(module, name.c_str());
+    if (not classObj) {
+    	PyErr_Print();
+    	throw RuntimeError();
+    }
+
+    if (not PyType_Check(classObj)) {
+    	std::cerr << name << " is not a class or a valid type" << std::endl;
+    	throw RuntimeError();
+    }
+
+    return classObj;
+}
+
+PyObjectPtr
+PyFunc::newInstance(PyObjectPtr cls) {
+    if (not PyCallable_Check(cls)) {
+	std::cerr << "Object is not callable!" << std::endl;
+	throw RuntimeError();
+    }
+
+    PyObjectPtr instance = PyObject_CallObject(cls, NULL);
+    if (not instance) {
+    	PyErr_Print();
+    	throw RuntimeError();
+    }
+
+    return instance;
+}
+
+PyObjectPtr
+PyFunc::callMethod(PyObjectPtr object, std::string name) {
+    PyObjectPtr result = PyObject_CallMethod(object, (char*)name.c_str(), NULL);
+    if (not result) {
+     	PyErr_Print();
+    	throw PyFunc::RuntimeError();
+    }
+
+    return result;
+}
+
+std::string
+PyFunc::getAsString(PyObjectPtr value) {
+    std::string retval = PyString_AsString(value);
+    if (PyErr_Occurred()) {
+     	PyErr_Print();
+    	throw PyFunc::RuntimeError();
+    }
+
+    return retval;
+}
+
+int
+PyFunc::getAsInteger(PyObjectPtr value) {
+    int retval = PyInt_AsLong(value);
+    if (PyErr_Occurred()) {
+     	PyErr_Print();
+    	throw PyFunc::RuntimeError();
+    }
+
+    return retval;
+}
+
