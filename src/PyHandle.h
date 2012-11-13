@@ -35,27 +35,50 @@ template<typename T>
 class PyHandle {
 public:
     PyHandle(T* p = NULL) {
+	std::cout << "PyHandle::PyHandle(T* p = " << p << ")"
+		  << " [" << (p ? p->ob_refcnt : -1) << "]"
+		  << std::endl;
+
 	_ptr = p;
     }
 
     PyHandle(const PyHandle& other) {
+	std::cout << "PyHandle::PyHandle(PyHandle& other = (_ptr) "
+		  << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1) << "]"
+		  << std::endl;
+
+	PyGILEnsurer e;
+	if (other._ptr && other._ptr->ob_refcnt < 1) {
+	    std::cerr << "PyHandle ERROR: BadPointer (" << other._ptr
+		      << "), this python object may be already destroyed!!" << std::endl;
+	    throw;
+	}
+
 	_ptr = other._ptr;
 
 	if (_ptr) {
-	    PyGILEnsurer e;
 	    Py_INCREF(_ptr);
 	}
     }
 
     ~PyHandle() {
+	std::cout << "PyHandle::~PyHandle() (_ptr) = " << _ptr
+		  << " [" << (_ptr ? _ptr->ob_refcnt : -1) << "]"
+		  << std::endl;
+
 	PyGILEnsurer e;
 	Py_XDECREF(_ptr);
     }
 
     PyHandle& operator=(const PyHandle& other) {
+	std::cout << "PyHandle::operator=(PyHandle& other)"
+		  << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1) << "]"
+		  << std::endl;
+
+	PyGILEnsurer e;
+
 	if (_ptr != other._ptr) {
 	    if (other._ptr) {
-		PyGILEnsurer e;
 		Py_INCREF(other._ptr);
 
 		T* ptr = this->_ptr;
@@ -66,7 +89,7 @@ public:
 	return *this;
     }
 
-    T* get() {
+    T* get() const {
 	return _ptr;
     }
 
@@ -76,8 +99,7 @@ public:
 
     T* operator->() const {
 	if (not _ptr) {
-	    std::cout << __FILE__ << ":" << __LINE__
-		      << ": ERROR, using NullHandle" << std::endl;
+	    std::cerr << "NullHandleException: trying to use null pointer" << std::endl;
 	    throw;
 	}
 	return _ptr;

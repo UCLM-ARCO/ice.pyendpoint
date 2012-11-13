@@ -43,10 +43,7 @@ PyEndpoint::EndpointFactoryI::EndpointFactoryI(const InstancePtr& instance) {
 }
 
 PyEndpoint::EndpointFactoryI::~EndpointFactoryI() {
-
-    PyGILEnsurer e;
-    PyObject* ref = _pyFactory.get();
-    Py_CLEAR(ref);
+    std::cout << " - call to ~EndpointFactoryI()" << std::endl;
 }
 
 Ice::Short
@@ -65,16 +62,21 @@ PyEndpoint::EndpointFactoryI::protocol() const {
 
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::create(const std::string& info, bool oaEndpoint) const {
+    std::cout << " - call to EndpointFactoryI.create()" << std::endl;
 
     PyObjectPtr args = Py_BuildValue("sb", info.c_str(), oaEndpoint);
     PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "create", args);
+
+    std::cout << "pyEndpoint @ " << pyEndpoint.get() << std::endl;
+    std::cout << " - now copy..." << std::endl;
+
     return new EndpointI(pyEndpoint);
 }
 
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::read(IceInternal::BasicStream*) const {
-
-    std::cout << "EndpointFactoryI.read() NOT IMPLEMENTED!!" << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
     throw;
 }
 
@@ -86,13 +88,13 @@ PyEndpoint::EndpointFactoryI::destroy() {
 
 PyEndpoint::EndpointI::EndpointI(PyObjectPtr pyEndpoint) :
     _pyEndpoint(pyEndpoint) {
+
+    std::cout << " - ok" << std::endl;
+    std::cout << " - this: " << this << std::endl;
 }
 
 PyEndpoint::EndpointI::~EndpointI() {
-
-    PyGILEnsurer e;
-    PyObject* ref = _pyEndpoint.get();
-    Py_CLEAR(ref);
+    std::cout << "call to ~EndpointI()" << std::endl;
 }
 
 void
@@ -160,16 +162,20 @@ PyEndpoint::EndpointI::compress(bool) const {
 
 bool
 PyEndpoint::EndpointI::datagram() const {
-    std::cout << __FILE__ << ":" << __LINE__
-	      << " NOT IMPLEMENTED!!" << std::endl;
-    throw;
+
+    std::cout << " - datagram() pyEndpoint @ " << _pyEndpoint.get() << std::endl;
+    std::cout << " - this: " << this << std::endl;
+    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "datagram");
+    return PyFunc::getAsBool(result);
 }
 
 bool
 PyEndpoint::EndpointI::secure() const {
-    std::cout << __FILE__ << ":" << __LINE__
-	      << " NOT IMPLEMENTED!!" << std::endl;
-    throw;
+
+    std::cout << " - secure() pyEndpoint @ " << _pyEndpoint.get() << std::endl;
+    std::cout << " - this: " << this << std::endl;
+    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "secure");
+    return PyFunc::getAsBool(result);
 }
 
 bool
@@ -188,8 +194,17 @@ PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr&) const {
 
 std::vector<IceInternal::ConnectorPtr>
 PyEndpoint::EndpointI::connectors() const {
-    std::cout << __FILE__ << ":" << __LINE__
-	      << " NOT IMPLEMENTED!!" << std::endl;
+    // std::cout << __FILE__ << ":" << __LINE__
+    //  	      << " NOT IMPLEMENTED!!" << std::endl;
+
+    por alguna razon, aqui _pyEndpoint es un objeto distinto, que no tiene
+	las estructuras correctamente inicializadas
+
+    std::cout << " - connectors() pyEndpoint @ " << _pyEndpoint.get() << std::endl;
+    std::cout << " - this: " << this << std::endl;
+    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "connectors");
+
+    std::cout << "OK, IT MAY WORK!!" << std::endl;
     throw;
 }
 

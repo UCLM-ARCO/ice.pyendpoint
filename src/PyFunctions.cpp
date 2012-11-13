@@ -113,17 +113,9 @@ PyFunc::callMethod(PyObjectPtr object, std::string name, PyObjectPtr args) {
     return result;
 }
 
-std::string
-PyFunc::getAsString(PyObjectPtr value) {
-    PyGILEnsurer e;
-
-    std::string retval = PyString_AsString(value);
-    if (PyErr_Occurred()) {
-     	PyErr_Print();
-    	throw PyFunc::RuntimeError();
-    }
-
-    return retval;
+bool
+PyFunc::getAsBool(PyObjectPtr value) {
+    return getAsInteger(value);
 }
 
 int
@@ -139,3 +131,15 @@ PyFunc::getAsInteger(PyObjectPtr value) {
     return retval;
 }
 
+std::string
+PyFunc::getAsString(PyObjectPtr value) {
+    PyGILEnsurer e;
+
+    std::string retval = PyString_AsString(value);
+    if (PyErr_Occurred()) {
+     	PyErr_Print();
+    	throw PyFunc::RuntimeError();
+    }
+
+    return retval;
+}

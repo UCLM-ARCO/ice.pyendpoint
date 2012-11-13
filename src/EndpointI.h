@@ -66,6 +66,7 @@ private:
     PyObjectPtr _pyEndpoint;
 };
 
+
 class EndpointFactoryI : public IceInternal::EndpointFactory {
 public:
 
