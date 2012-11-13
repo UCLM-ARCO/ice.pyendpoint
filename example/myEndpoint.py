@@ -1,18 +1,26 @@
 # -*- mode: python; coding: utf-8 -*-
 
 ENDPOINT_TYPE = 10
+ENDPOINT_PROTO = "example"
 
-class EndpointFactory(object):
+
+class EndpointFactoryI(object):
     def type(self):
-        print "PYTHON EndpointFactory.type()"
         return ENDPOINT_TYPE
 
     def protocol(self):
-        print "PYTHON EndpointFactory.protocol()"
-        return "example"
+        return ENDPOINT_PROTO
 
-    def create(self, info, oaEndpoint):
-        print "PYTHON EndpointFactory.create()"
+    def create(self, strEndpoint, oaEndpoint):
+        return ExampleEndpointI(strEndpoint)
+
+    def destroy(self):
+        pass
 
 
+class ExampleEndpointI(object):
+    def __init__(self, strEndpoint):
+        self.strEndpoint = strEndpoint
 
+    def toString(self):
+        return ENDPOINT_PROTO + self.strEndpoint

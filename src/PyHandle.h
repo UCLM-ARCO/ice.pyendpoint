@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <Python.h>
+#include "PyUtils.h"
 
 // Note: use only with functions wich returns new references. If
 // function's return value is a borrowed reference, this will cause
@@ -41,17 +42,20 @@ public:
 	_ptr = other._ptr;
 
 	if (_ptr) {
+	    PyGILEnsurer e;
 	    Py_INCREF(_ptr);
 	}
     }
 
     ~PyHandle() {
+	PyGILEnsurer e;
 	Py_XDECREF(_ptr);
     }
 
     PyHandle& operator=(const PyHandle& other) {
 	if (_ptr != other._ptr) {
 	    if (other._ptr) {
+		PyGILEnsurer e;
 		Py_INCREF(other._ptr);
 
 		T* ptr = this->_ptr;

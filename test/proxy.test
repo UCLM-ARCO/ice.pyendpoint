@@ -1,0 +1,26 @@
+# -*- mode: python; coding: utf-8 -*-
+
+import sys
+import Ice
+from unittest import TestCase
+from hamcrest import assert_that, equal_to
+
+
+class ProxyTest(TestCase):
+    def setUp(self):
+        args = ["--Ice.Config=$fulltestdir/test.cfg"]
+        self.ic = Ice.initialize(args)
+
+    def test_create_proxy(self):
+        str_proxy = "OID -o:test -a param1 -b param2"
+        proxy = self.ic.stringToProxy(str_proxy)
+
+    def test_string_representation_of_proxy_is_correct(self):
+        str_proxy = "OID -o:test -a param1 -b param2"
+        proxy = self.ic.stringToProxy(str_proxy)
+        assert_that(self.ic.proxyToString(proxy), equal_to(str_proxy))
+
+
+
+
+UnitTestCase()

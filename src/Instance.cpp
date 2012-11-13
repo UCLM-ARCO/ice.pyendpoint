@@ -20,7 +20,6 @@
 //
 
 #include <Python.h>
-
 #include <Ice/ProtocolPluginFacade.h>
 
 #include "PyFunctions.h"

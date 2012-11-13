@@ -19,7 +19,6 @@
 // along with PyEndpoint.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-
 #ifndef PYENDPOINT_ENDPOINT_I_H
 #define PYENDPOINT_ENDPOINT_I_H
 
@@ -35,55 +34,36 @@ namespace PyEndpoint {
 class EndpointI : public IceInternal::EndpointI {
 public:
 
-//     XbowEndpointI(const IceXbow::InstancePtr&, const std::string&, Ice::Int, const std::string&, Ice::Int,
-// 		 Ice::Byte, Ice::Byte, Ice::Byte, Ice::Byte, bool, const std::string&, bool);
-//     XbowEndpointI(const IceXbow::InstancePtr&, const std::string&, bool);
-//     XbowEndpointI(const IceXbow::InstancePtr&, BasicStream*);
+    EndpointI(PyObjectPtr pyEndpoint);
+    ~EndpointI();
 
-//     virtual void streamWrite(BasicStream*) const;
-//     virtual std::string toString() const;
-//     virtual Ice::Short type() const;
-//     virtual Ice::Int timeout() const;
-//     virtual EndpointIPtr timeout(Ice::Int) const;
-//     virtual EndpointIPtr connectionId(const ::std::string&) const;
-//     virtual bool compress() const;
-//     virtual EndpointIPtr compress(bool) const;
-//     virtual bool datagram() const;
-//     virtual bool secure() const;
-//     virtual bool unknown() const;
-//     virtual TransceiverPtr transceiver(EndpointIPtr&) const;
-//     virtual std::vector<ConnectorPtr> connectors() const;
-//     virtual void connectors_async(const EndpointI_connectorsPtr&) const;
-//     virtual AcceptorPtr acceptor(EndpointIPtr&, const std::string&) const;
-//     virtual std::vector<EndpointIPtr> expand() const;
-//     virtual bool equivalent(const EndpointIPtr&) const;
+    virtual void streamWrite(IceInternal::BasicStream*) const;
+    virtual std::string toString() const;
+    virtual Ice::EndpointInfoPtr getInfo() const;
+    virtual Ice::Short type() const;
+    virtual Ice::Int timeout() const;
+    virtual IceInternal::EndpointIPtr timeout(Ice::Int) const;
+    virtual IceInternal::EndpointIPtr connectionId(const ::std::string&) const;
+    virtual bool compress() const;
+    virtual IceInternal::EndpointIPtr compress(bool) const;
+    virtual bool datagram() const;
+    virtual bool secure() const;
+    virtual bool unknown() const;
+    virtual IceInternal::TransceiverPtr transceiver(IceInternal::EndpointIPtr&) const;
+    virtual std::vector<IceInternal::ConnectorPtr> connectors() const;
+    virtual void connectors_async(const IceInternal::EndpointI_connectorsPtr&) const;
+    virtual IceInternal::AcceptorPtr acceptor(IceInternal::EndpointIPtr&,
+					      const std::string&) const;
+    virtual std::vector<IceInternal::EndpointIPtr> expand() const;
+    virtual bool equivalent(const IceInternal::EndpointIPtr&) const;
 
-//     virtual bool operator==(const EndpointI&) const;
-//     virtual bool operator!=(const EndpointI&) const;
-//     virtual bool operator<(const EndpointI&) const;
+    virtual bool operator==(const IceInternal::EndpointI&) const;
+    virtual bool operator!=(const IceInternal::EndpointI&) const;
+    virtual bool operator<(const IceInternal::EndpointI&) const;
 
-// private:
+private:
 
-//     virtual std::vector<ConnectorPtr> connectors(const std::vector<struct sockaddr_storage>&) const;
-
-//     //
-//     // All members are const, because endpoints are immutable.
-//     //
-//     const IceXbow::InstancePtr _instance;
-//     const std::string _host;
-//     const Ice::Int _port;
-//     const std::string _mcastInterface;
-//     const Ice::Int _mcastTtl;
-//     const Ice::Byte _protocolMajor;
-//     const Ice::Byte _protocolMinor;
-//     const Ice::Byte _encodingMajor;
-//     const Ice::Byte _encodingMinor;
-//     const bool _connect;
-//     const std::string _connectionId;
-//     const bool _compress;
-
-//     // Remove this
-//     Ice::LoggerPtr _logger;
+    PyObjectPtr _pyEndpoint;
 };
 
 class EndpointFactoryI : public IceInternal::EndpointFactory {

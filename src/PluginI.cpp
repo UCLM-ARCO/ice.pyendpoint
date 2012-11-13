@@ -20,6 +20,7 @@
 //
 
 #include <Python.h>
+#include "PyFunctions.h"
 #include "PluginI.h"
 #include "Instance.h"
 
@@ -38,6 +39,7 @@ addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
 
 // Plugin interface
 PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic) {
+    PyEval_InitThreads();
     Py_Initialize();
     _instance = new Instance(ic);
 }

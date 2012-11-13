@@ -30,9 +30,18 @@ namespace PyFunc {
     class RuntimeError { };
 
     PyObjectPtr importModule(std::string name);
-    PyObjectPtr getClass(PyObjectPtr module, std::string name);
+
+    PyObjectPtr getClass(PyObjectPtr module,
+			 std::string name);
+    PyObjectPtr getMethod(PyObjectPtr classObj,
+			  std::string name);
     PyObjectPtr newInstance(PyObjectPtr cls);
-    PyObjectPtr callMethod(PyObjectPtr object, std::string name);
+
+    PyObjectPtr callMethod(PyObjectPtr object,
+			   std::string name);
+    PyObjectPtr callMethod(PyObjectPtr object,
+			   std::string name,
+			   PyObjectPtr args);
 
     int getAsInteger(PyObjectPtr value);
     std::string getAsString(PyObjectPtr value);

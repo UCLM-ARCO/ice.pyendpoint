@@ -21,9 +21,12 @@
 
 #include <Python.h>
 #include "PyFunctions.h"
+#include "PyUtils.h"
 
 PyObjectPtr
 PyFunc::importModule(std::string name) {
+    PyGILEnsurer e;
+
     PyObjectPtr nameObj = PyString_FromString(name.c_str());
     PyObjectPtr moduleObj = PyImport_Import(nameObj);
 
@@ -37,6 +40,8 @@ PyFunc::importModule(std::string name) {
 
 PyObjectPtr
 PyFunc::getClass(PyObjectPtr module, std::string name) {
+    PyGILEnsurer e;
+
     PyObjectPtr classObj = PyObject_GetAttrString(module, name.c_str());
     if (not classObj) {
     	PyErr_Print();
@@ -52,7 +57,28 @@ PyFunc::getClass(PyObjectPtr module, std::string name) {
 }
 
 PyObjectPtr
+PyFunc::getMethod(PyObjectPtr classObj, std::string name) {
+    PyGILEnsurer e;
+
+    if (not PyObject_HasAttrString(classObj, name.c_str())) {
+	std::cerr << "object has not attribute '" << name << "'" << std::endl;
+    	throw RuntimeError();
+    }
+
+    PyObjectPtr method = PyObject_GetAttrString(classObj, name.c_str());
+    if (not PyCallable_Check(method)) {
+    	std::cerr << name << " is not a valid method (is not callable)"
+		  << std::endl;
+    	throw RuntimeError();
+    }
+
+    return method;
+}
+
+PyObjectPtr
 PyFunc::newInstance(PyObjectPtr cls) {
+    PyGILEnsurer e;
+
     if (not PyCallable_Check(cls)) {
 	std::cerr << "Object is not callable!" << std::endl;
 	throw RuntimeError();
@@ -69,10 +95,19 @@ PyFunc::newInstance(PyObjectPtr cls) {
 
 PyObjectPtr
 PyFunc::callMethod(PyObjectPtr object, std::string name) {
-    PyObjectPtr result = PyObject_CallMethod(object, (char*)name.c_str(), NULL);
+    return callMethod(object, name, NULL);
+}
+
+PyObjectPtr
+PyFunc::callMethod(PyObjectPtr object, std::string name, PyObjectPtr args) {
+    PyGILEnsurer e;
+
+    PyObjectPtr method = getMethod(object, name);
+    PyObjectPtr result = PyObject_CallObject(method, args);
+
     if (not result) {
-     	PyErr_Print();
-    	throw PyFunc::RuntimeError();
+      	PyErr_Print();
+	throw PyFunc::RuntimeError();
     }
 
     return result;
@@ -80,6 +115,8 @@ PyFunc::callMethod(PyObjectPtr object, std::string name) {
 
 std::string
 PyFunc::getAsString(PyObjectPtr value) {
+    PyGILEnsurer e;
+
     std::string retval = PyString_AsString(value);
     if (PyErr_Occurred()) {
      	PyErr_Print();
@@ -91,6 +128,8 @@ PyFunc::getAsString(PyObjectPtr value) {
 
 int
 PyFunc::getAsInteger(PyObjectPtr value) {
+    PyGILEnsurer e;
+
     int retval = PyInt_AsLong(value);
     if (PyErr_Occurred()) {
      	PyErr_Print();

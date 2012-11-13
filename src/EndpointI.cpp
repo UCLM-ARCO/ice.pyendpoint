@@ -22,6 +22,8 @@
 #include <Python.h>
 #include "PyHandle.h"
 #include "PyFunctions.h"
+#include "PyUtils.h"
+
 #include "Instance.h"
 #include "EndpointI.h"
 
@@ -36,11 +38,15 @@ PyEndpoint::EndpointFactoryI::EndpointFactoryI(const InstancePtr& instance) {
     }
 
     PyObjectPtr module = PyFunc::importModule(moduleName);
-    PyObjectPtr factoryClass = PyFunc::getClass(module, "EndpointFactory");
+    PyObjectPtr factoryClass = PyFunc::getClass(module, "EndpointFactoryI");
     _pyFactory = PyFunc::newInstance(factoryClass);
 }
 
 PyEndpoint::EndpointFactoryI::~EndpointFactoryI() {
+
+    PyGILEnsurer e;
+    PyObject* ref = _pyFactory.get();
+    Py_CLEAR(ref);
 }
 
 Ice::Short
@@ -60,17 +66,179 @@ PyEndpoint::EndpointFactoryI::protocol() const {
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::create(const std::string& info, bool oaEndpoint) const {
 
+    PyObjectPtr args = Py_BuildValue("sb", info.c_str(), oaEndpoint);
     PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "create", args);
-    //return new EndpointI(pyEndpoint, _instance, info, oaEndpoint);
+    return new EndpointI(pyEndpoint);
 }
 
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::read(IceInternal::BasicStream*) const {
+
     std::cout << "EndpointFactoryI.read() NOT IMPLEMENTED!!" << std::endl;
     throw;
 }
 
 void
 PyEndpoint::EndpointFactoryI::destroy() {
+
+    PyFunc::callMethod(_pyFactory, "destroy");
+}
+
+PyEndpoint::EndpointI::EndpointI(PyObjectPtr pyEndpoint) :
+    _pyEndpoint(pyEndpoint) {
+}
+
+PyEndpoint::EndpointI::~EndpointI() {
+
+    PyGILEnsurer e;
+    PyObject* ref = _pyEndpoint.get();
+    Py_CLEAR(ref);
+}
+
+void
+PyEndpoint::EndpointI::streamWrite(IceInternal::BasicStream*) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+std::string
+PyEndpoint::EndpointI::toString() const {
+
+    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "toString");
+    return PyFunc::getAsString(result);
+}
+
+Ice::EndpointInfoPtr
+PyEndpoint::EndpointI::getInfo() const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+Ice::Short
+PyEndpoint::EndpointI::type() const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+Ice::Int
+PyEndpoint::EndpointI::timeout() const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+IceInternal::EndpointIPtr
+PyEndpoint::EndpointI::timeout(Ice::Int) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+IceInternal::EndpointIPtr
+PyEndpoint::EndpointI::connectionId(const ::std::string&) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+bool
+PyEndpoint::EndpointI::compress() const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+IceInternal::EndpointIPtr
+PyEndpoint::EndpointI::compress(bool) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+bool
+PyEndpoint::EndpointI::datagram() const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+bool
+PyEndpoint::EndpointI::secure() const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+bool
+PyEndpoint::EndpointI::unknown() const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+IceInternal::TransceiverPtr
+PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr&) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+std::vector<IceInternal::ConnectorPtr>
+PyEndpoint::EndpointI::connectors() const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+void
+PyEndpoint::EndpointI::connectors_async(const IceInternal::EndpointI_connectorsPtr&) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+IceInternal::AcceptorPtr
+PyEndpoint::EndpointI::acceptor(IceInternal::EndpointIPtr&, const std::string&) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+std::vector<IceInternal::EndpointIPtr>
+PyEndpoint::EndpointI::expand() const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+bool
+PyEndpoint::EndpointI::equivalent(const IceInternal::EndpointIPtr&) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+bool
+PyEndpoint::EndpointI::operator==(const IceInternal::EndpointI&) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+bool
+PyEndpoint::EndpointI::operator!=(const IceInternal::EndpointI&) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
+}
+
+bool
+PyEndpoint::EndpointI::operator<(const IceInternal::EndpointI&) const {
+    std::cout << __FILE__ << ":" << __LINE__
+	      << " NOT IMPLEMENTED!!" << std::endl;
+    throw;
 }
 
