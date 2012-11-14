@@ -27,6 +27,7 @@
 #include "PyHandle.h"
 #include "Ice/EndpointI.h"
 #include "InstanceF.h"
+#include "ConnectorsCallback.h"
 
 
 namespace PyEndpoint {

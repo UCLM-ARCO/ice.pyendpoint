@@ -1,19 +1,21 @@
 # -*- mode: makefile-gmake; coding: utf-8 -*-
 
-CXX      = g++
+CXX        = g++
 
-CXXFLAGS = -I. -Wall $$(python-config --includes) -ggdb
-LDFLAGS  = -L. $$(python-config --ldflags)
+DEBUG_OPS ?= -DDEBUG -ggdb
+CXXFLAGS   = -I. -Wall $$(python-config --includes) $(DEBUG_OPS)
+LDFLAGS    = -L. $$(python-config --ldflags) \
+	     -W1,--export-dynamic -fPIC -shared
 
-
-OBJS     = PluginI.o Instance.o EndpointI.o PyFunctions.o
-LIB      = libIcePyEndpoint.so.34
+OBJS       = PluginI.o Instance.o EndpointI.o PyFunctions.o ConnectorsCallback.o \
+	     ConnectorI.o
+LIB        = libIcePyEndpoint.so.34
 
 
 all: $(LIB)
 
 $(LIB): $(OBJS)
-	$(CXX) $(LDFLAGS) -o $@ -fPIC -shared $^
+	$(CXX) $(LDFLAGS)  -o $@ $^
 	ln -sf $@ $(LIB:%.34=%)
 
 

@@ -24,6 +24,7 @@
 
 #include "PluginI.h"
 #include "Instance.h"
+#include "ConnectorsCallback.h"
 
 // loader function
 extern "C" {
@@ -41,6 +42,7 @@ addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
 
 // Plugin interface.
 PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic) {
+
     PyEval_InitThreads();
     Py_Initialize();
     _instance = new Instance(ic);
@@ -48,11 +50,15 @@ PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic) {
 
 void
 PyEndpoint::PluginI::initialize() {
+
+    ConnectorsCallback_initModule();
+
     _instance->initialize();
 }
 
 void
 PyEndpoint::PluginI::destroy() {
+
     _instance->destroy();
     _instance = 0;
 }

@@ -22,21 +22,27 @@
 #include <Python.h>
 #include <Ice/Communicator.h>
 #include <Ice/Properties.h>
+#include <Ice/LocalException.h>
 
 #include "PyFunctions.h"
 #include "EndpointI.h"
 #include "Instance.h"
+#include "debug.h"
 
 
 PyEndpoint::EndpointI::EndpointI(const InstancePtr& instance, PyObjectPtr pyEndpoint) :
     _instance(instance),
     _pyEndpoint(pyEndpoint) {
 
-    std::cout << " - call to EndpointI() [1]" << std::endl;
+    IDG std::cout << " - call to EndpointI() [1] (this: "
+		  << this << ")" << std::endl;
 }
 
 void
 PyEndpoint::EndpointI::streamWrite(IceInternal::BasicStream* s) const {
+
+    IDG std::cout << " - call to EndpointI::streamWrite(s) [1] (this: "
+		  << this << ")" << std::endl;
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << " NOT IMPLEMENTED!!" << std::endl;
@@ -46,12 +52,18 @@ PyEndpoint::EndpointI::streamWrite(IceInternal::BasicStream* s) const {
 std::string
 PyEndpoint::EndpointI::toString() const {
 
+    IDG std::cout << " - call to EndpointI::toString() (this: "
+		  << this << ")" << std::endl;
+
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "toString");
     return PyFunc::getAsString(result);
 }
 
 Ice::EndpointInfoPtr
 PyEndpoint::EndpointI::getInfo() const {
+
+    IDG std::cout << " - call to EndpointI::getInfo() (this: "
+		  << this << ")" << std::endl;
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
@@ -61,7 +73,8 @@ PyEndpoint::EndpointI::getInfo() const {
 Ice::Short
 PyEndpoint::EndpointI::type() const {
 
-    std::cout << " - call to type() this: " << this << std::endl;
+    IDG std::cout << " - call to EndpointI::type() (this: "
+		  << this << ")" << std::endl;
 
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "type");
     return PyFunc::getAsInteger(result);
@@ -70,7 +83,8 @@ PyEndpoint::EndpointI::type() const {
 Ice::Int
 PyEndpoint::EndpointI::timeout() const {
 
-    std::cout << " - call to timeout() this: " << this << std::endl;
+    IDG std::cout << " - call to EndpointI::timeout() (this: "
+		  << this << ")" << std::endl;
 
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "timeout");
     return PyFunc::getAsInteger(result);
@@ -78,6 +92,10 @@ PyEndpoint::EndpointI::timeout() const {
 
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointI::timeout(Ice::Int timeout) const {
+
+    IDG std::cout << " - call to EndpointI::timeout("
+		  << timeout << ") (this: "
+		  << this << ")" << std::endl;
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
@@ -87,6 +105,10 @@ PyEndpoint::EndpointI::timeout(Ice::Int timeout) const {
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointI::connectionId(const std::string& connectionId) const {
 
+    IDG std::cout << " - call to EndpointI::connectionId('"
+		  << connectionId << "') (this: "
+		  << this << ")" << std::endl;
+
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
     throw;
@@ -95,7 +117,8 @@ PyEndpoint::EndpointI::connectionId(const std::string& connectionId) const {
 bool
 PyEndpoint::EndpointI::compress() const {
 
-    std::cout << " - call to compress() this: " << this << std::endl;
+    IDG std::cout << " - call to EndpointI::compress() (this: "
+		  << this << ")" << std::endl;
 
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "timeout");
     return PyFunc::getAsBool(result);
@@ -103,6 +126,10 @@ PyEndpoint::EndpointI::compress() const {
 
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointI::compress(bool compress) const {
+
+    IDG std::cout << " - call to EndpointI::compress("
+		  << compress << ") (this: "
+		  << this << ")" << std::endl;
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
@@ -112,7 +139,8 @@ PyEndpoint::EndpointI::compress(bool compress) const {
 bool
 PyEndpoint::EndpointI::datagram() const {
 
-    std::cout << " - call to datagram() this: " << this << std::endl;
+    IDG std::cout << " - call to EndpointI::datagram() (this: "
+		  << this << ")" << std::endl;
 
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "datagram");
     return PyFunc::getAsBool(result);
@@ -121,7 +149,8 @@ PyEndpoint::EndpointI::datagram() const {
 bool
 PyEndpoint::EndpointI::secure() const {
 
-    std::cout << " - call to secure() this: " << this << std::endl;
+    IDG std::cout << " - call to EndpointI::secure() (this: "
+		  << this << ")" << std::endl;
 
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "secure");
     return PyFunc::getAsBool(result);
@@ -129,6 +158,9 @@ PyEndpoint::EndpointI::secure() const {
 
 IceInternal::TransceiverPtr
 PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr& endp) const {
+
+    IDG std::cout << " - call to EndpointI::transceiver(endp) (this: "
+		  << this << ")" << std::endl;
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
@@ -138,23 +170,34 @@ PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr& endp) const {
 std::vector<IceInternal::ConnectorPtr>
 PyEndpoint::EndpointI::connectors() const {
 
+    IDG std::cout << " - call to EndpointI::connectors() (this: "
+		  << this << ")" << std::endl;
+
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
     throw;
 }
 
 void
-PyEndpoint::EndpointI::connectors_async(const IceInternal::EndpointI_connectorsPtr& callback) const {
+PyEndpoint::EndpointI::connectors_async(const IceInternal::EndpointI_connectorsPtr& cb) const {
 
-    std::cout << " - call to connectors_async() this: " << this << std::endl;
+    IDG std::cout << " - call to EndpointI::connectors_async(callback) (this: "
+		  << this << ")" << std::endl;
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
+    PyObjectPtr pyCb = ConnectorsCallback_new(cb);
+    PyObjectPtr args = Py_BuildValue("(O)", pyCb.get());
+    PyFunc::callMethod(_pyEndpoint, "connectors_async", args);
+
+    throw Ice::UnknownException("no reason", 2);
 }
 
 IceInternal::AcceptorPtr
 PyEndpoint::EndpointI::acceptor(IceInternal::EndpointIPtr& endp, const std::string& adapterName) const {
+
+    IDG std::cout << " - call to EndpointI::acceptor(endp, '"
+		  << adapterName << "') (this: "
+		  << this << ")" << std::endl;
+
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
@@ -164,6 +207,9 @@ PyEndpoint::EndpointI::acceptor(IceInternal::EndpointIPtr& endp, const std::stri
 std::vector<IceInternal::EndpointIPtr>
 PyEndpoint::EndpointI::expand() const {
 
+    IDG std::cout << " - call to EndpointI::expand() (this: "
+		  << this << ")" << std::endl;
+
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
     throw;
@@ -172,13 +218,8 @@ PyEndpoint::EndpointI::expand() const {
 bool
 PyEndpoint::EndpointI::equivalent(const IceInternal::EndpointIPtr& endpoint) const {
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
-}
-
-bool
-PyEndpoint::EndpointI::operator==(const Ice::LocalObject& r) const {
+    IDG std::cout << " - call to EndpointI::equivalent() (this: "
+		  << this << ")" << std::endl;
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
@@ -186,7 +227,21 @@ PyEndpoint::EndpointI::operator==(const Ice::LocalObject& r) const {
 }
 
 bool
-PyEndpoint::EndpointI::operator<(const Ice::LocalObject& r) const {
+PyEndpoint::EndpointI::operator==(const Ice::LocalObject& other) const {
+
+    IDG std::cout << " - call to EndpointI::operator==(other) (this: "
+		  << this << ")" << std::endl;
+
+    std::cout << __FILE__ << ":" << __LINE__
+	      << ": Not implemented!" << std::endl;
+    throw;
+}
+
+bool
+PyEndpoint::EndpointI::operator<(const Ice::LocalObject& other) const {
+
+    IDG std::cout << " - call to EndpointI::operator<(other) (this: "
+		  << this << ")" << std::endl;
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
@@ -196,6 +251,9 @@ PyEndpoint::EndpointI::operator<(const Ice::LocalObject& r) const {
 Ice::Int
 PyEndpoint::EndpointI::hashInit() const {
 
+    IDG std::cout << " - call to EndpointI::hashInit() (this: "
+		  << this << ")" << std::endl;
+
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
     throw;
@@ -203,6 +261,9 @@ PyEndpoint::EndpointI::hashInit() const {
 
 PyEndpoint::EndpointFactoryI::EndpointFactoryI(const InstancePtr& instance) :
     _instance(instance) {
+
+    IDG std::cout << " - call to EndpointFactoryI() (this: "
+		  << this << ")" << std::endl;
 
     Ice::PropertiesPtr props = instance->communicator()->getProperties();
     std::string moduleName = props->getProperty("PyEndpoint.Module");
@@ -218,11 +279,15 @@ PyEndpoint::EndpointFactoryI::EndpointFactoryI(const InstancePtr& instance) :
 
 PyEndpoint::EndpointFactoryI::~EndpointFactoryI() {
 
-    std::cout << " - call to ~EndpointFactoryI()" << std::endl;
+    IDG std::cout << " - call to ~EndpointFactoryI() (this: "
+		  << this << ")" << std::endl;
 }
 
 Ice::Short
 PyEndpoint::EndpointFactoryI::type() const {
+
+    IDG std::cout << " - call to EndpointFactoryI::type() (this: "
+		  << this << ")" << std::endl;
 
     PyObjectPtr result = PyFunc::callMethod(_pyFactory, "type");
     return PyFunc::getAsInteger(result);
@@ -231,6 +296,9 @@ PyEndpoint::EndpointFactoryI::type() const {
 std::string
 PyEndpoint::EndpointFactoryI::protocol() const {
 
+    IDG std::cout << " - call to EndpointFactoryI::protocol() (this: "
+		  << this << ")" << std::endl;
+
     PyObjectPtr result = PyFunc::callMethod(_pyFactory, "protocol");
     return PyFunc::getAsString(result);
 }
@@ -238,7 +306,9 @@ PyEndpoint::EndpointFactoryI::protocol() const {
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::create(const std::string& str, bool oaEndpoint) const {
 
-    std::cout << " - call to EndpointFactoryI::create()" << std::endl;
+    IDG std::cout << " - call to EndpointFactoryI::create('"
+		  << str << "', " << oaEndpoint << ") (this: "
+		  << this << ")" << std::endl;
 
     PyObjectPtr args = Py_BuildValue("sb", str.c_str(), oaEndpoint);
     PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "create", args);
@@ -248,6 +318,10 @@ PyEndpoint::EndpointFactoryI::create(const std::string& str, bool oaEndpoint) co
 
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::read(IceInternal::BasicStream* s) const {
+
+    IDG std::cout << " - call to EndpointFactoryI::read(s) (this: "
+		  << this << ")" << std::endl;
+
     std::cout << __FILE__ << ":" << __LINE__
 	      << " NOT IMPLEMENTED!!" << std::endl;
     throw;
@@ -255,6 +329,9 @@ PyEndpoint::EndpointFactoryI::read(IceInternal::BasicStream* s) const {
 
 void
 PyEndpoint::EndpointFactoryI::destroy() {
+
+    IDG std::cout << " - call to EndpointFactoryI::destroy() (this: "
+		  << this << ")" << std::endl;
 
     PyFunc::callMethod(_pyFactory, "destroy");
     _instance = 0;

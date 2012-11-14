@@ -48,3 +48,13 @@ class ExampleEndpointI(object):
     def secure(self):
         print "PYTHON: EndpointI.secure()"
         return False
+
+    def connectors_async(self, callback):
+        print "PYTHON: EndpointI.connectors_async()"
+        connectors = [ConnectorI(), ConnectorI()]
+        callback.connectors(connectors)
+
+
+class ConnectorI(object):
+    pass
+

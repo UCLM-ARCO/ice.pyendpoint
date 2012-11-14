@@ -70,6 +70,14 @@ public:
 	Py_XDECREF(_ptr);
     }
 
+    static T* fromBorrowed(T* p) {
+
+	PyGILEnsurer e;
+
+	Py_INCREF(p);
+	return p;
+    }
+
     PyHandle& operator=(const PyHandle& other) {
 	// std::cout << "PyHandle::operator=(PyHandle& other)"
 	// 	  << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1) << "]"
@@ -80,10 +88,8 @@ public:
 	if (_ptr != other._ptr) {
 	    if (other._ptr) {
 		Py_INCREF(other._ptr);
-
-		T* ptr = this->_ptr;
+		Py_XDECREF(this->_ptr);
 		this->_ptr = other._ptr;
-		Py_XDECREF(ptr);
 	    }
 	}
 	return *this;
