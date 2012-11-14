@@ -20,12 +20,11 @@
 //
 
 #include <Python.h>
+#include <Ice/CommunicatorF.h>
 #include <Ice/ProtocolPluginFacade.h>
 
-#include "PyFunctions.h"
 #include "Instance.h"
 #include "EndpointI.h"
-
 
 IceUtil::Shared*
 IceInternal::upCast(PyEndpoint::Instance* p) {
@@ -47,10 +46,11 @@ PyEndpoint::Instance::initialize() {
 
 void
 PyEndpoint::Instance::destroy() {
+    _facade = 0;
 }
+
 
 Ice::CommunicatorPtr
 PyEndpoint::Instance::communicator() const {
     return _facade->getCommunicator();
 }
-

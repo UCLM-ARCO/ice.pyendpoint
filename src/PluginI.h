@@ -19,12 +19,13 @@
 // along with PyEndpoint.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
+#ifndef PYENDPOINT_PLUGIN_I_H
+#define PYENDPOINT_PLUGIN_I_H
 
-#include <Ice/Ice.h>
-#include "PyHandle.h"
 #include "InstanceF.h"
+
+#include <Ice/Plugin.h>
+#include <Ice/CommunicatorF.h>
 
 namespace PyEndpoint {
 
@@ -32,10 +33,9 @@ class PluginI : public Ice::Plugin {
 public:
 
     PluginI(const Ice::CommunicatorPtr&);
-    ~PluginI();
 
-    void initialize();
-    void destroy();
+    virtual void initialize();
+    virtual void destroy();
 
 private:
 
@@ -44,4 +44,4 @@ private:
 
 }
 
-#endif // PLUGIN_H
+#endif // PYENDPOINT_PLUGIN_I_H

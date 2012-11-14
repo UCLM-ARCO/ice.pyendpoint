@@ -22,11 +22,9 @@
 #ifndef PYENDPOINT_INSTANCE_H
 #define PYENDPOINT_INSTANCE_H
 
-#include <Ice/Communicator.h>
+#include <Ice/CommunicatorF.h>
 #include <Ice/ProtocolPluginFacadeF.h>
-#include <IceUtil/Shared.h>
 
-#include "PyHandle.h"
 #include "InstanceF.h"
 
 

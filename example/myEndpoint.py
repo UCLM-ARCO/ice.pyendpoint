@@ -12,31 +12,39 @@ class EndpointFactoryI(object):
         print "PYTHON: EndpointFactoryI.__del__()"
 
     def type(self):
+        print "PYTHON: EndpointFactoryI.type()"
         return ENDPOINT_TYPE
 
     def protocol(self):
+        print "PYTHON: EndpointFactoryI.protocol()"
         return ENDPOINT_PROTO
 
     def create(self, strEndpoint, oaEndpoint):
+        print "PYTHON: EndpointFactoryI.create('{}', '{}')".format(
+            strEndpoint, oaEndpoint)
+
         return ExampleEndpointI(strEndpoint)
 
     def destroy(self):
-        pass
+        print "PYTHON: EndpointFactoryI.destroy()"
 
 
 class ExampleEndpointI(object):
     def __init__(self, strEndpoint):
-        print "PYTHON: ExampleEndpointI.__init__()"
+        print "PYTHON: EndpointI.__init__()"
         self.strEndpoint = strEndpoint
 
     def __del__(self):
-        print "PYTHON: ExampleEndpointI.__del__()"
+        print "PYTHON: EndpointI.__del__()"
 
     def toString(self):
+        print "PYTHON: EndpointI.toString()"
         return ENDPOINT_PROTO + self.strEndpoint
 
     def datagram(self):
+        print "PYTHON: EndpointI.datagram()"
         return True
 
     def secure(self):
+        print "PYTHON: EndpointI.secure()"
         return False

@@ -35,17 +35,17 @@ template<typename T>
 class PyHandle {
 public:
     PyHandle(T* p = NULL) {
-	std::cout << "PyHandle::PyHandle(T* p = " << p << ")"
-		  << " [" << (p ? p->ob_refcnt : -1) << "]"
-		  << std::endl;
+	// std::cout << "PyHandle::PyHandle(T* p = " << p << ")"
+	// 	  << " [" << (p ? p->ob_refcnt : -1) << "]"
+	// 	  << std::endl;
 
 	_ptr = p;
     }
 
     PyHandle(const PyHandle& other) {
-	std::cout << "PyHandle::PyHandle(PyHandle& other = (_ptr) "
-		  << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1) << "]"
-		  << std::endl;
+	// std::cout << "PyHandle::PyHandle(PyHandle& other = (_ptr) "
+	// 	  << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1) << "]"
+	// 	  << std::endl;
 
 	PyGILEnsurer e;
 	if (other._ptr && other._ptr->ob_refcnt < 1) {
@@ -62,18 +62,18 @@ public:
     }
 
     ~PyHandle() {
-	std::cout << "PyHandle::~PyHandle() (_ptr) = " << _ptr
-		  << " [" << (_ptr ? _ptr->ob_refcnt : -1) << "]"
-		  << std::endl;
+	// std::cout << "PyHandle::~PyHandle() (_ptr) = " << _ptr
+	// 	  << " [" << (_ptr ? _ptr->ob_refcnt : -1) << "]"
+	// 	  << std::endl;
 
 	PyGILEnsurer e;
 	Py_XDECREF(_ptr);
     }
 
     PyHandle& operator=(const PyHandle& other) {
-	std::cout << "PyHandle::operator=(PyHandle& other)"
-		  << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1) << "]"
-		  << std::endl;
+	// std::cout << "PyHandle::operator=(PyHandle& other)"
+	// 	  << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1) << "]"
+	// 	  << std::endl;
 
 	PyGILEnsurer e;
 

@@ -20,7 +20,8 @@
 //
 
 #include <Python.h>
-#include "PyFunctions.h"
+#include <Ice/BuiltinSequences.h>
+
 #include "PluginI.h"
 #include "Instance.h"
 
@@ -33,22 +34,16 @@ ICE_DECLSPEC_EXPORT Ice::Plugin*
 addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
 		     const std::string& name,
 		     const Ice::StringSeq& args) {
-    return new PluginI(ic);
+
+    PluginI* plugin = new PluginI(ic);
+    return plugin;
 }}
 
-
-// Plugin interface
+// Plugin interface.
 PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic) {
     PyEval_InitThreads();
     Py_Initialize();
     _instance = new Instance(ic);
-}
-
-PyEndpoint::PluginI::~PluginI() {
-    // FIXME: this frees resources of Python interpreter, but it
-    // produces a segfault. why? I don't know, maybe a thread issue
-    // with Ice
-    // Py_Finalize();
 }
 
 void

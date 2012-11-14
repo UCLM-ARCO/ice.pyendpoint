@@ -22,10 +22,10 @@
 #ifndef PYENDPOINT_ENDPOINT_I_H
 #define PYENDPOINT_ENDPOINT_I_H
 
-#include <Ice/EndpointI.h>
 #include <Ice/EndpointFactory.h>
 
 #include "PyHandle.h"
+#include "Ice/EndpointI.h"
 #include "InstanceF.h"
 
 
@@ -34,8 +34,7 @@ namespace PyEndpoint {
 class EndpointI : public IceInternal::EndpointI {
 public:
 
-    EndpointI(PyObjectPtr pyEndpoint);
-    ~EndpointI();
+    EndpointI(const InstancePtr&, PyObjectPtr);
 
     virtual void streamWrite(IceInternal::BasicStream*) const;
     virtual std::string toString() const;
@@ -48,7 +47,6 @@ public:
     virtual IceInternal::EndpointIPtr compress(bool) const;
     virtual bool datagram() const;
     virtual bool secure() const;
-    virtual bool unknown() const;
     virtual IceInternal::TransceiverPtr transceiver(IceInternal::EndpointIPtr&) const;
     virtual std::vector<IceInternal::ConnectorPtr> connectors() const;
     virtual void connectors_async(const IceInternal::EndpointI_connectorsPtr&) const;
@@ -57,17 +55,19 @@ public:
     virtual std::vector<IceInternal::EndpointIPtr> expand() const;
     virtual bool equivalent(const IceInternal::EndpointIPtr&) const;
 
-    virtual bool operator==(const IceInternal::EndpointI&) const;
-    virtual bool operator!=(const IceInternal::EndpointI&) const;
-    virtual bool operator<(const IceInternal::EndpointI&) const;
+    virtual bool operator==(const Ice::LocalObject&) const;
+    virtual bool operator<(const Ice::LocalObject&) const;
 
 private:
 
+    virtual ::Ice::Int hashInit() const;
+
+    const InstancePtr _instance;
     PyObjectPtr _pyEndpoint;
 };
 
-
-class EndpointFactoryI : public IceInternal::EndpointFactory {
+class EndpointFactoryI : public IceInternal::EndpointFactory
+{
 public:
 
     virtual ~EndpointFactoryI();
@@ -82,6 +82,7 @@ private:
 
     EndpointFactoryI(const InstancePtr&);
     friend class Instance;
+
     PyObjectPtr _pyFactory;
     InstancePtr _instance;
 };
@@ -89,4 +90,3 @@ private:
 }
 
 #endif // PYENDPOINT_ENDPOINT_I_H
-
