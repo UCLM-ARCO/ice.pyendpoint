@@ -56,5 +56,14 @@ class ExampleEndpointI(object):
 
 
 class ConnectorI(object):
-    pass
+    def __lt__(self, other):
+        print "PYTHON: Connector.__lt__(other)", id(self), id(other)
+        return id(self) < id(other)
 
+    def connect(self):
+        print "PYTHON: Connector.connect()"
+        return TransceiverI()
+
+
+class TransceiverI(object):
+    pass

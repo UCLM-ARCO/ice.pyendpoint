@@ -19,16 +19,22 @@
 // along with PyEndpoint.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-
 #ifndef PYENDPOINT_CONNECTOR_I_H
 #define PYENDPOINT_CONNECTOR_I_H
 
-#include "Ice/ConnectorF.h"
+#include <Ice/Connector.h>
+
+#include "PyHandle.h"
+#include "InstanceF.h"
+
 
 namespace PyEndpoint {
 
-class ConnectorI : public IceInternal::Connector {
+class ConnectorI: public IceInternal::Connector {
 public:
+
+    ConnectorI(PyEndpoint::InstancePtr&, PyObjectPtr&);
+    virtual ~ConnectorI();
 
     virtual IceInternal::TransceiverPtr connect();
 
@@ -41,13 +47,9 @@ public:
 
 private:
 
-    ConnectorI(const InstancePtr&, const std::string&, const struct sockaddr_storage&, Ice::Int, const std::string&);
-    virtual ~ConnectorI();
-    friend class EndpointI;
-
-    const InstancePtr _instance;
-}
+    PyObjectPtr _pyConnector;
+};
 
 }
 
-#endif // PYENDPOINT_CONNECTOR_I_H
+#endif

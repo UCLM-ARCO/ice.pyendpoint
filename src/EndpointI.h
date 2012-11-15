@@ -67,8 +67,7 @@ private:
     PyObjectPtr _pyEndpoint;
 };
 
-class EndpointFactoryI : public IceInternal::EndpointFactory
-{
+class EndpointFactoryI : public IceInternal::EndpointFactory {
 public:
 
     virtual ~EndpointFactoryI();

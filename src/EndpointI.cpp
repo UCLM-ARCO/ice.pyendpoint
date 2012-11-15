@@ -184,11 +184,13 @@ PyEndpoint::EndpointI::connectors_async(const IceInternal::EndpointI_connectorsP
     IDG std::cout << " - call to EndpointI::connectors_async(callback) (this: "
 		  << this << ")" << std::endl;
 
-    PyObjectPtr pyCb = ConnectorsCallback_new(cb);
+    PyObjectPtr pyCb = ConnectorsCallback_new(_instance, cb);
     PyObjectPtr args = Py_BuildValue("(O)", pyCb.get());
     PyFunc::callMethod(_pyEndpoint, "connectors_async", args);
 
-    throw Ice::UnknownException("no reason", 2);
+    std::cout << __FILE__ << ":" << __LINE__
+	      << ": Not implemented!" << std::endl;
+    throw;
 }
 
 IceInternal::AcceptorPtr
@@ -197,7 +199,6 @@ PyEndpoint::EndpointI::acceptor(IceInternal::EndpointIPtr& endp, const std::stri
     IDG std::cout << " - call to EndpointI::acceptor(endp, '"
 		  << adapterName << "') (this: "
 		  << this << ")" << std::endl;
-
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;

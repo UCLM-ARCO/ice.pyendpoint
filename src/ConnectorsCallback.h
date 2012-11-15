@@ -23,10 +23,13 @@
 #define PYENDPOINT_CONNECTORS_CALLBACK_H
 
 #include <Python.h>
+
+#include "Ice/InstanceF.h"
 #include "EndpointI.h"
 
 
-PyObject* ConnectorsCallback_new(const IceInternal::EndpointI_connectorsPtr& cb);
+PyObject* ConnectorsCallback_new(const PyEndpoint::InstancePtr& instance,
+				 const IceInternal::EndpointI_connectorsPtr& cb);
 void ConnectorsCallback_initModule();
 
 

@@ -24,8 +24,10 @@
 #include "PyFunctions.h"
 
 #include <Ice/LocalException.h>
-#include "Ice/ConnectorF.h"
+// #include "Ice/ConnectorF.h"
+#include "ConnectorI.h"
 #include "ConnectorsCallback.h"
+
 #include "debug.h"
 
 
@@ -33,6 +35,7 @@ struct ConnectorsCallbackObject {
 
     PyObject_HEAD
     IceInternal::EndpointI_connectorsPtr* cb;
+    PyEndpoint::InstancePtr* instance;
 };
 
 extern PyTypeObject ConnectorsCallbackType;
@@ -41,13 +44,15 @@ void
 ConnectorsCallback_initModule() {
 
     if(PyType_Ready(&ConnectorsCallbackType) < 0) {
-	std::cerr << "ERROR: could not initialize ConnectorsCallback type" << std::endl;
+	std::cerr << "ERROR: could not initialize ConnectorsCallback type"
+		  << std::endl;
 	throw PyFunc::RuntimeError();
     }
 }
 
 PyObject*
-ConnectorsCallback_new(const IceInternal::EndpointI_connectorsPtr& cb) {
+ConnectorsCallback_new(const PyEndpoint::InstancePtr& instance,
+		       const IceInternal::EndpointI_connectorsPtr& cb) {
 
     IDG std::cout << " - call to ConnectorsCallback_new()" << std::endl;
 
@@ -58,6 +63,7 @@ ConnectorsCallback_new(const IceInternal::EndpointI_connectorsPtr& cb) {
     }
 
     self->cb = new IceInternal::EndpointI_connectorsPtr(cb);
+    self->instance = new PyEndpoint::InstancePtr(instance);
     return reinterpret_cast<PyObject*>(self);
 }
 
@@ -67,6 +73,7 @@ ConnectorsCallback_dealloc(ConnectorsCallbackObject* self) {
     IDG std::cout << " - call to ConnectorsCallback_dealloc()" << std::endl;
 
     delete self->cb;
+    delete self->instance;
     PyObject_Del(self);
 }
 
@@ -80,6 +87,12 @@ ConnectorsCallback_connectors(ConnectorsCallbackObject* self, PyObject* args) {
 	return NULL;
     }
 
+    if (PyList_Size(connList) == 0) {
+	PyErr_SetString(PyExc_ValueError,
+			"need at least one connector (none received)");
+	return NULL;
+    }
+
     IceInternal::ConnectorPtr connector;
     PyObjectPtr pyConnector;
     std::vector< IceInternal::ConnectorPtr > retval;
@@ -87,11 +100,11 @@ ConnectorsCallback_connectors(ConnectorsCallbackObject* self, PyObject* args) {
     for (short i=0; i<PyList_Size(connList); i++) {
 
 	pyConnector = PyObjectPtr::fromBorrowed(PyList_GetItem(connList, i));
-	// connector = new PyEndpoint::ConnectorI(pyConnector);
-	// retval.push_back(connector);
+	connector = new PyEndpoint::ConnectorI(*self->instance, pyConnector);
+	retval.push_back(connector);
     }
 
-    // (*self->cb)->connectors(retval);
+    (*self->cb)->connectors(retval);
     Py_RETURN_NONE;
 }
 

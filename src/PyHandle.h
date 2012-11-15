@@ -23,8 +23,8 @@
 #ifndef PYENDPOINT_PYHANDLE_H
 #define PYENDPOINT_PYHANDLE_H
 
-#include <iostream>
 #include <Python.h>
+#include <iostream>
 #include "PyUtils.h"
 
 // Note: use only with functions wich returns new references. If
