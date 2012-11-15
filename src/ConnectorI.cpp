@@ -25,6 +25,7 @@
 #include "PyFunctions.h"
 #include "ConnectorI.h"
 #include "Instance.h"
+#include "TransceiverI.h"
 #include "EndpointI.h"
 
 #include "debug.h"
@@ -38,7 +39,7 @@ PyEndpoint::ConnectorI::connect() {
     PyObjectPtr pyTransceiver;
     PyObjectPtr result = PyFunc::callMethod(_pyConnector, "connect");
     PyArg_ParseTuple(result, "O", &pyTransceiver);
-    return new PyEndpoint::TransceiverI(pyTransceiver);
+    return new PyEndpoint::TransceiverI(_instance, pyTransceiver);
 }
 
 Ice::Short
@@ -86,6 +87,7 @@ PyEndpoint::ConnectorI::operator<(const IceInternal::Connector& other) const {
 
 PyEndpoint::ConnectorI::ConnectorI(PyEndpoint::InstancePtr& instance,
 				   PyObjectPtr& pyConnector) :
+    _instance(instance),
     _pyConnector(pyConnector) {
 
     IDG std::cout << " - call to ConnectorI::ConnectorI() " << std::endl;

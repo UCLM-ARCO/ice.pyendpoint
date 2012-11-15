@@ -47,6 +47,7 @@ public:
 
 private:
 
+    PyEndpoint::InstancePtr _instance;
     PyObjectPtr _pyConnector;
 };
 
