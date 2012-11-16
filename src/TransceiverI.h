@@ -50,6 +50,8 @@ private:
 
     TransceiverI(const InstancePtr&, PyObjectPtr pyTransceiver);
     virtual ~TransceiverI();
+
+    friend class EndpointI;
     friend class ConnectorI;
 
     const InstancePtr _instance;

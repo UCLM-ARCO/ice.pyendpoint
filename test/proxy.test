@@ -20,6 +20,8 @@ class ProxyTest(TestCase):
         proxy = self.ic.stringToProxy(str_proxy)
         assert_that(self.ic.proxyToString(proxy), equal_to(str_proxy))
 
+    def test_not_completed(self):
+        self.fail("THIS TESTS ARE NOT COMPLETED")
 
 
 

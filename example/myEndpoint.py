@@ -86,6 +86,16 @@ class EndpointI(object):
         log << "EndpointI.secure()"
         return False
 
+    def transceiver(self):
+        log << "EndpointI.transceiver(endp)"
+
+        # If no acceptor needed, create new endpoint (or reuse this,
+        # I'm not sure if will work) and new transceiver, and return
+        # both (endp, transceiver). Otherwise, return this endpoint,
+        # and None as transceiver
+
+        return self, None
+
     def connectors_async(self, callback):
         log << "EndpointI.connectors_async()"
         connectors = [ConnectorI()]

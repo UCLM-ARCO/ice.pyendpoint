@@ -25,8 +25,10 @@
 #include <Ice/LocalException.h>
 
 #include "PyFunctions.h"
+#include "TransceiverI.h"
 #include "EndpointI.h"
 #include "Instance.h"
+
 #include "debug.h"
 
 
@@ -167,6 +169,16 @@ PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr& endp) const {
 
     IDG std::cout << " - call to EndpointI::transceiver(endp) (this: "
 		  << this << ")" << std::endl;
+
+    PyObjectPtr pyEndp;
+    PyObjectPtr pyTransceiver;
+    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "transceiver");
+    if (not PyArg_ParseTuple(result, "OO", &pyEndp, &pyTransceiver)) {
+	std::cerr << __FILE__ << ":" << __LINE__
+		  << ": transceiver(): ValueError, need endpoint and transceiver"
+		  << std::endl;
+	throw;
+    }
 
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
