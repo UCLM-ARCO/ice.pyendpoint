@@ -19,7 +19,7 @@
 // along with PyEndpoint.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include <Python.h>
+#include <Python.h>  // include first this to avoid GCC annoying warnings
 #include <Ice/Communicator.h>
 #include <Ice/Properties.h>
 #include <Ice/LocalException.h>
@@ -120,7 +120,7 @@ PyEndpoint::EndpointI::compress() const {
     IDG std::cout << " - call to EndpointI::compress() (this: "
 		  << this << ")" << std::endl;
 
-    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "timeout");
+    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "getCompress");
     return PyFunc::getAsBool(result);
 }
 
@@ -131,9 +131,15 @@ PyEndpoint::EndpointI::compress(bool compress) const {
 		  << compress << ") (this: "
 		  << this << ")" << std::endl;
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
+    PyObjectPtr args = Py_BuildValue("(b)", compress);
+    PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyEndpoint, "setCompress", args);
+
+    if (PyObject_RichCompareBool(pyEndpoint, _pyEndpoint, Py_EQ)) {
+	return const_cast<EndpointI*>(this);
+    }
+    else {
+	return new EndpointI(_instance, pyEndpoint);
+    }
 }
 
 bool
@@ -187,10 +193,6 @@ PyEndpoint::EndpointI::connectors_async(const IceInternal::EndpointI_connectorsP
     PyObjectPtr pyCb = ConnectorsCallback_new(_instance, cb);
     PyObjectPtr args = Py_BuildValue("(O)", pyCb.get());
     PyFunc::callMethod(_pyEndpoint, "connectors_async", args);
-
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
 }
 
 IceInternal::AcceptorPtr
@@ -244,9 +246,10 @@ PyEndpoint::EndpointI::operator<(const Ice::LocalObject& other) const {
     IDG std::cout << " - call to EndpointI::operator<(other) (this: "
 		  << this << ")" << std::endl;
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
+    PyObjectPtr pyOther = dynamic_cast<const EndpointI*>(&other)->_pyEndpoint;
+    PyObjectPtr args = Py_BuildValue("(O)", pyOther.get());
+    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "__lt__", args);
+    return PyFunc::getAsBool(result);
 }
 
 Ice::Int

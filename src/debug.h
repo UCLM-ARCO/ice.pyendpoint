@@ -28,4 +28,10 @@
   #define IDG if(0)
 #endif
 
+#ifdef EXTRA_DEBUG
+  #define IXDG
+#else
+  #define IXDG if(0)
+#endif
+
 #endif // PYENDPOINT_DEBUG_H

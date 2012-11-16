@@ -22,6 +22,8 @@
 #ifndef PYENDPOINT_TRANSCEIVER_I_H
 #define PYENDPOINT_TRANSCEIVER_I_H
 
+#include "PyHandle.h"
+#include "InstanceF.h"
 #include "Ice/Transceiver.h"
 
 
@@ -51,6 +53,7 @@ private:
     friend class ConnectorI;
 
     const InstancePtr _instance;
+    PyObjectPtr _pyTransceiver;
 };
 
 typedef IceUtil::Handle<TransceiverI> TransceiverIPtr;

@@ -36,10 +36,8 @@ PyEndpoint::ConnectorI::connect() {
 
     IDG std::cout << " - call to ConnectorI::connect()" << std::endl;
 
-    PyObjectPtr pyTransceiver;
     PyObjectPtr result = PyFunc::callMethod(_pyConnector, "connect");
-    PyArg_ParseTuple(result, "O", &pyTransceiver);
-    return new PyEndpoint::TransceiverI(_instance, pyTransceiver);
+    return new PyEndpoint::TransceiverI(_instance, result);
 }
 
 Ice::Short

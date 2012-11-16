@@ -27,6 +27,9 @@
 #include <iostream>
 #include "PyUtils.h"
 
+#include "debug.h"
+
+
 // Note: use only with functions wich returns new references. If
 // function's return value is a borrowed reference, this will cause
 // unexpected behaviour.
@@ -35,17 +38,17 @@ template<typename T>
 class PyHandle {
 public:
     PyHandle(T* p = NULL) {
-	// std::cout << "PyHandle::PyHandle(T* p = " << p << ")"
-	// 	  << " [" << (p ? p->ob_refcnt : -1) << "]"
-	// 	  << std::endl;
+	IXDG std::cout << "PyHandle::PyHandle(T* p = " << p << ")"
+		       << " [" << (p ? p->ob_refcnt : -1) << "]"
+		       << std::endl;
 
 	_ptr = p;
     }
 
     PyHandle(const PyHandle& other) {
-	// std::cout << "PyHandle::PyHandle(PyHandle& other = (_ptr) "
-	// 	  << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1) << "]"
-	// 	  << std::endl;
+	IXDG  std::cout << "PyHandle::PyHandle(PyHandle& other = (_ptr) "
+			<< other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1)
+			<< "]" << std::endl;
 
 	PyGILEnsurer e;
 	if (other._ptr && other._ptr->ob_refcnt < 1) {
@@ -62,9 +65,9 @@ public:
     }
 
     ~PyHandle() {
-	// std::cout << "PyHandle::~PyHandle() (_ptr) = " << _ptr
-	// 	  << " [" << (_ptr ? _ptr->ob_refcnt : -1) << "]"
-	// 	  << std::endl;
+	IXDG std::cout << "PyHandle::~PyHandle() (_ptr) = " << _ptr
+		       << " [" << (_ptr ? _ptr->ob_refcnt : -1) << "]"
+		       << std::endl;
 
 	PyGILEnsurer e;
 	Py_XDECREF(_ptr);
@@ -79,9 +82,9 @@ public:
     }
 
     PyHandle& operator=(const PyHandle& other) {
-	// std::cout << "PyHandle::operator=(PyHandle& other)"
-	// 	  << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1) << "]"
-	// 	  << std::endl;
+	IXDG std::cout << "PyHandle::operator=(PyHandle& other)"
+		       << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1)
+		       << "]" << std::endl;
 
 	PyGILEnsurer e;
 
