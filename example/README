@@ -1,18 +1,41 @@
-You will need to build the library:
+Here is an example os how to use this library. There are a sample
+server and client to try it, wich uses a sample endpoint.
 
- $ make
+First of all, you will need to build the library:
+
+ $ make -C src
  [...]
 
-And set the LD_LIBRARY_PATH:
+And then make available both the library and the endpoint, exporting
+the correct environment variables. To make it easy, there is a shell
+script wich you can 'source', like this:
+
+ $ cd example/
+ $ source setup.sh
+
+Of course, you can, too, set it manually: to set the LD_LIBRARY_PATH:
 
  $ cd src/cpp/
  $ export LD_LIBRARY_PATH=$(pwd)
 
-And PYTHONPATH:
+and for PYTHONPATH:
 
  $ cd src/python
  $ export PYTHONPATH=$(pwd)
  $ cd ../../example
  $ export PYTHONPATH=$PYTHONPATH:$(pwd)
+
+After that, you can launch the server (an simple Ice.Object wich
+overwrites the ice_ping() method):
+
+ $ ./server_datagram.py
+
+and its client:
+
+ $ ./client_datagram.py
+
+If all works, you could see a message from servant implementation,
+saying that ice_ping() method was called.
+
 
 

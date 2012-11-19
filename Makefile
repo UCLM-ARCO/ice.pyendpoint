@@ -3,8 +3,13 @@
 all:
 	$(MAKE) -C src $@
 
-run_test: all
-	@export PYTHONPATH=$$(pwd)/test; \
-	export LD_LIBRARY_PATH=$$(pwd)/src; \
-	atheist test
+install:
+	$(MAKE) -C src $@
+	python setup.py install \
+	--prefix=$(DESTDIR)/usr/ \
+        --install-layout=deb
+
+.PHONY: clean
+clean:
+	$(MAKE) -C src $@
 
