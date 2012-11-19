@@ -1,7 +1,9 @@
 # -*- mode: python; coding: utf-8 -*-
 
 import socket
-from EndpointBase import EndpointFactoryI, EndpointI, ConnectorI, TransceiverI, log
+from pyendpoint import EndpointFactoryI, EndpointI, ConnectorI, TransceiverI
+
+# from EndpointBase import log
 # log.activated = True
 
 
@@ -35,7 +37,6 @@ class MyConnectorI(ConnectorI):
 class MyTransceiverI(TransceiverI):
     def __init__(self, protocol, connect=False):
         TransceiverI.__init__(self, protocol, connect)
-
         self.s = socket.socket(type=socket.SOCK_DGRAM)
 
         if connect:

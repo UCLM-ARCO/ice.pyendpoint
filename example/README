@@ -5,6 +5,14 @@ You will need to build the library:
 
 And set the LD_LIBRARY_PATH:
 
- $ cd src/
+ $ cd src/cpp/
  $ export LD_LIBRARY_PATH=$(pwd)
+
+And PYTHONPATH:
+
+ $ cd src/python
+ $ export PYTHONPATH=$(pwd)
+ $ cd ../../example
+ $ export PYTHONPATH=$PYTHONPATH:$(pwd)
+
 
