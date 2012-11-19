@@ -3,7 +3,7 @@
 import socket
 from pyendpoint import EndpointFactoryI, EndpointI, ConnectorI, TransceiverI
 
-# from EndpointBase import log
+# from pyendpoint import log
 # log.activated = True
 
 

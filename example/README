@@ -25,7 +25,7 @@ and for PYTHONPATH:
  $ cd ../../example
  $ export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-After that, you can launch the server (an simple Ice.Object wich
+After that, you can launch the server (a simple Ice.Object wich
 overwrites the ice_ping() method):
 
  $ ./server_datagram.py
