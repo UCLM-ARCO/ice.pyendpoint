@@ -136,7 +136,7 @@ PyEndpoint::EndpointI::compress(bool compress) const {
     PyObjectPtr args = Py_BuildValue("(b)", compress);
     PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyEndpoint, "setCompress", args);
 
-    if (PyObject_RichCompareBool(pyEndpoint, _pyEndpoint, Py_EQ)) {
+    if (pyEndpoint == _pyEndpoint) {
 	return const_cast<EndpointI*>(this);
     }
     else {
@@ -172,17 +172,35 @@ PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr& endp) const {
 
     PyObjectPtr pyEndp;
     PyObjectPtr pyTransceiver;
+    TransceiverI* trans;
+
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "transceiver");
     if (not PyArg_ParseTuple(result, "OO", &pyEndp, &pyTransceiver)) {
-	std::cerr << __FILE__ << ":" << __LINE__
-		  << ": transceiver(): ValueError, need endpoint and transceiver"
-		  << std::endl;
-	throw;
+    	std::cerr << "ValueError, need endpoint and transceiver!" << std::endl;
+	throw PyFunc::RuntimeError();
     }
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
+    // need to 'steal' the borrowed references from PyArg
+    pyEndp.steal();
+    pyTransceiver.steal();
+
+    // if need an acceptor, return a NULL transceiver
+    if (pyTransceiver == Py_None) {
+	endp = const_cast<EndpointI*>(this);
+        return 0;
+    }
+
+    // otherwise, return the given transceiver
+    trans = new PyEndpoint::TransceiverI(_instance, pyTransceiver);
+
+    if (pyEndp == _pyEndpoint) {
+	endp = const_cast<EndpointI*>(this);
+    }
+    else {
+	endp = new EndpointI(_instance, pyEndp);
+    }
+
+    return trans;
 }
 
 std::vector<IceInternal::ConnectorPtr>
@@ -208,7 +226,8 @@ PyEndpoint::EndpointI::connectors_async(const IceInternal::EndpointI_connectorsP
 }
 
 IceInternal::AcceptorPtr
-PyEndpoint::EndpointI::acceptor(IceInternal::EndpointIPtr& endp, const std::string& adapterName) const {
+PyEndpoint::EndpointI::acceptor(IceInternal::EndpointIPtr& endp,
+				const std::string& adapterName) const {
 
     IDG std::cout << " - call to EndpointI::acceptor(endp, '"
 		  << adapterName << "') (this: "
@@ -225,9 +244,29 @@ PyEndpoint::EndpointI::expand() const {
     IDG std::cout << " - call to EndpointI::expand() (this: "
 		  << this << ")" << std::endl;
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
+    PyObjectPtr endpList = PyFunc::callMethod(_pyEndpoint, "expand");
+    if (not PyList_Check(endpList)) {
+    	std::cerr << "ValueError, need endpoint list from expand()" << std::endl;
+     	throw PyFunc::RuntimeError();
+    }
+
+    if (PyList_Size(endpList) == 0) {
+    	std::cerr << "ValueError, need at least one endpoint from expand()" << std::endl;
+     	throw PyFunc::RuntimeError();
+    }
+
+
+    IceInternal::EndpointIPtr endpoint;
+    PyObjectPtr pyEndpoint;
+    std::vector<IceInternal::EndpointIPtr> retval;
+
+    for (short i=0; i<PyList_Size(endpList); i++) {
+	pyEndpoint = PyObjectPtr::fromBorrowed(PyList_GetItem(endpList, i));
+	endpoint = new PyEndpoint::EndpointI(_instance, pyEndpoint);
+	retval.push_back(endpoint);
+    }
+
+    return retval;
 }
 
 bool

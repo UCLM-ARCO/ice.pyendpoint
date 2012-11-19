@@ -74,15 +74,17 @@ public:
     }
 
     static T* fromBorrowed(T* p) {
+	IXDG std::cout << "PyHandle::fromBorrowed() (p) = " << p
+		       << " [" << (p ? p->ob_refcnt : -1) << "]"
+		       << std::endl;
 
 	PyGILEnsurer e;
-
 	Py_INCREF(p);
 	return p;
     }
 
     PyHandle& operator=(const PyHandle& other) {
-	IXDG std::cout << "PyHandle::operator=(PyHandle& other)"
+	IXDG std::cout << "PyHandle::operator=(PyHandle& other) "
 		       << other._ptr << ") [" << (other._ptr ? other._ptr->ob_refcnt : -1)
 		       << "]" << std::endl;
 
@@ -100,6 +102,17 @@ public:
 
     T* get() const {
 	return _ptr;
+    }
+
+    void steal() {
+	IXDG std::cout << "PyHandle::steal() (_ptr = "
+		       << _ptr << ") [" << (_ptr ? _ptr->ob_refcnt : -1)
+		       << "]" << std::endl;
+
+	PyGILEnsurer e;
+	if (_ptr) {
+	    Py_INCREF(_ptr);
+	}
     }
 
     operator T*() const {

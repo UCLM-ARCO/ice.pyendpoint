@@ -16,13 +16,16 @@ class StdoutLogger(object):
         self.index = index
         self.lastindex = index
 
+    def write(self, msg):
+        pass # sys.stdout.write(msg)
+
     def __del__(self):
         self.lastindex -= 1
         if self.lastindex == 0:
-            sys.stdout.write("\n")
+            self.write("\n")
 
     def __lshift__(self, msg):
-        sys.stdout.write(self.header + str(msg))
+        self.write(self.header + str(msg))
         return StdoutLogger(index=self.index + 1)
 
 
@@ -88,18 +91,18 @@ class EndpointI(object):
 
     def transceiver(self):
         log << "EndpointI.transceiver(endp)"
-
-        # If no acceptor needed, create new endpoint (or reuse this,
-        # I'm not sure if will work) and new transceiver, and return
-        # both (endp, transceiver). Otherwise, return this endpoint,
-        # and None as transceiver
-
-        return self, None
+        endp = EndpointI(self.strEndpoint)
+        trans = TransceiverI()
+        return endp, trans
 
     def connectors_async(self, callback):
         log << "EndpointI.connectors_async()"
         connectors = [ConnectorI()]
         callback.connectors(connectors)
+
+    def expand(self):
+        log << "EndpointI.expand()"
+        return [self]
 
 
 class ConnectorI(object):
@@ -107,19 +110,23 @@ class ConnectorI(object):
         log << "ConnectorI.__init__()"
 
     def __lt__(self, other):
-        log << "Connector.__lt__(other)", id(self), id(other)
+        log << "ConnectorI.__lt__(other)", id(self), id(other)
         return id(self) < id(other)
 
     def connect(self):
-        log << "Connector.connect()"
-        return TransceiverI()
+        log << "ConnectorI.connect()"
+        return TransceiverI(True)
 
 
 class TransceiverI(object):
-    def __init__(self):
+    def __init__(self, connect=False):
         log << "TransceiverI.__init__()"
-        self.s = socket.socket()
-        self.s.connect(("127.0.0.1", 9000))
+        self.s = socket.socket(type=socket.SOCK_DGRAM)
+
+        if connect:
+            self.s.connect(("127.0.0.1", 9000))
+        else:
+            self.s.bind(("127.0.0.1", 9000))
 
     def __del__(self):
         log << "TransceiverI.__del__()"
@@ -140,12 +147,20 @@ class TransceiverI(object):
         log << "TransceiverI.initialize()"
         return retvals['SocketOperationNone']
 
-    def write(self, data):
-        log << "TransceiverI.write(data)"
-        self.s.send(data)
+    def getMaxPaquetSize(self):
+        log << "TransceiverI.getMaxPaquetSize()"
+        return 256
+
+    def write(self, buff):
+        log << "TransceiverI.write(buff)"
+        self.s.send(buff)
         return True
+
+    def read(self, buff):
+        log << "TransceiverI.read(buff)"
+        size = self.s.recv_into(buff, len(buff))
+        return True, size
 
     def close(self):
         log << "TransceiverI.close()"
         self.s.close()
-

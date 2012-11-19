@@ -78,13 +78,35 @@ PyEndpoint::TransceiverI::write(IceInternal::Buffer& buf) {
 }
 
 bool
-PyEndpoint::TransceiverI::read(IceInternal::Buffer&) {
+PyEndpoint::TransceiverI::read(IceInternal::Buffer& buf) {
 
     IDG std::cout << " - call to TransceiverI::read()" << std::endl;
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
+    PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver, "getMaxPaquetSize");
+    const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
+
+    assert(buf.i == buf.b.begin());
+    buf.b.resize(maxPacketSize);
+    buf.i = buf.b.begin();
+
+    PyObjectPtr pyBuf = PyBuffer_FromReadWriteMemory(buf.i, buf.b.size());
+    PyObjectPtr args = Py_BuildValue("(O)", pyBuf.get());
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "read", args);
+
+    if (not PyTuple_Check(result)) {
+    	std::cerr << "ValueError, need status and read size!" << std::endl;
+	throw PyFunc::RuntimeError();
+    }
+
+    bool retval = PyFunc::getAsBool(PyTuple_GetItem(result, 0));
+    if (not retval) {
+	return retval;
+    }
+
+    int size = PyFunc::getAsInteger(PyTuple_GetItem(result, 1));
+    buf.b.resize(size);
+    buf.i = buf.b.end();
+    return retval;
 }
 
 std::string
