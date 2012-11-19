@@ -327,8 +327,11 @@ PyEndpoint::EndpointFactoryI::EndpointFactoryI(const InstancePtr& instance) :
     	throw PyFunc::RuntimeError();
     }
 
+    std::string factoryName = props->getPropertyWithDefault("PyEndpoint.Factory",
+							    "EndpointFacoryI");
+
     PyObjectPtr module = PyFunc::importModule(moduleName);
-    PyObjectPtr factoryClass = PyFunc::getClass(module, "EndpointFactoryI");
+    PyObjectPtr factoryClass = PyFunc::getClass(module, factoryName);
     _pyFactory = PyFunc::newInstance(factoryClass);
 }
 
