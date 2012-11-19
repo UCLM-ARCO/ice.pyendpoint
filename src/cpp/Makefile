@@ -24,7 +24,7 @@ $(LIB): $(OBJS)
 install: all
 	install -d $(DESTDIR)/usr/lib
 	install -m 644 $(LIB) $(DESTDIR)/usr/lib
-	install -m 644 $(LIB:%.34=%) $(DESTDIR)/usr/lib
+	ln -sf $(LIB) $(DESTDIR)/usr/lib/$(LIB:%.34=%)
 
 
 .PHONY: clean
