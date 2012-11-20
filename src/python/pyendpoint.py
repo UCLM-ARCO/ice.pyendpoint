@@ -102,14 +102,19 @@ class EndpointI(object):
 
     def transceiver(self):
         log << "EndpointI.transceiver(endp)"
-        endp = EndpointI(self._communicator, self._protocol, self._strEndpoint)
-        trans = TransceiverI(self._communicator, self._protocol)
-        return endp, trans
+        raise NotImplementedError
+
+        # endp = EndpointI(
+        #     self._communicator, self._protocol, self._strEndpoint)
+        # trans = TransceiverI(self._communicator, self._protocol)
+        # return endp, trans
 
     def connectors_async(self, callback):
         log << "EndpointI.connectors_async()"
-        connectors = [ConnectorI(self._communicator, self._protocol)]
-        callback.connectors(connectors)
+        raise NotImplementedError
+
+        # connectors = [ConnectorI(self._communicator, self._protocol)]
+        # callback.connectors(connectors)
 
     def expand(self):
         log << "EndpointI.expand()"
@@ -132,7 +137,9 @@ class ConnectorI(object):
 
     def connect(self):
         log << "ConnectorI.connect()"
-        return TransceiverI(self._communicator, self.protocol, True)
+        raise NotImplementedError
+
+        # return TransceiverI(self._communicator, self.protocol, True)
 
 
 class TransceiverI(object):
@@ -150,7 +157,7 @@ class TransceiverI(object):
 
     def toString(self):
         log << "TransceiverI.toString()"
-        return "undefined"
+        raise NotImplementedError
 
     def type(self):
         log << "TransceiverI.type()"
@@ -158,7 +165,7 @@ class TransceiverI(object):
 
     def fd(self):
         log << "TransceiverI.fd()"
-        return -1
+        raise NotImplementedError
 
     def initialize(self, retvals):
         log << "TransceiverI.initialize()"
@@ -170,11 +177,12 @@ class TransceiverI(object):
 
     def write(self, buff):
         log << "TransceiverI.write(buff)"
-        return True
+        raise NotImplementedError
 
     def read(self, buff):
         log << "TransceiverI.read(buff)"
-        return True, 0
+        raise NotImplementedError
 
     def close(self):
         log << "TransceiverI.close()"
+        raise NotImplementedError
