@@ -11,7 +11,7 @@ the correct environment variables. To make it easy, there is a shell
 script wich you can 'source', like this:
 
  $ cd example/
- $ source setup.sh
+ $ . setup.sh
 
 Of course, you can, too, set it manually: to set the LD_LIBRARY_PATH:
 

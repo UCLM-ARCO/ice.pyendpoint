@@ -37,6 +37,7 @@ namespace PyFunc {
     PyObjectPtr getMethod(PyObjectPtr classObj,
 			  std::string name);
     PyObjectPtr newInstance(PyObjectPtr cls);
+    PyObjectPtr newInstance(PyObjectPtr cls, PyObjectPtr args);
 
     PyObjectPtr callMethod(PyObjectPtr object,
 			   std::string name);

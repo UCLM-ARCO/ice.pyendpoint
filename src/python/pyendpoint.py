@@ -31,17 +31,22 @@ log = StdoutLogger("PYTHON: ")
 
 
 class EndpointFactoryI(object):
-    def __init__(self, typeNo, protocol):
+    def __init__(self, communicator):
         log << "EndpointFactoryI.__init__()"
-        self._typeNo = typeNo
-        self._protocol = protocol
+        self._communicator = communicator
+        self._type = -1
+        self._protocol = ""
 
     def __del__(self):
         log << "EndpointFactoryI.__del__()"
 
+    def getCommunicator(self):
+        log << "EndpointFactoryI.getCommunicator()"
+        return self._communicator
+
     def type(self):
         log << "EndpointFactoryI.type()"
-        return self._typeNo
+        return self._type
 
     def protocol(self):
         log << "EndpointFactoryI.protocol()"
@@ -51,15 +56,16 @@ class EndpointFactoryI(object):
         log << "EndpointFactoryI.create('{}', '{}')".format(
             strEndpoint, oaEndpoint)
 
-        return EndpointI(self._protocol, strEndpoint)
+        return EndpointI(self._communicator, self._protocol, strEndpoint)
 
     def destroy(self):
         log << "EndpointFactoryI.destroy()"
 
 
 class EndpointI(object):
-    def __init__(self, protocol, strEndpoint):
+    def __init__(self, communicator, protocol, strEndpoint):
         log << "EndpointI.__init__()"
+        self._communicator = communicator
         self._protocol = protocol
         self._strEndpoint = strEndpoint
 
@@ -69,6 +75,10 @@ class EndpointI(object):
     def __lt__(self, other):
         log << "EndpointI.__lt__(other)", id(self), id(other)
         return id(self) < id(other)
+
+    def getCommunicator(self):
+        log << "EndpointI.getCommunicator()"
+        return self._communicator
 
     def toString(self):
         log << "EndpointI.toString()"
@@ -92,13 +102,13 @@ class EndpointI(object):
 
     def transceiver(self):
         log << "EndpointI.transceiver(endp)"
-        endp = EndpointI(self._protocol, self._strEndpoint)
-        trans = TransceiverI(self._protocol)
+        endp = EndpointI(self._communicator, self._protocol, self._strEndpoint)
+        trans = TransceiverI(self._communicator, self._protocol)
         return endp, trans
 
     def connectors_async(self, callback):
         log << "EndpointI.connectors_async()"
-        connectors = [ConnectorI(self._protocol)]
+        connectors = [ConnectorI(self._communicator, self._protocol)]
         callback.connectors(connectors)
 
     def expand(self):
@@ -107,26 +117,36 @@ class EndpointI(object):
 
 
 class ConnectorI(object):
-    def __init__(self, protocol):
+    def __init__(self, communicator, protocol):
         log << "ConnectorI.__init__()"
+        self._communicator = communicator
         self._protocol = protocol
 
     def __lt__(self, other):
         log << "ConnectorI.__lt__(other)", id(self), id(other)
         return id(self) < id(other)
 
+    def getCommunicator(self):
+        log << "ConnectorI.getCommunicator()"
+        return self._communicator
+
     def connect(self):
         log << "ConnectorI.connect()"
-        return TransceiverI(self.protocol, True)
+        return TransceiverI(self._communicator, self.protocol, True)
 
 
 class TransceiverI(object):
-    def __init__(self, protocol, connect=False):
+    def __init__(self, communicator, protocol, connect=False):
         log << "TransceiverI.__init__()"
+        self._communicator = communicator
         self._protocol = protocol
+        self._connect = connect
 
     def __del__(self):
         log << "TransceiverI.__del__()"
+
+    def getCommunicator(self):
+        return self._communicator
 
     def toString(self):
         log << "TransceiverI.toString()"

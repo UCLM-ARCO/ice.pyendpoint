@@ -8,37 +8,37 @@ from pyendpoint import EndpointFactoryI, EndpointI, ConnectorI, TransceiverI
 
 
 class MyEndpointFactoryI(EndpointFactoryI):
-    def __init__(self):
-        EndpointFactoryI.__init__(self, 10, "example")
+    def __init__(self, communicator):
+        EndpointFactoryI.__init__(self, communicator)
+        self._type = 10
+        self._protocol = "example"
 
     def create(self, strEndpoint, oaEndpoint):
-        return MyEndpointI(self._protocol, strEndpoint)
+        return MyEndpointI(self._communicator, self._protocol, strEndpoint)
 
 
 class MyEndpointI(EndpointI):
-    def __init__(self, protocol, strEndpoint):
-        EndpointI.__init__(self, protocol, strEndpoint)
-
     def transceiver(self):
-        endp = MyEndpointI(self._protocol, self._strEndpoint)
-        trans = MyTransceiverI(self._protocol)
+        endp = MyEndpointI(
+            self._communicator, self._protocol, self._strEndpoint)
+        trans = MyTransceiverI(self._communicator, self._protocol, False)
         return endp, trans
 
     def connectors_async(self, callback):
-        connectors = [MyConnectorI(self._protocol)]
+        connectors = [MyConnectorI(self._communicator, self._protocol)]
         callback.connectors(connectors)
 
 
 class MyConnectorI(ConnectorI):
     def connect(self):
-        return MyTransceiverI(self._protocol, True)
+        return MyTransceiverI(self._communicator, self._protocol, True)
 
 
 class MyTransceiverI(TransceiverI):
-    def __init__(self, protocol, connect=False):
-        TransceiverI.__init__(self, protocol, connect)
-        self.s = socket.socket(type=socket.SOCK_DGRAM)
+    def __init__(self, communicator, protocol, connect=False):
+        TransceiverI.__init__(self, communicator, protocol, connect)
 
+        self.s = socket.socket(type=socket.SOCK_DGRAM)
         if connect:
             self.s.connect(("127.0.0.1", 9000))
         else:

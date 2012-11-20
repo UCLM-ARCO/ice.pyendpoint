@@ -77,6 +77,11 @@ PyFunc::getMethod(PyObjectPtr classObj, std::string name) {
 
 PyObjectPtr
 PyFunc::newInstance(PyObjectPtr cls) {
+    return newInstance(cls, NULL);
+}
+
+PyObjectPtr
+PyFunc::newInstance(PyObjectPtr cls, PyObjectPtr args) {
     PyGILEnsurer e;
 
     if (not PyCallable_Check(cls)) {
@@ -84,7 +89,7 @@ PyFunc::newInstance(PyObjectPtr cls) {
 	throw RuntimeError();
     }
 
-    PyObjectPtr instance = PyObject_CallObject(cls, NULL);
+    PyObjectPtr instance = PyObject_CallObject(cls, args);
     if (not instance) {
     	PyErr_Print();
     	throw RuntimeError();

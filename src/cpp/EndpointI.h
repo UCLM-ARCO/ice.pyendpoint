@@ -30,6 +30,12 @@
 #include "ConnectorsCallback.h"
 
 
+namespace IcePy {
+
+PyObject* createCommunicator(const Ice::CommunicatorPtr&);
+
+}
+
 namespace PyEndpoint {
 
 class EndpointI : public IceInternal::EndpointI {
