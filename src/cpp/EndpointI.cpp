@@ -331,7 +331,7 @@ PyEndpoint::EndpointFactoryI::EndpointFactoryI(const InstancePtr& instance) :
     }
 
     std::string factoryName =
-	props->getPropertyWithDefault("PyEndpoint.Factory", "EndpointFacoryI");
+	props->getPropertyWithDefault("PyEndpoint.Factory", "EndpointFactoryI");
 
     PyObjectPtr module = PyFunc::importModule(moduleName);
     PyObjectPtr factoryClass = PyFunc::getClass(module, factoryName);
