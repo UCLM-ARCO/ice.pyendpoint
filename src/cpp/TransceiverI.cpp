@@ -98,14 +98,15 @@ PyEndpoint::TransceiverI::read(IceInternal::Buffer& buf) {
 	throw PyFunc::RuntimeError();
     }
 
-    bool retval = PyFunc::getAsBool(PyTuple_GetItem(result, 0));
+    bool retval = PyFunc::getAsBool(PyObjectPtr::fromBorrowed(PyTuple_GetItem(result, 0)));
     if (not retval) {
 	return retval;
     }
 
-    int size = PyFunc::getAsInteger(PyTuple_GetItem(result, 1));
+    int size = PyFunc::getAsInteger(PyObjectPtr::fromBorrowed(PyTuple_GetItem(result, 1)));
     buf.b.resize(size);
     buf.i = buf.b.end();
+
     return retval;
 }
 

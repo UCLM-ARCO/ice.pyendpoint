@@ -3,7 +3,7 @@
 import socket
 from pyendpoint import EndpointFactoryI, EndpointI, ConnectorI, TransceiverI
 
-# from pyendpoint import log
+from pyendpoint import log
 # log.activated = True
 
 
@@ -36,6 +36,7 @@ class MyConnectorI(ConnectorI):
 
 class MyTransceiverI(TransceiverI):
     def __init__(self, communicator, protocol, connect=False):
+        log << "TransceiverI.__init__()"
         TransceiverI.__init__(self, communicator, protocol, connect)
 
         self.s = socket.socket(type=socket.SOCK_DGRAM)
@@ -44,16 +45,24 @@ class MyTransceiverI(TransceiverI):
         else:
             self.s.bind(("127.0.0.1", 9000))
 
+    def toString(self):
+        log << "TransceiverI.toString()"
+        return "example -h 127.0.0.1 -p 9000"
+
     def fd(self):
+        log << "TransceiverI.fd()"
         return self.s.fileno()
 
     def write(self, buff):
+        log << "TransceiverI.write()"
         self.s.send(buff)
         return True
 
     def read(self, buff):
+        log << "TransceiverI.read()"
         size = self.s.recv_into(buff, len(buff))
         return True, size
 
     def close(self):
+        log << "TransceiverI.close()"
         self.s.close()
