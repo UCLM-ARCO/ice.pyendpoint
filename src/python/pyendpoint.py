@@ -67,6 +67,7 @@ class EndpointI(object):
         log << "EndpointI.__init__()"
         self._communicator = communicator
         self._protocol = protocol
+        self._type = -1
         self._strEndpoint = strEndpoint
 
     def __del__(self):
@@ -91,6 +92,10 @@ class EndpointI(object):
     def setCompress(self, compress):
         log << "EndpointI.setCompress()"
         return self
+
+    def type(self):
+        log << "EndpointI.type()"
+        return self._type
 
     def datagram(self):
         log << "EndpointI.datagram()"
@@ -126,6 +131,7 @@ class ConnectorI(object):
         log << "ConnectorI.__init__()"
         self._communicator = communicator
         self._protocol = protocol
+        self._type = -1
 
     def __lt__(self, other):
         log << "ConnectorI.__lt__(other)", id(self), id(other)
@@ -134,6 +140,10 @@ class ConnectorI(object):
     def getCommunicator(self):
         log << "ConnectorI.getCommunicator()"
         return self._communicator
+
+    def type(self):
+        log << "ConnectorI.type()"
+        return self._type
 
     def connect(self):
         log << "ConnectorI.connect()"

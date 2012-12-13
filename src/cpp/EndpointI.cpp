@@ -300,6 +300,18 @@ PyEndpoint::EndpointI::operator<(const Ice::LocalObject& other) const {
     IDG std::cout << " - call to EndpointI::operator<(other) (this: "
 		  << this << ")" << std::endl;
 
+    const EndpointI* p = dynamic_cast<const EndpointI*>(&other);
+    if (not p) {
+        const IceInternal::EndpointI* e
+	    = dynamic_cast<const IceInternal::EndpointI*>(&other);
+
+        if (not e) {
+            return false;
+        }
+
+        return type() < e->type();
+    }
+
     PyObjectPtr pyOther = dynamic_cast<const EndpointI*>(&other)->_pyEndpoint;
     PyObjectPtr args = Py_BuildValue("(O)", pyOther.get());
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "__lt__", args);

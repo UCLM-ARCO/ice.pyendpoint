@@ -43,9 +43,8 @@ PyEndpoint::ConnectorI::connect() {
 Ice::Short
 PyEndpoint::ConnectorI::type() const {
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
+    PyObjectPtr result = PyFunc::callMethod(_pyConnector, "type");
+    return PyFunc::getAsInteger(result);
 }
 
 std::string
@@ -76,6 +75,11 @@ bool
 PyEndpoint::ConnectorI::operator<(const IceInternal::Connector& other) const {
 
     IDG std::cout << " - call to ConnectorI::operator<(other)" << std::endl;
+
+    const ConnectorI* p = dynamic_cast<const ConnectorI*>(&other);
+    if (not p) {
+        return type() < other.type();
+    }
 
     PyObjectPtr pyOther = ((PyEndpoint::ConnectorI&)other)._pyConnector;
     PyObjectPtr args = Py_BuildValue("(O)", pyOther.get());
