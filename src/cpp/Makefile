@@ -1,6 +1,6 @@
 # -*- mode: makefile-gmake; coding: utf-8 -*-
 
-CXX        = g++
+CXX        = g++-4.6
 
 # DEBUG_OPS += -DEXTRA_DEBUG
 # DEBUG_OPS += -DDEBUG -ggdb
@@ -11,8 +11,8 @@ CXXFLAGS   = -I. -Wall $$(python-config --includes) $(DEBUG_OPS) -fPIC
 LDFLAGS    = -L. $$(python-config --ldflags) \
 	     -Wl,-soname,$(LIB) -fPIC -shared
 
-OBJS       = PluginI.o Instance.o EndpointI.o PyFunctions.o ConnectorsCallback.o \
-	     ConnectorI.o TransceiverI.o
+OBJS       = PluginI.o Instance.o EndpointI.o PyFunctions.o \
+	     ConnectorsCallback.o ConnectorI.o TransceiverI.o
 
 
 all: $(LIB)
