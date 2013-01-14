@@ -56,19 +56,20 @@ class EndpointFactoryI(object):
         log << "EndpointFactoryI.create('{}', '{}')".format(
             strEndpoint, oaEndpoint)
 
-        return EndpointI(self._communicator, self._protocol, strEndpoint)
+        return EndpointI(self._communicator, self._protocol, strEndpoint, oaEndpoint)
 
     def destroy(self):
         log << "EndpointFactoryI.destroy()"
 
 
 class EndpointI(object):
-    def __init__(self, communicator, protocol, strEndpoint):
+    def __init__(self, communicator, protocol, strEndpoint, oaEndpoint):
         log << "EndpointI.__init__()"
         self._communicator = communicator
         self._protocol = protocol
         self._type = -1
         self._strEndpoint = strEndpoint
+        self._oaEndpoint = oaEndpoint
 
     def __del__(self):
         log << "EndpointI.__del__()"
