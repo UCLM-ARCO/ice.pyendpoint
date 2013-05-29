@@ -1,3 +1,9 @@
+ice-pyendpoint (0.6-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Oscar Aceña Herrera <oscaracena@gmail.com>  Wed, 29 May 2013 15:11:10 +0200
+
 ice-pyendpoint (0.5-1) unstable; urgency=low
 
   * Bugfix: stringfied proxy for object adapter was incorrect.

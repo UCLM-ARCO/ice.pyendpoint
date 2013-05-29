@@ -49,9 +49,22 @@ PyEndpoint::EndpointI::streamWrite(IceInternal::BasicStream* s) const {
     IDG std::cout << " - call to EndpointI::streamWrite(s) [1] (this: "
 		  << this << ")" << std::endl;
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << " NOT IMPLEMENTED!!" << std::endl;
-    throw;
+    // First goes endpoint type
+    s->write(type());
+
+    // Then, endpoint parameters
+    s->startWriteEncaps();
+
+    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "streamWrite");
+    std::string params = PyFunc::getAsString(result);
+
+    // NOTE: s->write(string) will write size first, but we assume
+    // that encapsulation is done in Python implementation.
+    for (std::string::iterator i = params.begin(); i != params.end(); i++) {
+	s->write(Ice::Byte(*i));
+    }
+
+    s->endWriteEncaps();
 }
 
 std::string
