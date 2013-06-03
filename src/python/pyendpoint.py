@@ -78,6 +78,10 @@ class EndpointI(object):
         log << "EndpointI.__lt__(other)", id(self), id(other)
         return id(self) < id(other)
 
+    def streamWrite(self):
+        log << "EndpointI.streamWrite()"
+        raise NotImplementedError
+
     def getCommunicator(self):
         log << "EndpointI.getCommunicator()"
         return self._communicator

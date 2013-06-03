@@ -140,11 +140,15 @@ std::string
 PyFunc::getAsString(PyObjectPtr value) {
     PyGILEnsurer e;
 
-    std::string retval = PyString_AsString(value);
+    Py_ssize_t length = 0;
+    char* buffer;
+    PyString_AsStringAndSize(value, &buffer, &length);
+
     if (PyErr_Occurred()) {
      	PyErr_Print();
     	throw PyFunc::RuntimeError();
     }
 
+    std::string retval(buffer, length);
     return retval;
 }
