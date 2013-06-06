@@ -82,8 +82,11 @@ PyEndpoint::TransceiverI::read(IceInternal::Buffer& buf) {
 
     IDG std::cout << " - call to TransceiverI::read()" << std::endl;
 
-    PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver, "getMaxPaquetSize");
-    const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
+    // PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver,
+    // 						   "getMaxPaquetSize");
+
+    // const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
+    const int maxPacketSize = 256;
 
     assert(buf.i == buf.b.begin());
     buf.b.resize(maxPacketSize);

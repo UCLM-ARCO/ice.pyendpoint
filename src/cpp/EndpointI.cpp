@@ -21,8 +21,6 @@
 
 #include <Python.h>  // include first this to avoid GCC annoying warnings
 
-// #include "/home/oscar.acena/usr/src/zeroc-ice-3.4.2/py/modules/IcePy/Communicator.h"
-
 #include <Ice/Communicator.h>
 #include <Ice/Properties.h>
 #include <Ice/LocalException.h>

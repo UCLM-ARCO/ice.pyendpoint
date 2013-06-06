@@ -9,5 +9,11 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+
+# PyEndpoint needs to be linked against a Python extension (Python
+# ZeroC Ice) which is not available as a shared library for
+# dh_shlibdeps. This is a workaround for building the package.
+
 %:
-	dh $@ --with python2
+	ln -fs /usr/lib/pyshared/python2.7/IcePy.so.3.4.2 /tmp/IcePy.so.34
+	LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/tmp/ dh $@ --with python2

@@ -8,7 +8,8 @@ Homepage: https://bitbucket.org/arco_group/ice-pyendpoint
 
 Package: ice-pyendpoint
 Architecture: i386
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends},
+ python-zeroc-ice 
 Description: Plugin for ZeroC-Ice
  It allows building new endpoints using Python, and use it on other
  languages. Provides a plugin, and a base class to implement new
