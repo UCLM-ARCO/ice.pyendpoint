@@ -29,6 +29,7 @@
 #include "TransceiverI.h"
 #include "EndpointI.h"
 #include "Instance.h"
+#include "BasicStream.h"
 
 #include "debug.h"
 
@@ -61,7 +62,6 @@ PyEndpoint::EndpointI::streamWrite(IceInternal::BasicStream* s) const {
     for (std::string::iterator i = params.begin(); i != params.end(); i++) {
 	s->write(Ice::Byte(*i));
     }
-
     s->endWriteEncaps();
 }
 
@@ -409,9 +409,17 @@ PyEndpoint::EndpointFactoryI::read(IceInternal::BasicStream* s) const {
     IDG std::cout << " - call to EndpointFactoryI::read(s) (this: "
 		  << this << ")" << std::endl;
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << " NOT IMPLEMENTED!!" << std::endl;
-    throw;
+    PyObjectPtr pyStream = BasicStream_new(s);
+    PyObjectPtr args = Py_BuildValue("(O)", pyStream.get());
+    PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "read", args);
+
+    if (pyEndpoint == Py_None) {
+    	std::cerr << "ValueError, invalid endpoint returned!"
+		  << std::endl;
+	throw PyFunc::RuntimeError();
+    }
+
+    return new EndpointI(_instance, pyEndpoint);
 }
 
 void

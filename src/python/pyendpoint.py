@@ -58,8 +58,17 @@ class EndpointFactoryI(object):
 
         return EndpointI(self._communicator, self._protocol, strEndpoint, oaEndpoint)
 
+    def read(self, s):
+        log << "EndpointFactoryI.read()"
+        raise NotImplementedError("EndpointFactoryI.read()")
+
     def destroy(self):
         log << "EndpointFactoryI.destroy()"
+
+
+class BasicStream(object):
+    def __init__(self, data):
+        self._data = data
 
 
 class EndpointI(object):
@@ -80,7 +89,7 @@ class EndpointI(object):
 
     def streamWrite(self):
         log << "EndpointI.streamWrite()"
-        raise NotImplementedError
+        raise NotImplementedError("EndpointI.streamWrite()")
 
     def getCommunicator(self):
         log << "EndpointI.getCommunicator()"
@@ -112,7 +121,7 @@ class EndpointI(object):
 
     def transceiver(self):
         log << "EndpointI.transceiver(endp)"
-        raise NotImplementedError
+        raise NotImplementedError("EndpointI.transceiver(endp)")
 
         # endp = EndpointI(
         #     self._communicator, self._protocol, self._strEndpoint)
@@ -121,7 +130,7 @@ class EndpointI(object):
 
     def connectors_async(self, callback):
         log << "EndpointI.connectors_async()"
-        raise NotImplementedError
+        raise NotImplementedError("EndpointI.connectors_async()")
 
         # connectors = [ConnectorI(self._communicator, self._protocol)]
         # callback.connectors(connectors)
@@ -152,7 +161,7 @@ class ConnectorI(object):
 
     def connect(self):
         log << "ConnectorI.connect()"
-        raise NotImplementedError
+        raise NotImplementedError("ConnectorI.connect()")
 
         # return TransceiverI(self._communicator, self.protocol, True)
 
@@ -172,7 +181,7 @@ class TransceiverI(object):
 
     def toString(self):
         log << "TransceiverI.toString()"
-        raise NotImplementedError
+        raise NotImplementedError("TransceiverI.toString()")
 
     def type(self):
         log << "TransceiverI.type()"
@@ -180,7 +189,7 @@ class TransceiverI(object):
 
     def fd(self):
         log << "TransceiverI.fd()"
-        raise NotImplementedError
+        raise NotImplementedError("TransceiverI.fd()")
 
     def initialize(self, retvals):
         log << "TransceiverI.initialize()"
@@ -192,12 +201,12 @@ class TransceiverI(object):
 
     def write(self, buff):
         log << "TransceiverI.write(buff)"
-        raise NotImplementedError
+        raise NotImplementedError("TransceiverI.write")
 
     def read(self, buff):
         log << "TransceiverI.read(buff)"
-        raise NotImplementedError
+        raise NotImplementedError("TransceiverI.read")
 
     def close(self):
         log << "TransceiverI.close()"
-        raise NotImplementedError
+        raise NotImplementedError("TransceiverI.close")

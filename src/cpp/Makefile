@@ -15,7 +15,7 @@ LDFLAGS    = -L. $$(python-config --ldflags) \
 
 OBJS       = PluginI.o Instance.o EndpointI.o PyFunctions.o \
 	     ConnectorsCallback.o ConnectorI.o TransceiverI.o \
-	     $(PYTHON_ICE)
+	     BasicStream.o $(PYTHON_ICE)
 
 all: $(LIB)
 
