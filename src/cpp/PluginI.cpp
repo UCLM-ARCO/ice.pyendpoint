@@ -25,6 +25,7 @@
 #include "PluginI.h"
 #include "Instance.h"
 #include "ConnectorsCallback.h"
+#include "BasicStream.h"
 
 // loader function
 extern "C" {
@@ -52,6 +53,7 @@ void
 PyEndpoint::PluginI::initialize() {
 
     ConnectorsCallback_initModule();
+    BasicStream_initModule();
 
     _instance->initialize();
 }

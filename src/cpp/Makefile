@@ -4,7 +4,7 @@ CXX        = g++-4.6
 PYTHON_VER = python2.7
 
 # DEBUG_OPS += -DEXTRA_DEBUG
-# DEBUG_OPS += -DDEBUG -ggdb
+DEBUG_OPS += -DDEBUG -ggdb
 
 LIB        = libIcePyEndpoint.so.34
 PYTHON_ICE = /usr/lib/pyshared/$(PYTHON_VER)/IcePy.so

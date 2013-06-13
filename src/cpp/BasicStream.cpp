@@ -47,11 +47,9 @@ BasicStream_initModule() {
 PyObject*
 BasicStream_new(IceInternal::BasicStream* s) {
 
-    IDG std::cout << " - call to BasicStream_new()" << std::endl;
+    IDG std::cout << " - call to BasicStream_new(" << s << ")" << std::endl;
 
-    BasicStreamObject* self = PyObject_New(BasicStreamObject,
-					   &BasicStreamType);
-
+    BasicStreamObject* self = PyObject_New(BasicStreamObject, &BasicStreamType);
     if(not self) {
 	return 0;
     }
@@ -61,55 +59,135 @@ BasicStream_new(IceInternal::BasicStream* s) {
 }
 
 static PyObject*
-BasicStream_readInt(BasicStreamObject* self, PyObject* args) {
+BasicStream_startReadEncaps(BasicStreamObject* self, PyObject* args) {
+
+    IDG std::cout << " - call to BasicStream_startReadEncaps()" << std::endl;
+
+    self->s->startReadEncaps();
     Py_RETURN_NONE;
 }
 
-// static PyObject*
-// ConnectorsCallback_connectors(ConnectorsCallbackObject* self, PyObject* args) {
+static PyObject*
+BasicStream_endReadEncaps(BasicStreamObject* self, PyObject* args) {
 
-//     IDG std::cout << " - call to ConnectorsCallback_connectors()" << std::endl;
+    IDG std::cout << " - call to BasicStream_endReadEncaps()" << std::endl;
 
-//     PyObject* connList;
-//     if (not PyArg_ParseTuple(args, "O!", &PyList_Type, &connList)) {
-// 	return NULL;
-//     }
+    self->s->endReadEncaps();
+    Py_RETURN_NONE;
+}
 
-//     if (PyList_Size(connList) == 0) {
-// 	PyErr_SetString(PyExc_ValueError,
-// 			"need at least one connector (none received)");
-// 	return NULL;
-//     }
+static PyObject*
+BasicStream_readString(BasicStreamObject* self, PyObject* args) {
 
-//     IceInternal::ConnectorPtr connector;
-//     PyObjectPtr pyConnector;
-//     std::vector< IceInternal::ConnectorPtr > retval;
+    IDG std::cout << " - call to BasicStream_readString()" << std::endl;
 
-//     for (short i=0; i<PyList_Size(connList); i++) {
+    std::string retval;
+    self->s->read(retval);
+    return PyString_FromStringAndSize(retval.data(), retval.size());
+}
 
-// 	pyConnector = PyObjectPtr::fromBorrowed(PyList_GetItem(connList, i));
-// 	connector = new PyEndpoint::ConnectorI(*self->instance, pyConnector);
-// 	retval.push_back(connector);
-//     }
+static PyObject*
+BasicStream_readBlob(BasicStreamObject* self, PyObject* args) {
 
-//     (*self->cb)->connectors(retval);
-//     Py_RETURN_NONE;
-// }
+    IDG std::cout << " - call to BasicStream_readBlob()" << std::endl;
 
-//  static PyObject*
-// ConnectorsCallback_exception(ConnectorsCallbackObject* self, PyObject* args) {
+    int size;
+    if (not PyArg_ParseTuple(args, "i", &size)) {
+     	return NULL;
+    }
 
-//     IDG std::cout << " - call to ConnectorsCallback_exception()" << std::endl;
+    const Ice::Byte* blob;
+    self->s->readBlob(blob, size);
+    return PyString_FromStringAndSize((const char*)blob, size);
+}
 
-//     Py_RETURN_NONE;
-// }
+static PyObject*
+BasicStream_startWriteEncaps(BasicStreamObject* self, PyObject* args) {
+
+    IDG std::cout << " - call to BasicStream_startWriteEncaps()" << std::endl;
+
+    self->s->startWriteEncaps();
+    Py_RETURN_NONE;
+}
+
+static PyObject*
+BasicStream_endWriteEncaps(BasicStreamObject* self, PyObject* args) {
+
+    IDG std::cout << " - call to BasicStream_endWriteEncaps()" << std::endl;
+
+    self->s->endWriteEncaps();
+    Py_RETURN_NONE;
+}
+
+static PyObject*
+BasicStream_writeString(BasicStreamObject* self, PyObject* args) {
+
+    IDG std::cout << " - call to BasicStream_writeString()" << std::endl;
+
+    char* data;
+    int size;
+    if (not PyArg_ParseTuple(args, "s#", &data, &size)) {
+     	return NULL;
+    }
+
+    IDG std::cout << "    -> string: " << std::string(data, size) << std::endl;
+
+    self->s->write(std::string(data, size));
+    Py_RETURN_NONE;
+}
+
+static PyObject*
+BasicStream_writeByte(BasicStreamObject* self, PyObject* args) {
+
+    IDG std::cout << " - call to BasicStream_writeByte()" << std::endl;
+
+    Ice::Byte b;
+    if (not PyArg_ParseTuple(args, "b", &b)) {
+     	return NULL;
+    }
+
+    IDG std::cout << "    -> byte: " << (int)b << std::endl;
+
+    self->s->write(b);
+    Py_RETURN_NONE;
+}
+
+static PyObject*
+BasicStream_writeBlob(BasicStreamObject* self, PyObject* args) {
+
+    IDG std::cout << " - call to BasicStream_writeBlob()" << std::endl;
+
+    Ice::Byte* data;
+    int size;
+    if (not PyArg_ParseTuple(args, "s#", &data, &size)) {
+     	return NULL;
+    }
+
+    self->s->writeBlob(data, size);
+    Py_RETURN_NONE;
+}
 
 static PyMethodDef basicStreamMethods[] = {
 
-    { "readInt", (PyCFunction)BasicStream_readInt,
-      METH_VARARGS, "internal function" },
-//     { "exception", (PyCFunction)ConnectorsCallback_exception,
-//       METH_VARARGS, "internal function" },
+    { "startReadEncaps", (PyCFunction)BasicStream_startReadEncaps,
+      METH_VARARGS, "prepare stream for reading" },
+    { "endReadEncaps", (PyCFunction)BasicStream_endReadEncaps,
+      METH_VARARGS, "notify end of stream reading" },
+    { "readString", (PyCFunction)BasicStream_readString,
+      METH_VARARGS, "read a string from stream" },
+    { "readBlob", (PyCFunction)BasicStream_readBlob,
+      METH_VARARGS, "read n bytes from stream" },
+
+    { "startWriteEncaps", (PyCFunction)BasicStream_startWriteEncaps,
+      METH_VARARGS, "prepare stream for writing" },
+    { "endWriteEncaps", (PyCFunction)BasicStream_endWriteEncaps,
+      METH_VARARGS, "notify end of stream writing" },
+    { "writeString", (PyCFunction)BasicStream_writeString,
+      METH_VARARGS, "write a string to stream" },
+    { "writeByte", (PyCFunction)BasicStream_writeByte,
+      METH_VARARGS, "write a byte to stream" },
+    { "writeBlob", (PyCFunction)BasicStream_writeBlob,
+      METH_VARARGS, "write b bytes to stream" },
 
     { NULL } /* sentinel */
 };

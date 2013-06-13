@@ -45,24 +45,12 @@ PyEndpoint::EndpointI::EndpointI(const InstancePtr& instance, PyObjectPtr pyEndp
 void
 PyEndpoint::EndpointI::streamWrite(IceInternal::BasicStream* s) const {
 
-    IDG std::cout << " - call to EndpointI::streamWrite(s) [1] (this: "
-		  << this << ")" << std::endl;
+    std::cout << " - call to EndpointI::streamWrite(s) [1] (this: "
+     		  << this << ")" << std::endl;
 
-    // First goes endpoint type
-    s->write(type());
-
-    // Then, endpoint parameters
-    s->startWriteEncaps();
-
-    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "streamWrite");
-    std::string params = PyFunc::getAsString(result);
-
-    // NOTE: s->write(string) will write size first, but we assume
-    // that encapsulation is done in Python implementation.
-    for (std::string::iterator i = params.begin(); i != params.end(); i++) {
-	s->write(Ice::Byte(*i));
-    }
-    s->endWriteEncaps();
+    PyObjectPtr pyStream = BasicStream_new(s);
+    PyObjectPtr args = Py_BuildValue("(O)", pyStream.get());
+    PyFunc::callMethod(_pyEndpoint, "streamWrite", args);
 }
 
 std::string
@@ -406,8 +394,8 @@ PyEndpoint::EndpointFactoryI::create(const std::string& str, bool oaEndpoint) co
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::read(IceInternal::BasicStream* s) const {
 
-    IDG std::cout << " - call to EndpointFactoryI::read(s) (this: "
-		  << this << ")" << std::endl;
+    std::cout << " - call to EndpointFactoryI::read(s) (this: "
+	      << this << ")" << std::endl;
 
     PyObjectPtr pyStream = BasicStream_new(s);
     PyObjectPtr args = Py_BuildValue("(O)", pyStream.get());
