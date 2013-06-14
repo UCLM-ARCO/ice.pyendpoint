@@ -45,7 +45,7 @@ PyEndpoint::EndpointI::EndpointI(const InstancePtr& instance, PyObjectPtr pyEndp
 void
 PyEndpoint::EndpointI::streamWrite(IceInternal::BasicStream* s) const {
 
-    std::cout << " - call to EndpointI::streamWrite(s) [1] (this: "
+    IDG std::cout << " - call to EndpointI::streamWrite(s) [1] (this: "
      		  << this << ")" << std::endl;
 
     PyObjectPtr pyStream = BasicStream_new(s);
@@ -394,8 +394,8 @@ PyEndpoint::EndpointFactoryI::create(const std::string& str, bool oaEndpoint) co
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::read(IceInternal::BasicStream* s) const {
 
-    std::cout << " - call to EndpointFactoryI::read(s) (this: "
-	      << this << ")" << std::endl;
+    IDG std::cout << " - call to EndpointFactoryI::read(s) (this: "
+		  << this << ")" << std::endl;
 
     PyObjectPtr pyStream = BasicStream_new(s);
     PyObjectPtr args = Py_BuildValue("(O)", pyStream.get());

@@ -159,11 +159,18 @@ BasicStream_writeBlob(BasicStreamObject* self, PyObject* args) {
 
     Ice::Byte* data;
     int size;
-    if (not PyArg_ParseTuple(args, "s#", &data, &size)) {
+    int count;
+    if (not PyArg_ParseTuple(args, "s#i", &data, &size, &count)) {
      	return NULL;
     }
 
-    self->s->writeBlob(data, size);
+    if (count > size) {
+    	std::cerr << "ValueError, need at least one endpoint from expand()"
+		  << std::endl;
+     	throw PyFunc::RuntimeError();
+    }
+
+    self->s->writeBlob(data, count);
     Py_RETURN_NONE;
 }
 
