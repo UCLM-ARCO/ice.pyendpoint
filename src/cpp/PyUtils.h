@@ -29,30 +29,16 @@
 class PyGILEnsurer {
 public:
 
-    PyGILEnsurer() :
-	acquired(false) {
-
-	// FIXME: this implies that this thread does not know about
-	// GIL, and thus it is NOT SAFE!
-	if (PyGILState_GetThisThreadState() == 0) {
-	    return;
-	}
-
-	// Current thread should have support for GIL API, otherwise
-	// this will unsue a deadlock. Assure it.
-	assert(PyGILState_GetThisThreadState() != 0);
+    PyGILEnsurer() {
 	_gstate = PyGILState_Ensure();
-	acquired = true;
     }
 
     ~PyGILEnsurer() {
-	if (acquired)
-	    PyGILState_Release(_gstate);
+	PyGILState_Release(_gstate);
     }
 
 private:
     PyGILState_STATE _gstate;
-    bool acquired;
 };
 
 #endif // PYENDPOINT_PYUTIL_H

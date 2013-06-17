@@ -44,9 +44,17 @@ addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
 // Plugin interface.
 PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic) {
 
-    PyEval_InitThreads();
     Py_Initialize();
+
+    // If threads are not initialized, then the main thread is not a
+    // python interpreter: init threads and release GIL
+    if (not PyEval_ThreadsInitialized()) {
+	PyEval_InitThreads();
+	PyEval_ReleaseLock();
+    }
+
     _instance = new Instance(ic);
+
 }
 
 void

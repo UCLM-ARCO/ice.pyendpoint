@@ -101,9 +101,7 @@ PyEndpoint::EndpointI::timeout(Ice::Int timeout) const {
 		  << timeout << ") (this: "
 		  << this << ")" << std::endl;
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
+    return const_cast<EndpointI*>(this);
 }
 
 IceInternal::EndpointIPtr
@@ -277,6 +275,12 @@ PyEndpoint::EndpointI::equivalent(const IceInternal::EndpointIPtr& endpoint) con
     IDG std::cout << " - call to EndpointI::equivalent() (this: "
 		  << this << ")" << std::endl;
 
+    const EndpointI* endp = dynamic_cast<const EndpointI*>(endpoint.get());
+    if(not endp) {
+	return false;
+    }
+
+    // FIXME: call to equivalent() on python endpoint
     std::cout << __FILE__ << ":" << __LINE__
 	      << ": Not implemented!" << std::endl;
     throw;

@@ -43,6 +43,8 @@ PyEndpoint::ConnectorI::connect() {
 Ice::Short
 PyEndpoint::ConnectorI::type() const {
 
+    IDG std::cout << " - call to ConnectorI::type()" << std::endl;
+
     PyObjectPtr result = PyFunc::callMethod(_pyConnector, "type");
     return PyFunc::getAsInteger(result);
 }
