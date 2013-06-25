@@ -5,6 +5,9 @@ ENDPOINT_PROTO = "test"
 
 
 class EndpointFactoryI(object):
+    def __init__(self, ic):
+        self._ic = ic
+
     def type(self):
         return ENDPOINT_TYPE
 
