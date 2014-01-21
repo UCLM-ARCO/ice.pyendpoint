@@ -84,6 +84,17 @@ PyEndpoint::EndpointI::type() const {
     return PyFunc::getAsInteger(result);
 }
 
+std::string
+PyEndpoint::EndpointI::protocol() const {
+
+    IDG std::cout << " - call to EndpointI::protocol() (this: "
+		  << this << ")" << std::endl;
+
+    std::cout << __FILE__ << ":" << __LINE__
+	      << ": Not implemented!" << std::endl;
+    throw;
+}
+
 Ice::Int
 PyEndpoint::EndpointI::timeout() const {
 

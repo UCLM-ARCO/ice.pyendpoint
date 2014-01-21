@@ -23,6 +23,7 @@
 #define PYENDPOINT_ENDPOINT_I_H
 
 #include <Ice/EndpointFactory.h>
+#include <Ice/Communicator.h>
 
 #include "PyHandle.h"
 #include "Ice/EndpointI.h"
@@ -47,6 +48,7 @@ public:
     virtual std::string toString() const;
     virtual Ice::EndpointInfoPtr getInfo() const;
     virtual Ice::Short type() const;
+    virtual std::string protocol() const;
     virtual Ice::Int timeout() const;
     virtual IceInternal::EndpointIPtr timeout(Ice::Int) const;
     virtual IceInternal::EndpointIPtr connectionId(const ::std::string&) const;
@@ -56,6 +58,7 @@ public:
     virtual bool secure() const;
     virtual IceInternal::TransceiverPtr transceiver(IceInternal::EndpointIPtr&) const;
     virtual std::vector<IceInternal::ConnectorPtr> connectors() const;
+    // virtual std::vector<ConnectorPtr> connectors(Ice::EndpointSelectionType) const = 0;
     virtual void connectors_async(const IceInternal::EndpointI_connectorsPtr&) const;
     virtual IceInternal::AcceptorPtr acceptor(IceInternal::EndpointIPtr&,
 					      const std::string&) const;
