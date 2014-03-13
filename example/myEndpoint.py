@@ -14,13 +14,13 @@ class MyEndpointFactoryI(EndpointFactoryI):
         self._protocol = "example"
 
     def create(self, strEndpoint, oaEndpoint):
-        return MyEndpointI(self._communicator, self._protocol, strEndpoint)
+        return MyEndpointI(self._communicator, self._protocol, strEndpoint, oaEndpoint)
 
 
 class MyEndpointI(EndpointI):
     def transceiver(self):
         endp = MyEndpointI(
-            self._communicator, self._protocol, self._strEndpoint)
+            self._communicator, self._protocol, self._strEndpoint, self._oaEndpoint)
         trans = MyTransceiverI(self._communicator, self._protocol, False)
         return endp, trans
 
