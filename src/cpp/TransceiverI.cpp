@@ -37,7 +37,7 @@ PyEndpoint::TransceiverI::getNativeInfo() {
 }
 
 IceInternal::SocketOperation
-PyEndpoint::TransceiverI::initialize() {
+PyEndpoint::TransceiverI::initialize(IceInternal::Buffer&, IceInternal::Buffer&) {
 
     IDG std::cout << " - call to TransceiverI::initialize()" << std::endl;
 

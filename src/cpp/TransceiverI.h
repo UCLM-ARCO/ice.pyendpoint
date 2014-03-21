@@ -37,7 +37,7 @@ class TransceiverI : public IceInternal::Transceiver,
 public:
 
     virtual IceInternal::NativeInfoPtr getNativeInfo();
-    virtual IceInternal::SocketOperation initialize();
+    virtual IceInternal::SocketOperation initialize(IceInternal::Buffer&, IceInternal::Buffer&);
     virtual void close();
     virtual bool write(IceInternal::Buffer&);
     virtual bool read(IceInternal::Buffer&);

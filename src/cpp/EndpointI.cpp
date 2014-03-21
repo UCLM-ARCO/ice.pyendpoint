@@ -215,8 +215,7 @@ PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr& endp) const {
 }
 
 std::vector<IceInternal::ConnectorPtr>
-PyEndpoint::EndpointI::connectors() const {
-
+PyEndpoint::EndpointI::connectors(Ice::EndpointSelectionType selType) const {
     IDG std::cout << " - call to EndpointI::connectors() (this: "
 		  << this << ")" << std::endl;
 
@@ -226,7 +225,7 @@ PyEndpoint::EndpointI::connectors() const {
 }
 
 void
-PyEndpoint::EndpointI::connectors_async(const IceInternal::EndpointI_connectorsPtr& cb) const {
+PyEndpoint::EndpointI::connectors_async(Ice::EndpointSelectionType selType, const IceInternal::EndpointI_connectorsPtr& cb) const {
 
     IDG std::cout << " - call to EndpointI::connectors_async(callback) (this: "
 		  << this << ")" << std::endl;
@@ -330,6 +329,20 @@ PyEndpoint::EndpointI::operator<(const Ice::LocalObject& other) const {
     PyObjectPtr args = Py_BuildValue("(O)", pyOther.get());
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "__lt__", args);
     return PyFunc::getAsBool(result);
+}
+
+// std::vector<IceInternal::ConnectorPtr>
+// IceInternal::EndpointI::connectors(std::vector<IceInternal::Address, std::allocator<IceInternal::Address> > const&) const {
+// }
+
+std::vector<IceInternal::ConnectorPtr>
+PyEndpoint::EndpointI::connectors(const std::vector<IceInternal::Address>&) const {
+    IDG std::cout << " - call to EndpointI::connectors() (this: "
+		  << this << ")" << std::endl;
+
+    std::cout << __FILE__ << ":" << __LINE__
+	      << ": Not implemented!" << std::endl;
+    throw;
 }
 
 Ice::Int

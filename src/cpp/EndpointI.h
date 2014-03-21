@@ -1,7 +1,7 @@
-/* -*- mode: c++; coding: utf-8 -*- */
+/* -*- mode: c++; coding: utf-8; truncate-lines: true -*- */
 
 //
-// Copyright (c) 2012 Oscar Aceña. All rights reserved.
+// Copyright (c) 2012-2014 Oscar Aceña. All rights reserved.
 //
 // This file is part of PyEndpoint
 //
@@ -42,7 +42,9 @@ namespace PyEndpoint {
 class EndpointI : public IceInternal::EndpointI {
 public:
 
+    EndpointI() {};
     EndpointI(const InstancePtr&, PyObjectPtr);
+    virtual ~EndpointI() {};
 
     virtual void streamWrite(IceInternal::BasicStream*) const;
     virtual std::string toString() const;
@@ -57,9 +59,9 @@ public:
     virtual bool datagram() const;
     virtual bool secure() const;
     virtual IceInternal::TransceiverPtr transceiver(IceInternal::EndpointIPtr&) const;
-    virtual std::vector<IceInternal::ConnectorPtr> connectors() const;
-    // virtual std::vector<ConnectorPtr> connectors(Ice::EndpointSelectionType) const = 0;
-    virtual void connectors_async(const IceInternal::EndpointI_connectorsPtr&) const;
+    virtual std::vector<IceInternal::ConnectorPtr> connectors(Ice::EndpointSelectionType) const;
+
+    virtual void connectors_async(Ice::EndpointSelectionType, const IceInternal::EndpointI_connectorsPtr&) const;
     virtual IceInternal::AcceptorPtr acceptor(IceInternal::EndpointIPtr&,
 					      const std::string&) const;
     virtual std::vector<IceInternal::EndpointIPtr> expand() const;
@@ -67,6 +69,11 @@ public:
 
     virtual bool operator==(const Ice::LocalObject&) const;
     virtual bool operator<(const Ice::LocalObject&) const;
+
+protected:
+
+    virtual std::vector<IceInternal::ConnectorPtr> connectors(const std::vector<IceInternal::Address>&) const;
+    friend class IceInternal::EndpointHostResolver;
 
 private:
 
