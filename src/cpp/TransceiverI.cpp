@@ -1,4 +1,4 @@
-// -*- mode: c++; coding: utf-8 -*-
+// -*- mode: c++; coding: utf-8; truncate-lines: true -*-
 
 //
 // Copyright (c) 2012 Oscar Aceña. All rights reserved.
@@ -23,6 +23,7 @@
 
 #include "PyFunctions.h"
 #include "TransceiverI.h"
+#include "Ice/Connection.h"
 #include "Ice/Network.h"
 
 #include "debug.h"
@@ -137,9 +138,13 @@ PyEndpoint::TransceiverI::getInfo() const {
 
     IDG std::cout << " - call to TransceiverI::getInfo()" << std::endl;
 
-    std::cout << __FILE__ << ":" << __LINE__
-	      << ": Not implemented!" << std::endl;
-    throw;
+    Ice::ConnectionInfoPtr info = new Ice::ConnectionInfo();
+    PyObjectPtr pyInfo = PyFunc::callMethod(_pyTransceiver, "getInfo");
+
+    info->incoming = PyFunc::getAsBool(PyFunc::getAttr(pyInfo, "incoming"));
+    info->adapterName = PyFunc::getAsString(PyFunc::getAttr(pyInfo, "adapterName"));
+    info->connectionId = PyFunc::getAsString(PyFunc::getAttr(pyInfo, "connectionId"));
+    return info;
 }
 
 void

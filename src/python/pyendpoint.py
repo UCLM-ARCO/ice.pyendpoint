@@ -140,6 +140,14 @@ class EndpointI(object):
         return [self]
 
 
+# Note: could not create an instance of Ice.ConnectionInfo here
+class ConnectionInfo(object):
+    def __init__(self, incoming, adapterName, connectionId):
+        self.incoming = incoming
+        self.adapterName = adapterName
+        self.connectionId = connectionId
+
+
 class ConnectorI(object):
     def __init__(self, communicator, protocol):
         log << "ConnectorI.__init__()"
@@ -186,6 +194,10 @@ class TransceiverI(object):
     def type(self):
         log << "TransceiverI.type()"
         return self._protocol
+
+    def getInfo(self):
+        log << "TransceiverI.getInfo()"
+        raise NotImplementedError("TransceiverI.getInfo()")
 
     def fd(self):
         log << "TransceiverI.fd()"
