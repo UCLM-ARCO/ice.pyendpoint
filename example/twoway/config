@@ -1,0 +1,5 @@
+# -*- mode: conf; coding: utf-8 -*-
+
+Ice.Plugin.PyEndpoint = IcePyEndpoint:addPyEndpointSupport
+PyEndpoint.Module = twoway_endpoint
+PyEndpoint.Factory = TwowayEndpointFactoryI
