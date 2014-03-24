@@ -3,6 +3,7 @@
 CXX        = g++-4.6
 PYTHON_VER = python2.7
 
+# If segfault...
 # DEBUG_OPS += -DEXTRA_DEBUG
 # DEBUG_OPS += -DDEBUG -ggdb
 
@@ -16,7 +17,7 @@ LDFLAGS    = -L. $$(python-config --ldflags) \
 
 OBJS       = PluginI.o Instance.o EndpointI.o PyFunctions.o \
 	     ConnectorsCallback.o ConnectorI.o TransceiverI.o \
-	     BasicStream.o $(PYTHON_ICE)
+	     BasicStream.o AcceptorI.o $(PYTHON_ICE)
 
 all: $(LIB)
 

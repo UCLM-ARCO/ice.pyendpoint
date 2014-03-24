@@ -119,6 +119,10 @@ class EndpointI(object):
         log << "EndpointI.secure()"
         return False
 
+    def timeout(self):
+        log << "EndpointI.timeout()"
+        return 60
+
     def transceiver(self):
         log << "EndpointI.transceiver(endp)"
         raise NotImplementedError("EndpointI.transceiver(endp)")
@@ -135,6 +139,10 @@ class EndpointI(object):
         # connectors = [ConnectorI(self._communicator, self._protocol)]
         # callback.connectors(connectors)
 
+    def acceptor(self):
+        log << "EndpointI.acceptor()"
+        raise NotImplementedError("EndpointI.acceptor()")
+
     def expand(self):
         log << "EndpointI.expand()"
         return [self]
@@ -146,6 +154,24 @@ class ConnectionInfo(object):
         self.incoming = incoming
         self.adapterName = adapterName
         self.connectionId = connectionId
+
+
+class NativeInfo(object):
+    def __init__(self, fd=-1):
+        self._fd = fd
+
+    def fd(self):
+        return self._fd
+
+
+class Acceptor(NativeInfo):
+    def listen(self):
+        log << "Acceptor.listen()"
+        raise NotImplementedError("Acceptor.listen()")
+
+    def close(self):
+        log << "Acceptor.close()"
+        raise NotImplementedError("Acceptor.close()")
 
 
 class ConnectorI(object):
@@ -174,8 +200,10 @@ class ConnectorI(object):
         # return TransceiverI(self._communicator, self.protocol, True)
 
 
-class TransceiverI(object):
-    def __init__(self, communicator, protocol, connect=False):
+class TransceiverI(NativeInfo):
+    def __init__(self, communicator, protocol, connect=False, fd=-1):
+        NativeInfo.__init__(self, fd)
+
         log << "TransceiverI.__init__()"
         self._communicator = communicator
         self._protocol = protocol
@@ -198,10 +226,6 @@ class TransceiverI(object):
     def getInfo(self):
         log << "TransceiverI.getInfo()"
         raise NotImplementedError("TransceiverI.getInfo()")
-
-    def fd(self):
-        log << "TransceiverI.fd()"
-        raise NotImplementedError("TransceiverI.fd()")
 
     def initialize(self, retvals):
         log << "TransceiverI.initialize()"

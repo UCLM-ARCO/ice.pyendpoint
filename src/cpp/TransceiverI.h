@@ -53,6 +53,7 @@ private:
 
     friend class EndpointI;
     friend class ConnectorI;
+    friend class AcceptorI;
 
     const InstancePtr _instance;
     PyObjectPtr _pyTransceiver;

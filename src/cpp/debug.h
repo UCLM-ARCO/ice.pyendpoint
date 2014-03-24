@@ -1,7 +1,7 @@
 /* -*- mode: c++; coding: utf-8 -*- */
 
 //
-// Copyright (c) 2012 Oscar Aceña. All rights reserved.
+// Copyright (c) 2012-2014 Oscar Aceña. All rights reserved.
 //
 // This file is part of PyEndpoint
 //
@@ -22,9 +22,17 @@
 #ifndef PYENDPOINT_DEBUG_H
 #define PYENDPOINT_DEBUG_H
 
+#define RED "\033[01;31m"
+#define CLR "\033[00m"
+
+#define fixme(MSG) printf(RED "FIXME:" CLR " %s (%s:%d %s)\n",	\
+			  MSG, __FILE__, __LINE__, __func__); assert(false)
+
 #ifdef DEBUG
+  #define trace() printf("CPP: %s:%d %s\n", __FILE__, __LINE__, __func__)
   #define IDG
 #else
+  #define trace(...)
   #define IDG if(0)
 #endif
 
