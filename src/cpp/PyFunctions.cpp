@@ -119,6 +119,21 @@ PyFunc::callMethod(PyObjectPtr object, std::string name, PyObjectPtr args) {
     return result;
 }
 
+PyObjectPtr
+PyFunc::getAttr(PyObjectPtr object, std::string name) {
+    PyGILEnsurer e;
+
+    assert(object);
+    PyObjectPtr result = PyObject_GetAttrString(object, name.c_str());
+
+    if (not result) {
+      	PyErr_Print();
+	throw PyFunc::RuntimeError();
+    }
+
+    return result;
+}
+
 bool
 PyFunc::getAsBool(PyObjectPtr value) {
     return getAsInteger(value);

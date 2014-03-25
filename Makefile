@@ -3,6 +3,10 @@
 all:
 	$(MAKE) -C src $@
 
+.PHONY: test
+test:
+	prego -veo test/*_test.py
+
 install:
 	$(MAKE) -C src $@
 	python setup.py install \

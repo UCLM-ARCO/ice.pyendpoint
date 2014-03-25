@@ -45,6 +45,9 @@ namespace PyFunc {
 			   std::string name,
 			   PyObjectPtr args);
 
+    PyObjectPtr getAttr(PyObjectPtr object,
+			std::string name);
+
     bool getAsBool(PyObjectPtr value);
     int getAsInteger(PyObjectPtr value);
     std::string getAsString(PyObjectPtr value);

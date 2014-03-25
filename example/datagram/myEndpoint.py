@@ -1,9 +1,12 @@
 # -*- mode: python; coding: utf-8 -*-
 
 import socket
-from pyendpoint import EndpointFactoryI, EndpointI, ConnectorI, TransceiverI
 
-from pyendpoint import log
+from pyendpoint import (
+    EndpointFactoryI, EndpointI, ConnectorI, TransceiverI, ConnectionInfo,
+    log
+)
+
 # log.activated = True
 
 
@@ -41,13 +44,20 @@ class MyTransceiverI(TransceiverI):
 
         self.s = socket.socket(type=socket.SOCK_DGRAM)
         if connect:
+            self.incoming = False
             self.s.connect(("127.0.0.1", 9000))
         else:
+            self.incoming = True
             self.s.bind(("127.0.0.1", 9000))
 
     def toString(self):
         log << "TransceiverI.toString()"
         return "example -h 127.0.0.1 -p 9000"
+
+    def getInfo(self):
+        adapterName = ""
+        connectionId = ""
+        return ConnectionInfo(self.incoming, adapterName, connectionId)
 
     def fd(self):
         log << "TransceiverI.fd()"

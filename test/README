@@ -1,2 +1,2 @@
 
-Remember to set LD_LIBRARY_PATH to 'src', and PYTHONPATH to 'test' dirs.
+Remember to set LD_LIBRARY_PATH to 'src/cpp', and PYTHONPATH to 'test' dirs.

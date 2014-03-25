@@ -49,8 +49,8 @@ PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic) {
     // If threads are not initialized, then the main thread is not a
     // python interpreter: init threads and release GIL
     if (not PyEval_ThreadsInitialized()) {
-	PyEval_InitThreads();
-	PyEval_ReleaseLock();
+    	PyEval_InitThreads();
+    	PyEval_ReleaseLock();
     }
 
     _instance = new Instance(ic);
