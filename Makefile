@@ -5,7 +5,7 @@ all:
 
 .PHONY: test
 test:
-	prego -veo test/*_test.py
+	-prego -veo test/*_test.py
 
 install:
 	$(MAKE) -C src $@

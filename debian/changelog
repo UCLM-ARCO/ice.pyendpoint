@@ -1,3 +1,9 @@
+ice-pyendpoint (0.20141028-1) unstable; urgency=low
+
+  * Fix support for Ice3.5
+
+ -- Oscar Aceña Herrera <oscaracena@gmail.com>  Tue, 28 Oct 2014 11:32:40 +0100
+
 ice-pyendpoint (0.20140313-1) unstable; urgency=low
 
   * New release

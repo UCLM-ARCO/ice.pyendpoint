@@ -9,15 +9,14 @@ PYTHON_VER = python2.7
 
 VER        = 35
 LIB        = libIcePyEndpoint.so.$(VER)
-PYTHON_ICE = /usr/lib/pyshared/$(PYTHON_VER)/IcePy.so
-
+PYTHON_ICE = /usr/lib/$(PYTHON_VER)/dist-packages/IcePy.so
 CXXFLAGS   = -I. -Wall $$(python-config --includes) $(DEBUG_OPS) -fPIC
 LDFLAGS    = -L. $$(python-config --ldflags) \
 	     -Wl,-soname,$(LIB) -fPIC -shared
 
 OBJS       = PluginI.o Instance.o EndpointI.o PyFunctions.o \
 	     ConnectorsCallback.o ConnectorI.o TransceiverI.o \
-	     BasicStream.o AcceptorI.o $(PYTHON_ICE)
+	     BasicStream.o AcceptorI.o # $(PYTHON_ICE)
 
 all: $(LIB)
 

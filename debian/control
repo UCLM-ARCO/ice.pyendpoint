@@ -2,8 +2,8 @@ Source: ice-pyendpoint
 Section: devel
 Priority: extra
 Maintainer: Oscar Aceña Herrera <oscaracena@gmail.com>
-Build-Depends: debhelper (>= 8.0.0), python, zeroc-ice34
-Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8.0.0), python, zeroc-ice35
+Standards-Version: 3.9.5
 Homepage: https://bitbucket.org/arco_group/ice-pyendpoint
 
 Package: ice-pyendpoint
