@@ -169,6 +169,10 @@ class Acceptor(NativeInfo):
         log << "Acceptor.listen()"
         raise NotImplementedError("Acceptor.listen()")
 
+    def accept(self):
+        log << "Acceptor.accept()"
+        raise NotImplementedError("Acceptor.accept()")
+
     def close(self):
         log << "Acceptor.close()"
         raise NotImplementedError("Acceptor.close()")
