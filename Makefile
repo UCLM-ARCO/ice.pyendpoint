@@ -16,4 +16,5 @@ install:
 .PHONY: clean
 clean:
 	$(MAKE) -C src $@
+	$(RM) -rf build/
 
