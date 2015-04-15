@@ -13,6 +13,7 @@ PYTHON_ICE = /usr/lib/$(PYTHON_VER)/dist-packages/IcePy.so
 CXXFLAGS   = -I. -Wall $$(python-config --includes) $(DEBUG_OPS) -fPIC
 LDFLAGS    = -L. $$(python-config --ldflags) \
 	     -Wl,-soname,$(LIB) -fPIC -shared
+LDLIBS     = $$(python-config --libs)
 
 OBJS       = PluginI.o Instance.o EndpointI.o PyFunctions.o \
 	     ConnectorsCallback.o ConnectorI.o TransceiverI.o \
@@ -21,7 +22,7 @@ OBJS       = PluginI.o Instance.o EndpointI.o PyFunctions.o \
 all: $(LIB)
 
 $(LIB): $(OBJS)
-	$(CXX) $(LDFLAGS) -o $@ $^
+	$(CXX) $(LDFLAGS) $(LDLIBS) -o $@ $^
 	ln -sf $@ $(LIB:%.$(VER)=%)
 
 install: all

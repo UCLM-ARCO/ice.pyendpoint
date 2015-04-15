@@ -38,9 +38,9 @@ void
 BasicStream_initModule() {
 
     if(PyType_Ready(&BasicStreamType) < 0) {
- 	std::cerr << "ERROR: could not initialize BasicStream type"
-		  << std::endl;
-	throw PyFunc::RuntimeError();
+    	std::cerr << "ERROR: could not initialize BasicStream type"
+    		  << std::endl;
+    	throw PyFunc::RuntimeError();
     }
 }
 
@@ -199,7 +199,6 @@ static PyMethodDef basicStreamMethods[] = {
     { NULL } /* sentinel */
 };
 
-
 PyTypeObject BasicStreamType = {
 
     PyObject_HEAD_INIT(0)
@@ -232,4 +231,3 @@ PyTypeObject BasicStreamType = {
     0,                            /* tp_iternext */
     basicStreamMethods            /* tp_methods */
 };
-

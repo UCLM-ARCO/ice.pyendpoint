@@ -24,7 +24,6 @@
 #include "PyFunctions.h"
 
 #include <Ice/LocalException.h>
-// #include "Ice/ConnectorF.h"
 #include "ConnectorI.h"
 #include "ConnectorsCallback.h"
 
@@ -44,9 +43,9 @@ void
 ConnectorsCallback_initModule() {
 
     if(PyType_Ready(&ConnectorsCallbackType) < 0) {
-	std::cerr << "ERROR: could not initialize ConnectorsCallback type"
-		  << std::endl;
-	throw PyFunc::RuntimeError();
+    	std::cerr << "ERROR: could not initialize ConnectorsCallback type"
+    		  << std::endl;
+    	throw PyFunc::RuntimeError();
     }
 }
 
@@ -122,6 +121,7 @@ static PyMethodDef connectorsCallbackMethods[] = {
       METH_VARARGS, "internal function" },
     { "exception", (PyCFunction)ConnectorsCallback_exception,
       METH_VARARGS, "internal function" },
+
     { NULL } /* sentinel */
 };
 
@@ -134,28 +134,27 @@ PyTypeObject ConnectorsCallbackType = {
     sizeof(ConnectorsCallbackObject), /* tp_basicsize */
     0,                                /* tp_itemsize */
     reinterpret_cast<destructor>(ConnectorsCallback_dealloc), /* tp_dealloc */
-    0,                               /* tp_print */
-    0,                               /* tp_getattr */
-    0,                               /* tp_setattr */
-    0,                               /* tp_compare */
-    0,                               /* tp_repr */
-    0,                               /* tp_as_number */
-    0,                               /* tp_as_sequence */
-    0,                               /* tp_as_mapping */
-    0,                               /* tp_hash */
-    0,                               /* tp_call */
-    0,                               /* tp_str */
-    0,                               /* tp_getattro */
-    0,                               /* tp_setattro */
-    0,                               /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT,              /* tp_flags */
-    0,                               /* tp_doc */
-    0,                               /* tp_traverse */
-    0,                               /* tp_clear */
-    0,                               /* tp_richcompare */
-    0,                               /* tp_weaklistoffset */
-    0,                               /* tp_iter */
-    0,                               /* tp_iternext */
-    connectorsCallbackMethods        /* tp_methods */
+    0,                                /* tp_print */
+    0,                                /* tp_getattr */
+    0,                                /* tp_setattr */
+    0,                                /* tp_compare */
+    0,                                /* tp_repr */
+    0,                                /* tp_as_number */
+    0,                                /* tp_as_sequence */
+    0,                                /* tp_as_mapping */
+    0,                                /* tp_hash */
+    0,                                /* tp_call */
+    0,                                /* tp_str */
+    0,                                /* tp_getattro */
+    0,                                /* tp_setattro */
+    0,                                /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,               /* tp_flags */
+    0,                                /* tp_doc */
+    0,                                /* tp_traverse */
+    0,                                /* tp_clear */
+    0,                                /* tp_richcompare */
+    0,                                /* tp_weaklistoffset */
+    0,                                /* tp_iter */
+    0,                                /* tp_iternext */
+    connectorsCallbackMethods         /* tp_methods */
 };
-
