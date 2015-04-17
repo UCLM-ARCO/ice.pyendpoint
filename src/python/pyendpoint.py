@@ -1,5 +1,9 @@
 # -*- mode: python; coding: utf-8 -*-
 
+# Note: do not remove imoprt Ice: if the endpoint is loaded on C++,
+# both 'engines' (c++ and python) should be connected.
+
+import Ice
 import sys
 
 
