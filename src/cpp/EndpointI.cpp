@@ -301,15 +301,17 @@ PyEndpoint::EndpointFactoryI::EndpointFactoryI(const InstancePtr& instance) :
     _instance(instance) {
     trace();
 
+    std::string preffix = instance->pluginName;
+
     Ice::PropertiesPtr props = instance->communicator()->getProperties();
-    std::string moduleName = props->getProperty("PyEndpoint.Module");
+    std::string moduleName = props->getProperty(preffix + ".Module");
     if (moduleName.empty()) {
-    	std::cerr << "Property 'PyEndpoint.Module' not set!" << std::endl;
+    	std::cerr << "Property '" + preffix + ".Module' not set!" << std::endl;
     	throw PyFunc::RuntimeError();
     }
 
     std::string factoryName =
-	props->getPropertyWithDefault("PyEndpoint.Factory", "EndpointFactoryI");
+	props->getPropertyWithDefault(preffix + ".Factory", "EndpointFactoryI");
 
     PyObjectPtr module = PyFunc::importModule(moduleName);
     PyObjectPtr factoryClass = PyFunc::getClass(module, factoryName);

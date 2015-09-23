@@ -31,7 +31,10 @@ IceInternal::upCast(PyEndpoint::Instance* p) {
     return p;
 }
 
-PyEndpoint::Instance::Instance(const Ice::CommunicatorPtr& ic) {
+PyEndpoint::Instance::Instance(const Ice::CommunicatorPtr& ic,
+			       const std::string& pName) :
+    pluginName(pName) {
+
     __setNoDelete(true);
 
     _facade = IceInternal::getProtocolPluginFacade(ic);

@@ -37,12 +37,13 @@ addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
 		     const std::string& name,
 		     const Ice::StringSeq& args) {
 
-    PluginI* plugin = new PluginI(ic);
+    PluginI* plugin = new PluginI(ic, name);
     return plugin;
 }}
 
 // Plugin interface.
-PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic) {
+PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic,
+			     const std::string& name) {
 
     Py_Initialize();
 
@@ -53,7 +54,7 @@ PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic) {
     	PyEval_ReleaseLock();
     }
 
-    _instance = new Instance(ic);
+    _instance = new Instance(ic, name);
 
 }
 
@@ -72,4 +73,3 @@ PyEndpoint::PluginI::destroy() {
     _instance->destroy();
     _instance = 0;
 }
-

@@ -32,7 +32,7 @@ namespace PyEndpoint {
 class PluginI : public Ice::Plugin {
 public:
 
-    PluginI(const Ice::CommunicatorPtr&);
+    PluginI(const Ice::CommunicatorPtr&, const std::string&);
 
     virtual void initialize();
     virtual void destroy();

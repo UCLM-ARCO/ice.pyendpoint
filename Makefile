@@ -17,4 +17,4 @@ install:
 clean:
 	$(MAKE) -C src $@
 	$(RM) -rf build/
-
+	find -name "*.pyc" -delete

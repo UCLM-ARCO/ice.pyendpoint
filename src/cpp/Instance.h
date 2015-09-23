@@ -33,12 +33,13 @@ namespace PyEndpoint {
 class Instance : public IceUtil::Shared {
 public:
 
-    Instance(const Ice::CommunicatorPtr&);
+    Instance(const Ice::CommunicatorPtr&, const std::string&);
 
     void initialize();
     void destroy();
 
     Ice::CommunicatorPtr communicator() const;
+    const std::string& pluginName;
 
 private:
 
