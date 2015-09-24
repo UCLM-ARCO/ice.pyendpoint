@@ -29,11 +29,6 @@
 namespace PyEndpoint {
 
 class Instance;
-
-}
-
-namespace IceInternal {
-
 IceUtil::Shared* upCast(PyEndpoint::Instance*);
 
 }

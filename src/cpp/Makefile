@@ -1,6 +1,6 @@
 # -*- mode: makefile-gmake; coding: utf-8 -*-
 
-CXX        = g++-4.6
+CXX        = g++
 PYTHON_VER = python2.7
 
 # If segfault...

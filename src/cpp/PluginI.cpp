@@ -20,7 +20,6 @@
 //
 
 #include <Python.h>
-#include <Ice/BuiltinSequences.h>
 
 #include "PluginI.h"
 #include "Instance.h"
