@@ -27,7 +27,7 @@
 #include "EndpointI.h"
 
 IceUtil::Shared*
-upCast(PyEndpoint::Instance* p) {
+PyEndpoint::upCast(PyEndpoint::Instance* p) {
     return p;
 }
 
