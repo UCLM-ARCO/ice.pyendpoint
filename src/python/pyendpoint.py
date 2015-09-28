@@ -91,7 +91,7 @@ class EndpointI(object):
         log << "EndpointI.__lt__(other)", id(self), id(other)
         return id(self) < id(other)
 
-    def streamWrite(self):
+    def streamWrite(self, stream):
         log << "EndpointI.streamWrite()"
         raise NotImplementedError("EndpointI.streamWrite()")
 
