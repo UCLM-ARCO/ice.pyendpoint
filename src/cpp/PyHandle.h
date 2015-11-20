@@ -30,13 +30,13 @@
 #include "debug.h"
 
 
-// Note: use only with functions wich returns new references. If
-// function's return value is a borrowed reference, this will cause
-// unexpected behaviour.
-
 template<typename T>
 class PyHandle {
 public:
+
+    // Note: use only with functions wich returns new references. If
+    // function's return value is a borrowed reference, this will cause
+    // unexpected behaviour. Use 'fromBorrowed' method below.
     PyHandle(T* p = NULL) {
 	IXDG std::cout << "PyHandle::PyHandle(T* p = " << p << ")"
 		       << " [" << (p ? p->ob_refcnt : -1) << "]"
@@ -53,6 +53,7 @@ public:
 	PyGILEnsurer e;
 	if (other._ptr && other._ptr->ob_refcnt < 1) {
 	    std::cerr << "PyHandle ERROR: BadPointer (" << other._ptr
+		      << ", refs: " << other._ptr->ob_refcnt
 		      << "), this python object may be already destroyed!!" << std::endl;
 	    throw;
 	}
@@ -75,7 +76,7 @@ public:
 
     static T* fromBorrowed(T* p) {
 	IXDG std::cout << "PyHandle::fromBorrowed() (p) = " << p
-		       << " [" << (p ? p->ob_refcnt : -1) << "]"
+		       << " [" << (p ? p->ob_refcnt : -123) << "]"
 		       << std::endl;
 
 	PyGILEnsurer e;

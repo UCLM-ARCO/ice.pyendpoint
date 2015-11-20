@@ -42,6 +42,9 @@ PyEndpoint::EndpointI::EndpointI(const InstancePtr& instance, PyObjectPtr pyEndp
     trace();
 }
 
+PyEndpoint::EndpointI::~EndpointI() {
+};
+
 void
 PyEndpoint::EndpointI::streamWrite(IceInternal::BasicStream* s) const {
     trace();
@@ -112,7 +115,9 @@ IceInternal::EndpointIPtr
 PyEndpoint::EndpointI::compress(bool compress) const {
     trace();
 
+    // this returns a new reference
     PyObjectPtr args = Py_BuildValue("(b)", compress);
+
     PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyEndpoint, "setCompress", args);
 
     if (pyEndpoint == _pyEndpoint) {
@@ -148,12 +153,14 @@ PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr& endp) const {
     TransceiverI* trans;
 
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "transceiver");
+
+    // this put on out params borrowed references
     if (not PyArg_ParseTuple(result, "OO", &pyEndp, &pyTransceiver)) {
     	std::cerr << "ValueError, need endpoint and transceiver!" << std::endl;
 	throw PyFunc::RuntimeError();
     }
 
-    // need to 'steal' the borrowed references from PyArg
+    // need to 'steal' the borrowed references from PyArg_ParseTuple
     pyEndp.steal();
     pyTransceiver.steal();
 
@@ -187,7 +194,10 @@ PyEndpoint::EndpointI::connectors_async(Ice::EndpointSelectionType selType, cons
     trace();
 
     PyObjectPtr pyCb = ConnectorsCallback_new(_instance, cb);
+
+    // this returns a new reference
     PyObjectPtr args = Py_BuildValue("(O)", pyCb.get());
+
     PyFunc::callMethod(_pyEndpoint, "connectors_async", args);
 }
 
@@ -201,19 +211,20 @@ PyEndpoint::EndpointI::acceptor(IceInternal::EndpointIPtr& endp,
     AcceptorI* acceptor;
 
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "acceptor");
+
+    // this put on out params borrowed references
     if (not PyArg_ParseTuple(result, "OO", &pyEndp, &pyAcceptor)) {
     	std::cerr << "ValueError, need endpoint and acceptor!" << std::endl;
 	throw PyFunc::RuntimeError();
     }
 
-    // need to 'steal' the borrowed references from PyArg
+    // need to 'steal' the borrowed references from PyArg_ParseTuple
     pyEndp.steal();
     pyAcceptor.steal();
 
     endp = new PyEndpoint::EndpointI(_instance, pyEndp);
     acceptor = new PyEndpoint::AcceptorI(_instance, pyAcceptor);
 
-    // return p;
     return acceptor;
 }
 
@@ -237,7 +248,10 @@ PyEndpoint::EndpointI::expand() const {
     std::vector<IceInternal::EndpointIPtr> retval;
 
     for (short i=0; i<PyList_Size(endpList); i++) {
+
+	// PyList_GetItem returns a borrowed reference
 	pyEndpoint = PyObjectPtr::fromBorrowed(PyList_GetItem(endpList, i));
+
 	endpoint = new PyEndpoint::EndpointI(_instance, pyEndpoint);
 	retval.push_back(endpoint);
     }
@@ -280,7 +294,10 @@ PyEndpoint::EndpointI::operator<(const Ice::LocalObject& other) const {
     }
 
     PyObjectPtr pyOther = dynamic_cast<const EndpointI*>(&other)->_pyEndpoint;
+
+    // Py_BuildValue returns a new reference
     PyObjectPtr args = Py_BuildValue("(O)", pyOther.get());
+
     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "__lt__", args);
     return PyFunc::getAsBool(result);
 }
@@ -313,6 +330,7 @@ PyEndpoint::EndpointFactoryI::EndpointFactoryI(const InstancePtr& instance) :
     std::string factoryName =
 	props->getPropertyWithDefault(preffix + ".Factory", "EndpointFactoryI");
 
+    // all of this creates new references
     PyObjectPtr module = PyFunc::importModule(moduleName);
     PyObjectPtr factoryClass = PyFunc::getClass(module, factoryName);
     PyObjectPtr pyCom = IcePy::createCommunicator(instance->communicator());
@@ -336,6 +354,13 @@ PyEndpoint::EndpointFactoryI::type() const {
 std::string
 PyEndpoint::EndpointFactoryI::protocol() const {
     trace();
+
+    /* NOTE: due an unknown error, on this stage, the Python object
+       'True', is decremented, and eventually it will be destroyed. To
+       avoid this happening, make sure here that it's reference count
+       never gets near 0 */
+    if (Py_True->ob_refcnt < 32000)
+	Py_True->ob_refcnt = 32000;
 
     PyObjectPtr result = PyFunc::callMethod(_pyFactory, "protocol");
     return PyFunc::getAsString(result);

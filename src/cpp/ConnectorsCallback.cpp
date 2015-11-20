@@ -61,8 +61,8 @@ ConnectorsCallback_new(const PyEndpoint::InstancePtr& instance,
         return 0;
     }
 
-    self->cb = new IceInternal::EndpointI_connectorsPtr(cb);
     self->instance = new PyEndpoint::InstancePtr(instance);
+    self->cb = new IceInternal::EndpointI_connectorsPtr(cb);
     return reinterpret_cast<PyObject*>(self);
 }
 

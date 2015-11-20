@@ -35,6 +35,7 @@ ICE_DECLSPEC_EXPORT Ice::Plugin*
 addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
 		     const std::string& name,
 		     const Ice::StringSeq& args) {
+    trace();
 
     PluginI* plugin = new PluginI(ic, name);
     return plugin;
@@ -43,7 +44,7 @@ addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
 // Plugin interface.
 PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic,
 			     const std::string& name) {
-
+    trace();
     Py_Initialize();
 
     // If threads are not initialized, then the main thread is not a
@@ -59,7 +60,7 @@ PyEndpoint::PluginI::PluginI(const Ice::CommunicatorPtr& ic,
 
 void
 PyEndpoint::PluginI::initialize() {
-
+    trace();
     ConnectorsCallback_initModule();
     BasicStream_initModule();
 
@@ -68,7 +69,7 @@ PyEndpoint::PluginI::initialize() {
 
 void
 PyEndpoint::PluginI::destroy() {
-
+    trace();
     _instance->destroy();
     _instance = 0;
 }

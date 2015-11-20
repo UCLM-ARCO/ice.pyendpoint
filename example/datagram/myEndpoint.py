@@ -4,7 +4,7 @@ import socket
 
 from pyendpoint import (
     EndpointFactoryI, EndpointI, ConnectorI, TransceiverI, ConnectionInfo,
-    log
+    log, trace
 )
 
 # log.activated = True
@@ -39,7 +39,7 @@ class MyConnectorI(ConnectorI):
 
 class MyTransceiverI(TransceiverI):
     def __init__(self, communicator, protocol, connect=False):
-        log << "TransceiverI.__init__()"
+        trace()
         TransceiverI.__init__(self, communicator, protocol, connect)
 
         self.s = socket.socket(type=socket.SOCK_DGRAM)
@@ -51,7 +51,7 @@ class MyTransceiverI(TransceiverI):
             self.s.bind(("127.0.0.1", 9000))
 
     def toString(self):
-        log << "TransceiverI.toString()"
+        trace()
         return "example -h 127.0.0.1 -p 9000"
 
     def getInfo(self):
@@ -60,19 +60,19 @@ class MyTransceiverI(TransceiverI):
         return ConnectionInfo(self.incoming, adapterName, connectionId)
 
     def fd(self):
-        log << "TransceiverI.fd()"
+        trace()
         return self.s.fileno()
 
     def write(self, buff):
-        log << "TransceiverI.write()"
+        trace()
         self.s.send(buff)
         return True
 
     def read(self, buff):
-        log << "TransceiverI.read()"
+        trace()
         size = self.s.recv_into(buff, len(buff))
         return True, size
 
     def close(self):
-        log << "TransceiverI.close()"
+        trace()
         self.s.close()

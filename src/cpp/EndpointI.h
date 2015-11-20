@@ -44,7 +44,7 @@ public:
 
     EndpointI() {};
     EndpointI(const InstancePtr&, PyObjectPtr);
-    virtual ~EndpointI() {};
+    virtual ~EndpointI();
 
     virtual void streamWrite(IceInternal::BasicStream*) const;
     virtual std::string toString() const;

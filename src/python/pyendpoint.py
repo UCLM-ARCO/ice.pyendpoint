@@ -6,78 +6,71 @@
 import Ice
 import sys
 
-
-class StdoutLogger(object):
-    lastindex = 0
-
-    def __init__(self, header="", index=0, activated=False):
-        self.header = header
-        self.index = index
-        self.lastindex = index
-        self.activated = activated
-
-    def write(self, msg):
-        if self.activated:
-            sys.stdout.write(msg)
-
-    def __del__(self):
-        self.lastindex -= 1
-        if self.lastindex == 0:
-            self.write("\n")
-
-    def __lshift__(self, msg):
-        self.write(self.header + str(msg))
-        return StdoutLogger(
-            index=self.index + 1, activated=self.activated)
+import inspect
 
 
-log = StdoutLogger("PYTHON: ")
+class log(object):
+    activated = False
+
+
+def trace():
+    if not log.activated:
+        return
+
+    curframe = inspect.currentframe()
+    callframe = inspect.getouterframes(curframe, 2)
+    path, line, method = callframe[1][1:4]
+
+    print "PYTHON: {}:{} {}".format(path, line, method)
+    sys.stdout.flush()
 
 
 class EndpointFactoryI(object):
     def __init__(self, communicator):
-        log << "EndpointFactoryI.__init__()"
+        trace()
+
         self._communicator = communicator
         self._type = -1
         self._protocol = ""
 
     def __del__(self):
-        log << "EndpointFactoryI.__del__()"
+        trace()
 
     def getCommunicator(self):
-        log << "EndpointFactoryI.getCommunicator()"
+        trace()
         return self._communicator
 
     def type(self):
-        log << "EndpointFactoryI.type()"
+        trace()
         return self._type
 
     def protocol(self):
-        log << "EndpointFactoryI.protocol()"
+        trace()
         return self._protocol
 
     def create(self, strEndpoint, oaEndpoint):
-        log << "EndpointFactoryI.create('{}', '{}')".format(
-            strEndpoint, oaEndpoint)
-
+        trace()
         return EndpointI(self._communicator, self._protocol, strEndpoint, oaEndpoint)
 
     def read(self, s):
-        log << "EndpointFactoryI.read()"
+        trace()
         raise NotImplementedError("EndpointFactoryI.read()")
 
     def destroy(self):
-        log << "EndpointFactoryI.destroy()"
+        trace()
 
 
 class BasicStream(object):
     def __init__(self, data):
+        trace()
+
         self._data = data
 
 
 class EndpointI(object):
     def __init__(self, communicator, protocol, strEndpoint, oaEndpoint):
-        log << "EndpointI.__init__()"
+        trace()
+
         self._communicator = communicator
         self._protocol = protocol
         self._type = -1
@@ -85,50 +78,61 @@ class EndpointI(object):
         self._oaEndpoint = oaEndpoint
 
     def __del__(self):
-        log << "EndpointI.__del__()"
+        trace()
 
     def __lt__(self, other):
-        log << "EndpointI.__lt__(other)", id(self), id(other)
+        trace()
+
         return id(self) < id(other)
 
     def streamWrite(self, stream):
-        log << "EndpointI.streamWrite()"
+        trace()
+
         raise NotImplementedError("EndpointI.streamWrite()")
 
     def getCommunicator(self):
-        log << "EndpointI.getCommunicator()"
+        trace()
+
         return self._communicator
 
     def toString(self):
-        log << "EndpointI.toString()"
+        trace()
+
         return self._protocol + self._strEndpoint
 
     def getCompress(self):
-        log << "EndpointI.getCompress()"
+        trace()
+
         return 0
 
     def setCompress(self, compress):
-        log << "EndpointI.setCompress()"
+        trace()
+
         return self
 
     def type(self):
-        log << "EndpointI.type()"
+        trace()
+
         return self._type
 
     def datagram(self):
-        log << "EndpointI.datagram()"
+        trace()
+
         return True
 
     def secure(self):
-        log << "EndpointI.secure()"
+        trace()
+
         return False
 
     def timeout(self):
-        log << "EndpointI.timeout()"
+        trace()
+
         return 60
 
     def transceiver(self):
-        log << "EndpointI.transceiver(endp)"
+        trace()
+
         raise NotImplementedError("EndpointI.transceiver(endp)")
 
         # endp = EndpointI(
@@ -137,24 +141,29 @@ class EndpointI(object):
         # return endp, trans
 
     def connectors_async(self, callback):
-        log << "EndpointI.connectors_async()"
+        trace()
+
         raise NotImplementedError("EndpointI.connectors_async()")
 
         # connectors = [ConnectorI(self._communicator, self._protocol)]
         # callback.connectors(connectors)
 
     def acceptor(self):
-        log << "EndpointI.acceptor()"
+        trace()
+
         raise NotImplementedError("EndpointI.acceptor()")
 
     def expand(self):
-        log << "EndpointI.expand()"
+        trace()
+
         return [self]
 
 
 # Note: could not create an instance of Ice.ConnectionInfo here
 class ConnectionInfo(object):
     def __init__(self, incoming, adapterName, connectionId):
+        trace()
+
         self.incoming = incoming
         self.adapterName = adapterName
         self.connectionId = connectionId
@@ -162,47 +171,59 @@ class ConnectionInfo(object):
 
 class NativeInfo(object):
     def __init__(self, fd=-1):
+        trace()
+
         self._fd = fd
 
     def fd(self):
+        trace()
+
         return self._fd
 
 
 class Acceptor(NativeInfo):
     def listen(self):
-        log << "Acceptor.listen()"
+        trace()
+
         raise NotImplementedError("Acceptor.listen()")
 
     def accept(self):
-        log << "Acceptor.accept()"
+        trace()
+
         raise NotImplementedError("Acceptor.accept()")
 
     def close(self):
-        log << "Acceptor.close()"
+        trace()
+
         raise NotImplementedError("Acceptor.close()")
 
 
 class ConnectorI(object):
     def __init__(self, communicator, protocol):
-        log << "ConnectorI.__init__()"
+        trace()
+
         self._communicator = communicator
         self._protocol = protocol
         self._type = -1
 
     def __lt__(self, other):
-        log << "ConnectorI.__lt__(other)", id(self), id(other)
+        trace()
+
         return id(self) < id(other)
 
     def getCommunicator(self):
-        log << "ConnectorI.getCommunicator()"
+        trace()
+
         return self._communicator
 
     def type(self):
-        log << "ConnectorI.type()"
+        trace()
+
         return self._type
 
     def connect(self):
-        log << "ConnectorI.connect()"
+        trace()
+
         raise NotImplementedError("ConnectorI.connect()")
 
         # return TransceiverI(self._communicator, self.protocol, True)
@@ -210,47 +231,58 @@ class ConnectorI(object):
 
 class TransceiverI(NativeInfo):
     def __init__(self, communicator, protocol, connect=False, fd=-1):
+        trace()
+
         NativeInfo.__init__(self, fd)
 
-        log << "TransceiverI.__init__()"
         self._communicator = communicator
         self._protocol = protocol
         self._connect = connect
 
     def __del__(self):
-        log << "TransceiverI.__del__()"
+        trace()
 
     def getCommunicator(self):
+        trace()
+
         return self._communicator
 
     def toString(self):
-        log << "TransceiverI.toString()"
+        trace()
+
         raise NotImplementedError("TransceiverI.toString()")
 
     def type(self):
-        log << "TransceiverI.type()"
+        trace()
+
         return self._protocol
 
     def getInfo(self):
-        log << "TransceiverI.getInfo()"
+        trace()
+
         raise NotImplementedError("TransceiverI.getInfo()")
 
     def initialize(self, retvals):
-        log << "TransceiverI.initialize()"
+        trace()
+
         return retvals['SocketOperationNone']
 
     def getMaxPaquetSize(self):
-        log << "TransceiverI.getMaxPaquetSize()"
+        trace()
+
         return 256
 
     def write(self, buff):
-        log << "TransceiverI.write(buff)"
+        trace()
+
         raise NotImplementedError("TransceiverI.write")
 
     def read(self, buff):
-        log << "TransceiverI.read(buff)"
+        trace()
+
         raise NotImplementedError("TransceiverI.read")
 
     def close(self):
-        log << "TransceiverI.close()"
+        trace()
+
         raise NotImplementedError("TransceiverI.close")

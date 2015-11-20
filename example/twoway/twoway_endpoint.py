@@ -4,7 +4,7 @@ import socket
 
 from pyendpoint import (
     EndpointFactoryI, EndpointI, ConnectorI, TransceiverI, ConnectionInfo,
-    Acceptor, log
+    Acceptor, log, trace
 )
 
 # log.activated = True
@@ -32,7 +32,7 @@ class TwowayConnectorI(ConnectorI):
 
 class TwowayAcceptor(Acceptor):
     def __init__(self, communicator, protocol):
-        log << "TwowayAcceptor.__init__()"
+        trace()
 
         Acceptor.__init__(self)
         self._communicator = communicator
@@ -44,11 +44,11 @@ class TwowayAcceptor(Acceptor):
         self.sock.bind(("127.0.0.1", 9000))
 
     def close(self):
-        log << "TwowayAcceptor.close()"
+        trace()
         self.sock.close()
 
     def listen(self):
-        log << "TwowayAcceptor.listen()"
+        trace()
         self.sock.listen(1)
         self._fd = self.sock.fileno()
 
@@ -60,11 +60,11 @@ class TwowayAcceptor(Acceptor):
 
 class TwowayEndpointI(EndpointI):
     def transceiver(self):
-        log << "EndpointI.transceiver()"
+        trace()
         return self, None
 
     def connectors_async(self, callback):
-        log << "EndpointI.connectors_async()"
+        trace()
         connectors = [TwowayConnectorI(self._communicator, self._protocol)]
         callback.connectors(connectors)
 
@@ -72,20 +72,20 @@ class TwowayEndpointI(EndpointI):
         return self, TwowayAcceptor(self._communicator, self._protocol)
 
     def datagram(self):
-        log << "EndpointI.datagram()"
+        trace()
         return False
 
 
 class TwowayTransceiverI(TransceiverI):
     def __init__(self, communicator, protocol, sock, incoming=False):
-        log << "TransceiverI.__init__()"
+        trace()
 
         TransceiverI.__init__(self, communicator, protocol, fd=sock.fileno())
         self.incoming = incoming
         self.sock = sock
 
     def toString(self):
-        log << "TransceiverI.toString()"
+        trace()
         return "twowayEndp -h 127.0.0.1 -p 9000"
 
     def getInfo(self):
@@ -94,19 +94,15 @@ class TwowayTransceiverI(TransceiverI):
         return ConnectionInfo(self.incoming, adapterName, connectionId)
 
     def write(self, buff):
-        log << "TransceiverI.write()"
+        trace()
         self.sock.send(buff)
         return True
 
     def read(self, buff):
-        log << "TransceiverI.read()"
+        trace()
         size = self.sock.recv_into(buff, len(buff))
         return True, size
 
     def close(self):
-        log << "TransceiverI.close()"
+        trace()
         self.sock.close()
-
-
-
-

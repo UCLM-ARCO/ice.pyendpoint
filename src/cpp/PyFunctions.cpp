@@ -28,7 +28,10 @@ PyObjectPtr
 PyFunc::importModule(std::string name) {
     PyGILEnsurer e;
 
+    // this returns a new reference
     PyObjectPtr nameObj = PyString_FromString(name.c_str());
+
+    // this returns a new reference
     PyObjectPtr moduleObj = PyImport_Import(nameObj);
 
     if (not moduleObj) {
@@ -43,7 +46,9 @@ PyObjectPtr
 PyFunc::getClass(PyObjectPtr module, std::string name) {
     PyGILEnsurer e;
 
+    // this returns a new reference
     PyObjectPtr classObj = PyObject_GetAttrString(module, name.c_str());
+
     if (not classObj) {
     	PyErr_Print();
     	throw RuntimeError();
@@ -66,7 +71,9 @@ PyFunc::getMethod(PyObjectPtr classObj, std::string name) {
     	throw RuntimeError();
     }
 
+    // this returns a new reference
     PyObjectPtr method = PyObject_GetAttrString(classObj, name.c_str());
+
     if (not PyCallable_Check(method)) {
     	std::cerr << name << " is not a valid method (is not callable)"
 		  << std::endl;
@@ -90,7 +97,9 @@ PyFunc::newInstance(PyObjectPtr cls, PyObjectPtr args) {
 	throw RuntimeError();
     }
 
+    // this returns a new reference
     PyObjectPtr instance = PyObject_CallObject(cls, args);
+
     if (not instance) {
     	PyErr_Print();
     	throw RuntimeError();
@@ -109,6 +118,8 @@ PyFunc::callMethod(PyObjectPtr object, std::string name, PyObjectPtr args) {
     PyGILEnsurer e;
 
     PyObjectPtr method = getMethod(object, name);
+
+    // this returns a new reference
     PyObjectPtr result = PyObject_CallObject(method, args);
 
     if (not result) {
@@ -124,6 +135,8 @@ PyFunc::getAttr(PyObjectPtr object, std::string name) {
     PyGILEnsurer e;
 
     assert(object);
+
+    // this returns a new reference
     PyObjectPtr result = PyObject_GetAttrString(object, name.c_str());
 
     if (not result) {
