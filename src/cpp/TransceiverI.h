@@ -37,14 +37,23 @@ class TransceiverI : public IceInternal::Transceiver,
 public:
 
     virtual IceInternal::NativeInfoPtr getNativeInfo();
-    virtual IceInternal::SocketOperation initialize(IceInternal::Buffer&, IceInternal::Buffer&);
+
+    virtual IceInternal::SocketOperation initialize(IceInternal::Buffer&, IceInternal::Buffer&, bool&);
+    virtual IceInternal::SocketOperation closing(bool, const Ice::LocalException&);
     virtual void close();
-    virtual bool write(IceInternal::Buffer&);
-    virtual bool read(IceInternal::Buffer&);
-    virtual std::string type() const;
+    virtual IceInternal::EndpointIPtr bind();
+    virtual IceInternal::SocketOperation write(IceInternal::Buffer&);
+    virtual IceInternal::SocketOperation read(IceInternal::Buffer&, bool&);
+
+    virtual std::string protocol() const;
     virtual std::string toString() const;
+    virtual std::string toDetailedString() const;
     virtual Ice::ConnectionInfoPtr getInfo() const;
-    virtual void checkSendSize(const IceInternal::Buffer&, size_t);
+    virtual void checkSendSize(const IceInternal::Buffer&);
+    virtual void setBufferSize(int rcvSize, int sndSize);
+
+    // FIXME: review for 3.6
+    // virtual std::string type() const;
 
 private:
 

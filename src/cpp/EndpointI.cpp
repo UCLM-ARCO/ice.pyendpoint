@@ -1,7 +1,7 @@
 /* -*- mode: c++; coding: utf-8; truncate-lines: true -*- */
 
 //
-// Copyright (c) 2012-2014 Oscar Aceña. All rights reserved.
+// Copyright (c) 2012-2016 Oscar Aceña. All rights reserved.
 //
 // This file is part of PyEndpoint
 //
@@ -62,11 +62,12 @@ PyEndpoint::EndpointI::toString() const {
     return PyFunc::getAsString(result);
 }
 
-Ice::EndpointInfoPtr
-PyEndpoint::EndpointI::getInfo() const {
-    trace();
-    fixme("Not implemented");
-}
+// FIXME: review for 3.6
+// Ice::EndpointInfoPtr
+// PyEndpoint::EndpointI::getInfo() const {
+//     trace();
+//     fixme("Not implemented");
+// }
 
 Ice::Short
 PyEndpoint::EndpointI::type() const {
@@ -76,11 +77,12 @@ PyEndpoint::EndpointI::type() const {
     return PyFunc::getAsInteger(result);
 }
 
-std::string
-PyEndpoint::EndpointI::protocol() const {
-    trace();
-    fixme("Not implemented");
-}
+// FIXME: review for 3.6
+// std::string
+// PyEndpoint::EndpointI::protocol() const {
+//     trace();
+//     fixme("Not implemented");
+// }
 
 Ice::Int
 PyEndpoint::EndpointI::timeout() const {
@@ -145,49 +147,69 @@ PyEndpoint::EndpointI::secure() const {
 }
 
 IceInternal::TransceiverPtr
-PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr& endp) const {
+PyEndpoint::EndpointI::transceiver() const {
     trace();
 
-    PyObjectPtr pyEndp;
-    PyObjectPtr pyTransceiver;
     TransceiverI* trans;
-
-    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "transceiver");
-
-    // this put on out params borrowed references
-    if (not PyArg_ParseTuple(result, "OO", &pyEndp, &pyTransceiver)) {
-    	std::cerr << "ValueError, need endpoint and transceiver!" << std::endl;
-	throw PyFunc::RuntimeError();
-    }
-
-    // need to 'steal' the borrowed references from PyArg_ParseTuple
-    pyEndp.steal();
-    pyTransceiver.steal();
+    PyObjectPtr pyTransceiver = PyFunc::callMethod(_pyEndpoint, "transceiver");
 
     // if need an acceptor, return a NULL transceiver
     if (pyTransceiver == Py_None) {
-	endp = const_cast<EndpointI*>(this);
         return 0;
     }
 
     // otherwise, return the given transceiver
     trans = new PyEndpoint::TransceiverI(_instance, pyTransceiver);
-
-    if (pyEndp == _pyEndpoint) {
-	endp = const_cast<EndpointI*>(this);
-    }
-    else {
-	endp = new EndpointI(_instance, pyEndp);
-    }
-
     return trans;
-}
 
-std::vector<IceInternal::ConnectorPtr>
-PyEndpoint::EndpointI::connectors(Ice::EndpointSelectionType selType) const {
-    trace();
-    fixme("Not implemented");
-}
+};
+
+// FIXME: review for 3.6
+// IceInternal::TransceiverPtr
+// PyEndpoint::EndpointI::transceiver(IceInternal::EndpointIPtr& endp) const {
+//     trace();
+
+//     PyObjectPtr pyEndp;
+//     PyObjectPtr pyTransceiver;
+//     TransceiverI* trans;
+
+//     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "transceiver");
+
+//     // this put on out params borrowed references
+//     if (not PyArg_ParseTuple(result, "OO", &pyEndp, &pyTransceiver)) {
+//     	std::cerr << "ValueError, need endpoint and transceiver!" << std::endl;
+// 	throw PyFunc::RuntimeError();
+//     }
+
+//     // need to 'steal' the borrowed references from PyArg_ParseTuple
+//     pyEndp.steal();
+//     pyTransceiver.steal();
+
+//     // if need an acceptor, return a NULL transceiver
+//     if (pyTransceiver == Py_None) {
+// 	endp = const_cast<EndpointI*>(this);
+//         return 0;
+//     }
+
+//     // otherwise, return the given transceiver
+//     trans = new PyEndpoint::TransceiverI(_instance, pyTransceiver);
+
+//     if (pyEndp == _pyEndpoint) {
+// 	endp = const_cast<EndpointI*>(this);
+//     }
+//     else {
+// 	endp = new EndpointI(_instance, pyEndp);
+//     }
+
+//     return trans;
+// }
+
+// FIXME: review for 3.6
+// std::vector<IceInternal::ConnectorPtr>
+// PyEndpoint::EndpointI::connectors(Ice::EndpointSelectionType selType) const {
+//     trace();
+//     fixme("Not implemented");
+// }
 
 void
 PyEndpoint::EndpointI::connectors_async(Ice::EndpointSelectionType selType, const IceInternal::EndpointI_connectorsPtr& cb) const {
@@ -202,31 +224,43 @@ PyEndpoint::EndpointI::connectors_async(Ice::EndpointSelectionType selType, cons
 }
 
 IceInternal::AcceptorPtr
-PyEndpoint::EndpointI::acceptor(IceInternal::EndpointIPtr& endp,
-				const std::string&) const {
+PyEndpoint::EndpointI::acceptor(const std::string&) const {
     trace();
 
-    PyObjectPtr pyEndp;
-    PyObjectPtr pyAcceptor;
     AcceptorI* acceptor;
+    PyObjectPtr pyAcceptor = PyFunc::callMethod(_pyEndpoint, "acceptor");
 
-    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "acceptor");
-
-    // this put on out params borrowed references
-    if (not PyArg_ParseTuple(result, "OO", &pyEndp, &pyAcceptor)) {
-    	std::cerr << "ValueError, need endpoint and acceptor!" << std::endl;
-	throw PyFunc::RuntimeError();
-    }
-
-    // need to 'steal' the borrowed references from PyArg_ParseTuple
-    pyEndp.steal();
-    pyAcceptor.steal();
-
-    endp = new PyEndpoint::EndpointI(_instance, pyEndp);
     acceptor = new PyEndpoint::AcceptorI(_instance, pyAcceptor);
-
     return acceptor;
 }
+
+// FIXME: review for 3.6
+// IceInternal::AcceptorPtr
+// PyEndpoint::EndpointI::acceptor(IceInternal::EndpointIPtr& endp,
+// 				const std::string&) const {
+//     trace();
+
+//     PyObjectPtr pyEndp;
+//     PyObjectPtr pyAcceptor;
+//     AcceptorI* acceptor;
+
+//     PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "acceptor");
+
+//     // this put on out params borrowed references
+//     if (not PyArg_ParseTuple(result, "OO", &pyEndp, &pyAcceptor)) {
+//     	std::cerr << "ValueError, need endpoint and acceptor!" << std::endl;
+// 	throw PyFunc::RuntimeError();
+//     }
+
+//     // need to 'steal' the borrowed references from PyArg_ParseTuple
+//     pyEndp.steal();
+//     pyAcceptor.steal();
+
+//     endp = new PyEndpoint::EndpointI(_instance, pyEndp);
+//     acceptor = new PyEndpoint::AcceptorI(_instance, pyAcceptor);
+
+//     return acceptor;
+// }
 
 std::vector<IceInternal::EndpointIPtr>
 PyEndpoint::EndpointI::expand() const {
@@ -302,17 +336,19 @@ PyEndpoint::EndpointI::operator<(const Ice::LocalObject& other) const {
     return PyFunc::getAsBool(result);
 }
 
-std::vector<IceInternal::ConnectorPtr>
-PyEndpoint::EndpointI::connectors(const std::vector<IceInternal::Address>&) const {
-    trace();
-    fixme("Not implemented");
-}
+// FIXME: review for 3.6
+// std::vector<IceInternal::ConnectorPtr>
+// PyEndpoint::EndpointI::connectors(const std::vector<IceInternal::Address>&) const {
+//     trace();
+//     fixme("Not implemented");
+// }
 
-Ice::Int
-PyEndpoint::EndpointI::hashInit() const {
-    trace();
-    fixme("Not implemented");
-}
+// FIXME: review for 3.6
+// Ice::Int
+// PyEndpoint::EndpointI::hashInit() const {
+//     trace();
+//     fixme("Not implemented");
+// }
 
 PyEndpoint::EndpointFactoryI::EndpointFactoryI(const InstancePtr& instance) :
     _instance(instance) {
@@ -355,26 +391,41 @@ std::string
 PyEndpoint::EndpointFactoryI::protocol() const {
     trace();
 
-    /* NOTE: due an unknown error, on this stage, the Python object
-       'True', is decremented, and eventually it will be destroyed. To
-       avoid this happening, make sure here that it's reference count
-       never gets near 0 */
-    if (Py_True->ob_refcnt < 32000)
-	Py_True->ob_refcnt = 32000;
-
     PyObjectPtr result = PyFunc::callMethod(_pyFactory, "protocol");
     return PyFunc::getAsString(result);
 }
 
 IceInternal::EndpointIPtr
-PyEndpoint::EndpointFactoryI::create(const std::string& str, bool oaEndpoint) const {
+PyEndpoint::EndpointFactoryI::create(std::vector<std::string>& strs, bool oaEndpoint) const {
     trace();
 
-    PyObjectPtr args = Py_BuildValue("sb", str.c_str(), oaEndpoint);
-    PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "create", args);
+    PyObjectPtr py_strs = PyList_New(0);
 
-    return new EndpointI(_instance, pyEndpoint);
+    for (unsigned int i=0; i<strs.size(); i++) {
+	PyObject* p = Py_BuildValue("s", strs[i].c_str());
+
+	// PyList_SET_ITEM steals a reference
+     	PyList_SetItem(py_strs, i, p);
+    }
+
+    PyObjectPtr args = Py_BuildValue("Ob", py_strs, oaEndpoint);
+    // PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "create", args);
+
+    // return new EndpointI(_instance, pyEndpoint);
+
+
 }
+
+// FIXME: review for 3.6
+// IceInternal::EndpointIPtr
+// PyEndpoint::EndpointFactoryI::create(const std::string& str, bool oaEndpoint) const {
+//     trace();
+
+//     PyObjectPtr args = Py_BuildValue("sb", str.c_str(), oaEndpoint);
+//     PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "create", args);
+
+//     return new EndpointI(_instance, pyEndpoint);
+// }
 
 IceInternal::EndpointIPtr
 PyEndpoint::EndpointFactoryI::read(IceInternal::BasicStream* s) const {

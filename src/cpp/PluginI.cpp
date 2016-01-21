@@ -1,7 +1,7 @@
 // -*- mode: c++; coding: utf-8 -*-
 
 //
-// Copyright (c) 2012 Oscar Aceña. All rights reserved.
+// Copyright (c) 2012-2016 Oscar Aceña. All rights reserved.
 //
 // This file is part of PyEndpoint
 //

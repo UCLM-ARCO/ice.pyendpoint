@@ -1,7 +1,7 @@
 /* -*- mode: c++; coding: utf-8; truncate-lines: true -*- */
 
 //
-// Copyright (c) 2012-2014 Oscar Aceña. All rights reserved.
+// Copyright (c) 2012-2016 Oscar Aceña. All rights reserved.
 //
 // This file is part of PyEndpoint
 //
@@ -47,37 +47,45 @@ public:
     virtual ~EndpointI();
 
     virtual void streamWrite(IceInternal::BasicStream*) const;
-    virtual std::string toString() const;
-    virtual Ice::EndpointInfoPtr getInfo() const;
     virtual Ice::Short type() const;
-    virtual std::string protocol() const;
+    virtual const std::string& protocol() const;
     virtual Ice::Int timeout() const;
     virtual IceInternal::EndpointIPtr timeout(Ice::Int) const;
+    virtual const std::string& connectionId() const;
     virtual IceInternal::EndpointIPtr connectionId(const ::std::string&) const;
     virtual bool compress() const;
     virtual IceInternal::EndpointIPtr compress(bool) const;
     virtual bool datagram() const;
     virtual bool secure() const;
-    virtual IceInternal::TransceiverPtr transceiver(IceInternal::EndpointIPtr&) const;
-    virtual std::vector<IceInternal::ConnectorPtr> connectors(Ice::EndpointSelectionType) const;
-
+    virtual IceInternal::TransceiverPtr transceiver() const;
     virtual void connectors_async(Ice::EndpointSelectionType, const IceInternal::EndpointI_connectorsPtr&) const;
-    virtual IceInternal::AcceptorPtr acceptor(IceInternal::EndpointIPtr&,
-					      const std::string&) const;
+    virtual IceInternal::AcceptorPtr acceptor(const std::string&) const;
     virtual std::vector<IceInternal::EndpointIPtr> expand() const;
     virtual bool equivalent(const IceInternal::EndpointIPtr&) const;
-
     virtual bool operator==(const Ice::LocalObject&) const;
     virtual bool operator<(const Ice::LocalObject&) const;
+    virtual Ice::Int hash() const;
+    virtual std::string options() const;
+    virtual std::string toString() const;
+    void initWithOptions(std::vector<std::string>&);
+
+    virtual Ice::EndpointInfoPtr getInfo() const;
+
+    // FIXME: review for 3.6
+    // virtual IceInternal::TransceiverPtr transceiver(IceInternal::EndpointIPtr&) const;
+    // virtual IceInternal::AcceptorPtr acceptor(IceInternal::EndpointIPtr&, const std::string&) const;
+    // virtual std::vector<IceInternal::ConnectorPtr> connectors(Ice::EndpointSelectionType) const;
 
 protected:
 
-    virtual std::vector<IceInternal::ConnectorPtr> connectors(const std::vector<IceInternal::Address>&) const;
-    friend class IceInternal::EndpointHostResolver;
+    // FIXME: review for 3.6
+    // virtual std::vector<IceInternal::ConnectorPtr> connectors(const std::vector<IceInternal::Address>&) const;
+    // friend class IceInternal::EndpointHostResolver;
 
 private:
 
-    virtual ::Ice::Int hashInit() const;
+    // FIXME: review for 3.6
+    // virtual ::Ice::Int hashInit() const;
 
     const InstancePtr _instance;
     PyObjectPtr _pyEndpoint;
@@ -90,9 +98,11 @@ public:
 
     virtual Ice::Short type() const;
     virtual std::string protocol() const;
-    virtual IceInternal::EndpointIPtr create(const std::string&, bool) const;
+    virtual IceInternal::EndpointIPtr create(std::vector<std::string>&, bool) const;
     virtual IceInternal::EndpointIPtr read(IceInternal::BasicStream*) const;
     virtual void destroy();
+
+    virtual IceInternal::EndpointFactoryPtr clone(const IceInternal::ProtocolInstancePtr&) const;
 
 private:
 

@@ -1,7 +1,7 @@
 /* -*- mode: c++; coding: utf-8; truncate-lines: true -*- */
 
 //
-// Copyright (c) 2014 Oscar Aceña. All rights reserved.
+// Copyright (c) 2014-2016 Oscar Aceña. All rights reserved.
 //
 // This file is part of PyEndpoint
 //
@@ -35,9 +35,14 @@ public:
 
     virtual IceInternal::NativeInfoPtr getNativeInfo();
     virtual void close();
-    virtual void listen();
+    virtual IceInternal::EndpointIPtr listen();
     virtual IceInternal::TransceiverPtr accept();
+    virtual std::string protocol() const;
     virtual std::string toString() const;
+    virtual std::string toDetailedString() const;
+
+    // FIXME: review for 3.6
+    // virtual void listen();
 
 private:
 
@@ -53,4 +58,3 @@ private:
 }
 
 #endif // PYENDPOINT_ACCEPTOR_I_H
-
