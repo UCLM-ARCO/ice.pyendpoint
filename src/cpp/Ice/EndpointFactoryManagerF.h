@@ -7,8 +7,8 @@
 //
 // **********************************************************************
 
-#ifndef ICE_ENDPOINT_FACTORY_F_H
-#define ICE_ENDPOINT_FACTORY_F_H
+#ifndef ICE_ENDPOINT_FACTORY_MANAGER_F_H
+#define ICE_ENDPOINT_FACTORY_MANAGER_F_H
 
 #include <IceUtil/Shared.h>
 
@@ -17,9 +17,9 @@
 namespace IceInternal
 {
 
-class EndpointFactory;
-ICE_API IceUtil::Shared* upCast(EndpointFactory*);
-typedef Handle<EndpointFactory> EndpointFactoryPtr;
+class EndpointFactoryManager;
+IceUtil::Shared* upCast(EndpointFactoryManager*);
+typedef Handle<EndpointFactoryManager> EndpointFactoryManagerPtr;
 
 }
 

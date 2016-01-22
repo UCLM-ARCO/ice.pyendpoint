@@ -1,7 +1,7 @@
-/* -*- mode: c++; coding: utf-8 -*- */
+// -*- mode: c++; coding: utf-8 -*-
 
 //
-// Copyright (c) 2012 Oscar Aceña. All rights reserved.
+// Copyright (c) 2012-2016 Oscar Aceña. All rights reserved.
 //
 // This file is part of PyEndpoint
 //
@@ -19,38 +19,31 @@
 // along with PyEndpoint.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef PYENDPOINT_CONNECTOR_I_H
-#define PYENDPOINT_CONNECTOR_I_H
-
-#include <Ice/Connector.h>
-
-#include "PyHandle.h"
-#include "InstanceF.h"
+#ifndef _PYENDPOINTI_H_
+#define _PYENDPOINTI_H_
 
 
 namespace PyEndpoint {
 
-class ConnectorI: public IceInternal::Connector {
+class PyEndpointFactory : public IceInternal::EndpointFactory {
 public:
 
-    ConnectorI(PyEndpoint::InstancePtr&, PyObjectPtr&);
-    virtual ~ConnectorI();
-
-    virtual IceInternal::TransceiverPtr connect();
+    PyEndpointFactory(const Ice::CommunicatorPtr& ic) ;
+    virtual ~PyEndpointFactory();
 
     virtual Ice::Short type() const;
-    virtual std::string toString() const;
+    virtual std::string protocol() const;
+    virtual IceInternal::EndpointIPtr create(std::vector<std::string>&, bool) const;
+    virtual IceInternal::EndpointIPtr read(IceInternal::BasicStream*) const;
+    virtual void destroy();
 
-    virtual bool operator==(const IceInternal::Connector&) const;
-    virtual bool operator!=(const IceInternal::Connector&) const;
-    virtual bool operator<(const IceInternal::Connector&) const;
+    virtual IceInternal::EndpointFactoryPtr clone(const IceInternal::ProtocolInstancePtr&) const;
 
 private:
 
-    PyEndpoint::InstancePtr _instance;
-    PyObjectPtr _pyConnector;
+    IceInternal::ProtocolInstancePtr _instance;
 };
 
 }
 
-#endif
+#endif /* _PYENDPOINTI_H_ */

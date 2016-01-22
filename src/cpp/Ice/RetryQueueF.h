@@ -7,19 +7,17 @@
 //
 // **********************************************************************
 
-#ifndef ICE_PROTOCOL_PLUGIN_FACADE_F_H
-#define ICE_PROTOCOL_PLUGIN_FACADE_F_H
-
-#include <IceUtil/Shared.h>
+#ifndef ICE_RETRY_QUEUE_F_H
+#define ICE_RETRY_QUEUE_F_H
 
 #include <Ice/Handle.h>
 
 namespace IceInternal
 {
 
-class ProtocolPluginFacade;
-ICE_API IceUtil::Shared* upCast(ProtocolPluginFacade*);
-typedef Handle<ProtocolPluginFacade> ProtocolPluginFacadePtr;
+class RetryQueue;
+IceUtil::Shared* upCast(RetryQueue*);
+typedef Handle<RetryQueue> RetryQueuePtr;
 
 }
 

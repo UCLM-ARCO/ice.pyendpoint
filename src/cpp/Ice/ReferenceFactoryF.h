@@ -7,21 +7,17 @@
 //
 // **********************************************************************
 
-#ifndef ICE_NETWORK_F_H
-#define ICE_NETWORK_F_H
-
-#include <IceUtil/Shared.h>
+#ifndef ICE_REFERENCE_FACTORY_F_H
+#define ICE_REFERENCE_FACTORY_F_H
 
 #include <Ice/Handle.h>
 
 namespace IceInternal
 {
 
-#ifdef ICE_OS_WINRT
-struct ICE_API Address;
-#else
-union Address;
-#endif
+class ReferenceFactory;
+IceUtil::Shared* upCast(ReferenceFactory*);
+typedef Handle<ReferenceFactory> ReferenceFactoryPtr;
 
 }
 

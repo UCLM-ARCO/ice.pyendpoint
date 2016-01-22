@@ -7,8 +7,8 @@
 //
 // **********************************************************************
 
-#ifndef ICE_PROTOCOL_INSTANCE_F_H
-#define ICE_PROTOCOL_INSTANCE_F_H
+#ifndef ICE_LOCATOR_INFO_F_H
+#define ICE_LOCATOR_INFO_F_H
 
 #include <IceUtil/Shared.h>
 
@@ -17,9 +17,17 @@
 namespace IceInternal
 {
 
-class ProtocolInstance;
-ICE_API IceUtil::Shared* upCast(ProtocolInstance*);
-typedef IceInternal::Handle<ProtocolInstance> ProtocolInstancePtr;
+class LocatorManager;
+IceUtil::Shared* upCast(LocatorManager*);
+typedef Handle<LocatorManager> LocatorManagerPtr;
+
+class LocatorInfo;
+IceUtil::Shared* upCast(LocatorInfo*);
+typedef Handle<LocatorInfo> LocatorInfoPtr;
+
+class LocatorTable;
+IceUtil::Shared* upCast(LocatorTable*);
+typedef Handle<LocatorTable> LocatorTablePtr;
 
 }
 

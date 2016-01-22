@@ -7,8 +7,8 @@
 //
 // **********************************************************************
 
-#ifndef ICE_NETWORK_PROXY_F_H
-#define ICE_NETWORK_PROXY_F_H
+#ifndef ICE_ROUTER_INFO_F_H
+#define ICE_ROUTER_INFO_F_H
 
 #include <IceUtil/Shared.h>
 
@@ -17,9 +17,13 @@
 namespace IceInternal
 {
 
-class NetworkProxy;
-ICE_API IceUtil::Shared* upCast(NetworkProxy*);
-typedef Handle<NetworkProxy> NetworkProxyPtr;
+class RouterManager;
+IceUtil::Shared* upCast(RouterManager*);
+typedef Handle<RouterManager> RouterManagerPtr;
+
+class RouterInfo;
+IceUtil::Shared* upCast(RouterInfo*);
+typedef Handle<RouterInfo> RouterInfoPtr;
 
 }
 

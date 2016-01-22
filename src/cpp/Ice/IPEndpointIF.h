@@ -7,23 +7,22 @@
 //
 // **********************************************************************
 
-#ifndef ICE_ACCEPTOR_F_H
-#define ICE_ACCEPTOR_F_H
+#ifndef ICE_IP_ENDPOINT_I_F_H
+#define ICE_IP_ENDPOINT_I_F_H
 
 #include <IceUtil/Shared.h>
-
 #include <Ice/Handle.h>
 
 namespace IceInternal
 {
 
-class Acceptor;
-ICE_API IceUtil::Shared* upCast(Acceptor*);
-typedef Handle<Acceptor> AcceptorPtr;
+class IPEndpointI;
+ICE_API IceUtil::Shared* upCast(IPEndpointI*);
+typedef Handle<IPEndpointI> IPEndpointIPtr;
 
-class TcpAcceptor;
-ICE_API IceUtil::Shared* upCast(TcpAcceptor*);
-typedef Handle<TcpAcceptor> TcpAcceptorPtr;
+class EndpointHostResolver;
+ICE_API IceUtil::Shared* upCast(EndpointHostResolver*);
+typedef Handle<EndpointHostResolver> EndpointHostResolverPtr;
 
 }
 
