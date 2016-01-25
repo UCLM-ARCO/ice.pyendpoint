@@ -19,17 +19,17 @@
 // along with PyEndpoint.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include <boost/python.hpp>
-
 #include <Ice/EndpointFactory.h>
 #include <Ice/Communicator.h>
 #include <Ice/ProtocolInstance.h>
 #include <Ice/Plugin.h>
 
+#include <IcePy/Communicator.h>
+
+#include "PyUtils.h"
+#include "PyFunctions.h"
 #include "PyEndpointI.h"
 #include "debug.h"
-
-namespace bp = boost::python;
 
 extern "C" {
 
@@ -48,47 +48,42 @@ addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
     	PyEval_ReleaseLock();
     }
 
-    std::string preffix = name;
-    Ice::PropertiesPtr props = ic->getProperties();
-    std::string moduleName = props->getProperty(preffix + ".Module");
-    if (!moduleName.empty()) {
-     	std::cerr << "Property '" + preffix + ".Module' not set!" << std::endl;
-	throw FIXME_createAValidException;
-    }
-
-    // std::string factoryName =
-    // 	props->getPropertyWithDefault(preffix + ".Factory", "EndpointFactoryI");
-
-    // // all of this creates new references
-    // PyObjectPtr module = PyFunc::importModule(moduleName);
-    // PyObjectPtr factoryClass = PyFunc::getClass(module, factoryName);
-    // PyObjectPtr pyCom = IcePy::createCommunicator(instance->communicator());
-    // PyObjectPtr args = Py_BuildValue("(O)", pyCom.get());
-
-    // _pyFactory = PyFunc::newInstance(factoryClass, args);
-
-
-
-
-
-
-
-
-    IceInternal::EndpointFactoryPtr factory = new PyEndpoint::PyEndpointFactory(ic);
+    IceInternal::EndpointFactoryPtr factory = new PyEndpoint::PyEndpointFactory(name, ic);
     return new IceInternal::EndpointFactoryPlugin(ic, factory);
 }
 
 }
 
-PyEndpoint::PyEndpointFactory::PyEndpointFactory(const Ice::CommunicatorPtr& ic) {
+PyEndpoint::PyEndpointFactory::PyEndpointFactory(const std::string& name,
+						 const Ice::CommunicatorPtr& ic) {
     trace();
 
-    // FIXME: take this from Python's factory
-    Ice::Short type = -1;
-    std::string protocol = "";
-    bool secure = false;
+    std::string preffix = name;
+    Ice::PropertiesPtr props = ic->getProperties();
 
-    _instance = new IceInternal::ProtocolInstance(ic, type, protocol, secure);
+    std::string moduleName = props->getProperty(preffix + ".Module");
+    if (moduleName.empty()) {
+	std::string msg = "Property '" + preffix + ".Module' not set!";
+	throw Ice::PluginInitializationException("", 0, msg);
+    }
+
+    std::string factoryName =
+     	props->getPropertyWithDefault(preffix + ".Factory", "EndpointFactoryI");
+
+    // all of this creates new references
+    PyObjectPtr module = PyFunc::importModule(moduleName);
+    PyObjectPtr factoryClass = PyFunc::getClass(module, factoryName);
+    PyObjectPtr pyCom = IcePy::createCommunicator(ic);
+    PyObjectPtr call_args = Py_BuildValue("(O)", pyCom.get());
+
+    _pyFactory = PyFunc::newInstance(factoryClass, call_args);
+
+    // FIXME: take this from Python's factory
+    Ice::Short endp_type = type();
+    std::string endp_protocol = "";
+    bool endp_secure = false;
+
+    _instance = new IceInternal::ProtocolInstance(ic, endp_type, endp_protocol, endp_secure);
 }
 
 PyEndpoint::PyEndpointFactory::~PyEndpointFactory() {
@@ -99,38 +94,64 @@ Ice::Short
 PyEndpoint::PyEndpointFactory::type() const {
     trace();
 
-    return -1;
+    PyObjectPtr result = PyFunc::callMethod(_pyFactory, "type");
+    return PyFunc::getAsInteger(result);
 }
 
 std::string
 PyEndpoint::PyEndpointFactory::protocol() const {
     trace();
 
-    return "";
+    PyObjectPtr result = PyFunc::callMethod(_pyFactory, "protocol");
+    return PyFunc::getAsString(result);
 }
 
 IceInternal::EndpointIPtr
-PyEndpoint::PyEndpointFactory::create(std::vector<std::string>&, bool) const {
+PyEndpoint::PyEndpointFactory::create(std::vector<std::string>& args, bool oaEndpoint) const {
     trace();
 
-    return NULL;
+    // PyTuple_SetItem steals a reference to object
+
+    // PyObject* str_tuple = PyTuple_New(str.size());
+    // for (unsigned int i=0; i<str.size(); i++){
+    // 	PyObject* item = PyString_FromString(str[i].c_str());
+    // 	PyTuple_SetItem(str_tuple, i, item);
+    // }
+
+    // PyObjectPtr args = PyTuple_New(2);
+    // PyTuple_SetItem(args, 0, Py_BuildValue("b", oaEndpoint));
+    // PyTuple_SetItem(args, 1, str_tuple);
+
+    // ZeroC code:
+    // IPEndpointIPtr endpt = new TcpEndpointI(_instance);
+    // endpt->initWithOptions(args, oaEndpoint);
+    // return endpt;
+
+    PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "create");
+    IceInternal::EndpointIPtr endp = new PyEndpoint::PyEndpointI(_instance, pyEndpoint);
+    endp->initWithOptions(args, oaEndpoint);
+    return endp;
 }
 
 IceInternal::EndpointIPtr
 PyEndpoint::PyEndpointFactory::read(IceInternal::BasicStream*) const {
     trace();
 
+    fixme("Not implemented");
     return NULL;
 }
 
 void
 PyEndpoint::PyEndpointFactory::destroy() {
     trace();
+
+    fixme("Not implemented");
 }
 
 IceInternal::EndpointFactoryPtr
 PyEndpoint::PyEndpointFactory::clone(const IceInternal::ProtocolInstancePtr&) const {
     trace();
 
+    fixme("Not implemented");
     return NULL;
 }

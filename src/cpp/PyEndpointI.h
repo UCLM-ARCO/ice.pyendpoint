@@ -22,13 +22,16 @@
 #ifndef _PYENDPOINTI_H_
 #define _PYENDPOINTI_H_
 
+#include <Ice/Communicator.h>
+#include <Ice/EndpointFactory.h>
+
 
 namespace PyEndpoint {
 
 class PyEndpointFactory : public IceInternal::EndpointFactory {
 public:
 
-    PyEndpointFactory(const Ice::CommunicatorPtr& ic) ;
+    PyEndpointFactory(const std::string& name, const Ice::CommunicatorPtr& ic) ;
     virtual ~PyEndpointFactory();
 
     virtual Ice::Short type() const;
@@ -42,6 +45,7 @@ public:
 private:
 
     IceInternal::ProtocolInstancePtr _instance;
+    PyObjectPtr _pyFactory;
 };
 
 }
