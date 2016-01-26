@@ -31,7 +31,8 @@
 
 namespace PyEndpoint {
 
-class PyTransceiver : public IceInternal::Transceiver {
+class PyTransceiver : public IceInternal::Transceiver,
+		      public IceInternal::NativeInfo {
 public:
 
     virtual IceInternal::NativeInfoPtr getNativeInfo();
@@ -53,6 +54,8 @@ private:
     virtual ~PyTransceiver() {};
 
     friend class PyEndpointI;
+    friend class PyConnector;
+    friend class PyAcceptor;
 
     const IceInternal::ProtocolInstancePtr _instance;
     PyObjectPtr _pyTransceiver;

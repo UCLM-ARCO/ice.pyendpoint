@@ -197,10 +197,10 @@ class Acceptor(NativeInfo):
 
         raise NotImplementedError("Acceptor.listen()")
 
-#     def accept(self):
-#         trace()
+    def accept(self):
+        """Accept a new incomming connection."""
 
-#         raise NotImplementedError("Acceptor.accept()")
+        raise NotImplementedError("Acceptor.accept()")
 
     def close(self):
         """Stop and close your incoming devices"""
@@ -231,23 +231,21 @@ class ConnectorI(object):
 
 #         return self._type
 
-#     def connect(self):
-#         trace()
+    def connect(self):
+        """Perform an active conncetion."""
 
-#         raise NotImplementedError("ConnectorI.connect()")
-
-#         # return TransceiverI(self._communicator, self.protocol, True)
+        raise NotImplementedError("ConnectorI.connect()")
 
 
-# class TransceiverI(NativeInfo):
-#     def __init__(self, communicator, protocol, connect=False, fd=-1):
-#         trace()
+class TransceiverI(NativeInfo):
+    def __init__(self, communicator, protocol, connect=False, fd=-1):
+        trace()
 
-#         NativeInfo.__init__(self, fd)
+        NativeInfo.__init__(self, fd)
 
-#         self._communicator = communicator
-#         self._protocol = protocol
-#         self._connect = connect
+        self._communicator = communicator
+        self._protocol = protocol
+        self._connect = connect
 
 #     def __del__(self):
 #         trace()
@@ -257,10 +255,15 @@ class ConnectorI(object):
 
 #         return self._communicator
 
-#     def toString(self):
-#         trace()
+    def toString(self):
+        """Return a string representation of this transceiver."""
 
-#         raise NotImplementedError("TransceiverI.toString()")
+        raise NotImplementedError("TransceiverI.toString()")
+
+    def protocol(self):
+        trace()
+
+        return self._protocol
 
 #     def type(self):
 #         trace()
@@ -272,27 +275,30 @@ class ConnectorI(object):
 
 #         raise NotImplementedError("TransceiverI.getInfo()")
 
-#     def initialize(self, retvals):
-#         trace()
+    def initialize(self):
+        trace()
 
-#         return retvals['SocketOperationNone']
+        return 0
 
 #     def getMaxPaquetSize(self):
 #         trace()
 
 #         return 256
 
-#     def write(self, buff):
-#         trace()
+    def write(self, buff):
+        """Write buff data to medium. Return True if all was fine, False if
+        need to retry."""
 
-#         raise NotImplementedError("TransceiverI.write")
+        raise NotImplementedError("TransceiverI.write")
 
-#     def read(self, buff):
-#         trace()
+    def read(self, buff):
+        """Read data from medium and store it on buff. Return (state,
+        size). 'state' as True if all was fine, or False if need to
+        retry. """
 
-#         raise NotImplementedError("TransceiverI.read")
+        raise NotImplementedError("TransceiverI.read")
 
-#     def close(self):
-#         trace()
+    def close(self):
+        """Close your medium."""
 
-#         raise NotImplementedError("TransceiverI.close")
+        raise NotImplementedError("TransceiverI.close")

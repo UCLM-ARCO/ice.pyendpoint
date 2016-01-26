@@ -21,6 +21,7 @@
 
 #include "PyAcceptor.h"
 #include "PyEndpointI.h"
+#include "PyTransceiver.h"
 #include "PyFunctions.h"
 
 IceInternal::NativeInfoPtr
@@ -51,7 +52,9 @@ PyEndpoint::PyAcceptor::listen() {
 IceInternal::TransceiverPtr
 PyEndpoint::PyAcceptor::accept() {
     trace();
-    fixme("Not implemented!");
+
+    PyObjectPtr pyTransceiver = PyFunc::callMethod(_pyAcceptor, "accept");
+    return new PyEndpoint::PyTransceiver(_instance, pyTransceiver);
 }
 
 std::string

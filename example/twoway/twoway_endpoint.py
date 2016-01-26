@@ -6,7 +6,7 @@ from pyendpoint import (
     EndpointFactoryI,
     EndpointI,
     ConnectorI,
-    # TransceiverI,
+    TransceiverI,
     # ConnectionInfo,
     Acceptor,
     log,
@@ -33,9 +33,9 @@ class TwowayConnectorI(ConnectorI):
         ConnectorI.__init__(self, communicator, protocol)
         self.sock = socket.socket(type=socket.SOCK_STREAM)
 
-#     def connect(self):
-#         self.sock.connect(("127.0.0.1", 9000))
-#         return TwowayTransceiverI(self._communicator, self._protocol, self.sock, False)
+    def connect(self):
+        self.sock.connect(("127.0.0.1", 9000))
+        return TwowayTransceiverI(self._communicator, self._protocol, self.sock, False)
 
 
 class TwowayAcceptor(Acceptor):
@@ -61,10 +61,10 @@ class TwowayAcceptor(Acceptor):
         trace()
         self.sock.close()
 
-#     def accept(self):
-#         self.client, addr = self.sock.accept()
-#         self._fd = self.client.fileno()
-#         return TwowayTransceiverI(self._communicator, self._protocol, self.client, True)
+    def accept(self):
+        self.client, addr = self.sock.accept()
+        self._fd = self.client.fileno()
+        return TwowayTransceiverI(self._communicator, self._protocol, self.client, True)
 
 
 class TwowayEndpointI(EndpointI):
@@ -117,33 +117,35 @@ class TwowayEndpointI(EndpointI):
         return False
 
 
-# class TwowayTransceiverI(TransceiverI):
-#     def __init__(self, communicator, protocol, sock, incoming=False):
-#         trace()
+class TwowayTransceiverI(TransceiverI):
+    def __init__(self, communicator, protocol, sock, incoming=False):
+        trace()
 
-#         TransceiverI.__init__(self, communicator, protocol, fd=sock.fileno())
-#         self.incoming = incoming
-#         self.sock = sock
+        TransceiverI.__init__(self, communicator, protocol, fd=sock.fileno())
+        self.incoming = incoming
+        self.sock = sock
 
-#     def toString(self):
-#         trace()
-#         return "twowayEndp -h 127.0.0.1 -p 9000"
+    def toString(self):
+        trace()
+        return "twowayEndp -h 127.0.0.1 -p 9000"
 
 #     def getInfo(self):
 #         adapterName = ""
 #         connectionId = ""
 #         return ConnectionInfo(self.incoming, adapterName, connectionId)
 
-#     def write(self, buff):
-#         trace()
-#         self.sock.send(buff)
-#         return True
+    def write(self, buff):
+        trace()
 
-#     def read(self, buff):
-#         trace()
-#         size = self.sock.recv_into(buff, len(buff))
-#         return True, size
+        self.sock.send(buff)
+        return True
 
-#     def close(self):
-#         trace()
-#         self.sock.close()
+    def read(self, buff):
+        trace()
+
+        size = self.sock.recv_into(buff, len(buff))
+        return True, size
+
+    def close(self):
+        trace()
+        self.sock.close()

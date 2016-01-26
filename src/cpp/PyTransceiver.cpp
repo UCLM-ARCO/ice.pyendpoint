@@ -20,17 +20,24 @@
 //
 
 #include "PyTransceiver.h"
+#include "PyFunctions.h"
+
 
 IceInternal::NativeInfoPtr
 PyEndpoint::PyTransceiver::getNativeInfo() {
     trace();
-    fixme("Not implemented!");
+
+    return this;
 }
 
 IceInternal::SocketOperation
 PyEndpoint::PyTransceiver::initialize(IceInternal::Buffer&, IceInternal::Buffer&, bool&) {
     trace();
-    fixme("Not implemented!");
+
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "initialize");
+    int sop = PyFunc::getAsInteger(result);
+
+    return sop == 0 ? IceInternal::SocketOperationNone : IceInternal::SocketOperationConnect;
 }
 
 IceInternal::SocketOperation
@@ -42,31 +49,69 @@ PyEndpoint::PyTransceiver::closing(bool, const Ice::LocalException&) {
 void
 PyEndpoint::PyTransceiver::close() {
     trace();
-    fixme("Not implemented!");
+
+    PyFunc::callMethod(_pyTransceiver, "close");
 }
 
 IceInternal::SocketOperation
-PyEndpoint::PyTransceiver::write(IceInternal::Buffer&) {
+PyEndpoint::PyTransceiver::write(IceInternal::Buffer& buf) {
     trace();
-    fixme("Not implemented!");
+
+    PyObjectPtr pyBuf = PyBuffer_FromMemory(buf.i, buf.b.size());
+    PyObjectPtr args = Py_BuildValue("(O)", pyBuf.get());
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "write", args);
+    bool ok = PyFunc::getAsBool(result);
+
+    return ok ? IceInternal::SocketOperationNone : IceInternal::SocketOperationWrite;
 }
 
 IceInternal::SocketOperation
-PyEndpoint::PyTransceiver::read(IceInternal::Buffer&, bool&) {
+PyEndpoint::PyTransceiver::read(IceInternal::Buffer& buf, bool&) {
     trace();
-    fixme("Not implemented!");
+
+    // PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver, "getMaxPaquetSize");
+    // const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
+    const int maxPacketSize = 256;
+
+    assert(buf.i == buf.b.begin());
+    buf.b.resize(maxPacketSize);
+    buf.i = buf.b.begin();
+
+    PyObjectPtr pyBuf = PyBuffer_FromReadWriteMemory(buf.i, buf.b.size());
+    PyObjectPtr args = Py_BuildValue("(O)", pyBuf.get());
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "read", args);
+
+    if (not PyTuple_Check(result)) {
+    	std::cerr << "ValueError, need status and read size!" << std::endl;
+    	throw PyFunc::RuntimeError();
+    }
+
+    bool ok = PyFunc::getAsBool(PyObjectPtr::fromBorrowed(PyTuple_GetItem(result, 0)));
+    if (not ok) {
+    	return IceInternal::SocketOperationRead;
+    }
+
+    int size = PyFunc::getAsInteger(PyObjectPtr::fromBorrowed(PyTuple_GetItem(result, 1)));
+    buf.b.resize(size);
+    buf.i = buf.b.end();
+
+    return IceInternal::SocketOperationNone;
 }
 
 std::string
 PyEndpoint::PyTransceiver::protocol() const {
     trace();
-    fixme("Not implemented!");
+
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "protocol");
+    return PyFunc::getAsString(result);
 }
 
 std::string
 PyEndpoint::PyTransceiver::toString() const {
     trace();
-    fixme("Not implemented!");
+
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "toString");
+    return PyFunc::getAsString(result);
 }
 
 std::string
@@ -99,4 +144,7 @@ PyEndpoint::PyTransceiver::PyTransceiver(const IceInternal::ProtocolInstancePtr&
     _pyTransceiver(pyTransceiver) {
 
     trace();
+
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "fd");
+    _fd = PyFunc::getAsInteger(result);
 }

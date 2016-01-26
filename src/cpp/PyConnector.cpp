@@ -20,14 +20,17 @@
 //
 
 #include "PyConnector.h"
+#include "PyTransceiver.h"
+#include "PyFunctions.h"
 
 
 IceInternal::TransceiverPtr
 PyEndpoint::PyConnector::connect() {
     trace();
-    fixme("Not implemented!");
-}
 
+    PyObjectPtr result = PyFunc::callMethod(_pyConnector, "connect");
+    return new PyEndpoint::PyTransceiver(_instance, result);
+}
 
 Ice::Short
 PyEndpoint::PyConnector::type() const {
@@ -60,7 +63,10 @@ PyEndpoint::PyConnector::operator<(const IceInternal::Connector&) const {
     fixme("Not implemented!");
 }
 
-PyEndpoint::PyConnector::PyConnector(const IceInternal::ProtocolInstancePtr&, PyObjectPtr&) {
+PyEndpoint::PyConnector::PyConnector(const IceInternal::ProtocolInstancePtr& instance,
+				     PyObjectPtr& pyConnector) :
+    _instance(instance),
+    _pyConnector(pyConnector) {
+
     trace();
-    fixme("Not implemented!");
 }
