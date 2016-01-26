@@ -1,0 +1,66 @@
+/* -*- mode: c++; coding: utf-8; truncate-lines: true -*- */
+
+//
+// Copyright (c) 2012-2016 Oscar Aceña. All rights reserved.
+//
+// This file is part of PyEndpoint
+//
+// PyEndpoint is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// PyEndpoint is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with PyEndpoint.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+#include "PyConnector.h"
+
+
+IceInternal::TransceiverPtr
+PyEndpoint::PyConnector::connect() {
+    trace();
+    fixme("Not implemented!");
+}
+
+
+Ice::Short
+PyEndpoint::PyConnector::type() const {
+    trace();
+    fixme("Not implemented!");
+}
+
+std::string
+PyEndpoint::PyConnector::toString() const {
+    trace();
+    fixme("Not implemented!");
+}
+
+
+bool
+PyEndpoint::PyConnector::operator==(const IceInternal::Connector&) const {
+    trace();
+    fixme("Not implemented!");
+}
+
+bool
+PyEndpoint::PyConnector::operator!=(const IceInternal::Connector&) const {
+    trace();
+    fixme("Not implemented!");
+}
+
+bool
+PyEndpoint::PyConnector::operator<(const IceInternal::Connector&) const {
+    trace();
+    fixme("Not implemented!");
+}
+
+PyEndpoint::PyConnector::PyConnector(const IceInternal::ProtocolInstancePtr&, PyObjectPtr&) {
+    trace();
+    fixme("Not implemented!");
+}

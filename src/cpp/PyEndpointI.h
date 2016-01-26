@@ -1,4 +1,4 @@
-// -*- mode: c++; coding: utf-8 -*-
+// -*- mode: c++; coding: utf-8; truncate-lines: true -*-
 
 //
 // Copyright (c) 2012-2016 Oscar Aceña. All rights reserved.
@@ -25,8 +25,59 @@
 #include <Ice/Communicator.h>
 #include <Ice/EndpointFactory.h>
 
+#include "Ice/EndpointI.h"
+
+#include "PyEndpointF.h"
+
 
 namespace PyEndpoint {
+
+class PyEndpointI : public IceInternal::EndpointI {
+public:
+
+    PyEndpointI(const IceInternal::ProtocolInstancePtr&, PyObjectPtr);
+    virtual ~PyEndpointI() {};
+
+    virtual Ice::EndpointInfoPtr getInfo() const;
+    virtual void streamWrite(IceInternal::BasicStream*) const;
+
+    virtual Ice::Short type() const;
+    virtual const std::string& protocol() const;
+    virtual Ice::Int timeout() const;
+    virtual IceInternal::EndpointIPtr timeout(Ice::Int) const;
+    virtual bool compress() const;
+    virtual IceInternal::EndpointIPtr compress(bool) const;
+    virtual bool datagram() const;
+    virtual bool secure() const;
+
+    PyEndpointIPtr endpoint(const PyAcceptorPtr&) const;
+
+    virtual const std::string& connectionId() const;
+    virtual IceInternal::EndpointIPtr connectionId(const std::string&) const;
+
+    virtual IceInternal::TransceiverPtr transceiver() const;
+    virtual IceInternal::AcceptorPtr acceptor(const std::string&) const;
+    virtual std::vector<IceInternal::EndpointIPtr> expand() const;
+    virtual bool equivalent(const IceInternal::EndpointIPtr&) const;
+    virtual Ice::Int hash() const;
+    virtual std::string options() const;
+
+    virtual void connectors_async(Ice::EndpointSelectionType,
+				  const IceInternal::EndpointI_connectorsPtr&) const;
+
+    virtual bool operator==(const Ice::LocalObject&) const;
+    virtual bool operator<(const Ice::LocalObject&) const;
+
+    virtual void initWithOptions(std::vector<std::string>&, bool);
+    virtual void initWithOptions(std::vector<std::string>&);
+
+private:
+
+    IceInternal::ProtocolInstancePtr _instance;
+    PyObjectPtr _pyEndpoint;
+
+    std::string _protocol; // needed by method protocol(), it returns a reference
+};
 
 class PyEndpointFactory : public IceInternal::EndpointFactory {
 public:

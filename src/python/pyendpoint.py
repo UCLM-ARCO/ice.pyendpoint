@@ -36,9 +36,9 @@ class EndpointFactoryI(object):
     def __del__(self):
         trace()
 
-    def getCommunicator(self):
-        trace()
-        return self._communicator
+#     def getCommunicator(self):
+#         trace()
+#         return self._communicator
 
     def type(self):
         trace()
@@ -48,125 +48,135 @@ class EndpointFactoryI(object):
         trace()
         return self._protocol
 
-    def create(self, strEndpoint, oaEndpoint):
+    def create(self):
         trace()
-        return EndpointI(self._communicator, self._protocol, strEndpoint, oaEndpoint)
+        return EndpointI(self._communicator, self._protocol)
 
-    def read(self, s):
-        trace()
-        raise NotImplementedError("EndpointFactoryI.read()")
+#     def read(self, s):
+#         trace()
+#         raise NotImplementedError("EndpointFactoryI.read()")
 
     def destroy(self):
         trace()
 
 
-class BasicStream(object):
-    def __init__(self, data):
-        trace()
+# class BasicStream(object):
+#     def __init__(self, data):
+#         trace()
 
-        self._data = data
+#         self._data = data
 
 
 class EndpointI(object):
-    def __init__(self, communicator, protocol, strEndpoint, oaEndpoint):
+    def __init__(self, communicator, protocol):
         trace()
 
         self._communicator = communicator
         self._protocol = protocol
-        self._type = -1
-        self._strEndpoint = strEndpoint
-        self._oaEndpoint = oaEndpoint
 
-    def __del__(self):
-        trace()
+#         self._type = -1
+#         self._strEndpoint = strEndpoint
+#         self._oaEndpoint = oaEndpoint
 
-    def __lt__(self, other):
-        trace()
+#     def __del__(self):
+#         trace()
 
-        return id(self) < id(other)
+#     def __lt__(self, other):
+#         trace()
 
-    def streamWrite(self, stream):
-        trace()
+#         return id(self) < id(other)
 
-        raise NotImplementedError("EndpointI.streamWrite()")
+    def initWithOptions(self, args, oaEndpoint):
+        """Here you must parse endpoint options."""
 
-    def getCommunicator(self):
-        trace()
+        raise NotImplementedError("EndpointI.initWithOptions()")
 
-        return self._communicator
+    def options(self):
+        """Return a string with the options part of a stringfied proxy that
+        uses this endpoint. """
 
-    def toString(self):
-        trace()
+        raise NotImplementedError("EndpointI.options()")
 
-        return self._protocol + self._strEndpoint
+#     def streamWrite(self, stream):
+#         trace()
 
-    def getCompress(self):
-        trace()
+#         raise NotImplementedError("EndpointI.streamWrite()")
 
-        return 0
+#     def getCommunicator(self):
+#         trace()
 
-    def setCompress(self, compress):
-        trace()
+#         return self._communicator
 
-        return self
+#     def toString(self):
+#         trace()
 
-    def type(self):
-        trace()
+#         return self._protocol + self._strEndpoint
 
-        return self._type
+#     def getCompress(self):
+#         trace()
+
+#         return 0
+
+#     def setCompress(self, compress):
+#         trace()
+
+#         return self
+
+#     def type(self):
+#         trace()
+
+#         return self._type
 
     def datagram(self):
-        trace()
+        """Return True if this endpoint is datagram oriented (not connection oriented)."""
 
-        return True
+        raise NotImplementedError("EndpointI.datagram()")
+
+    def protocol(self):
+        trace()
+        return self._protocol
 
     def secure(self):
-        trace()
+        """Return True if this endpoint is secure."""
 
         return False
 
-    def timeout(self):
-        trace()
+#     def timeout(self):
+#         trace()
 
-        return 60
+#         return 60
 
     def transceiver(self):
-        trace()
+        """Return an instance of your Transceiver, if this endpoint is not
+        connection oriented. Otherwise, return None."""
 
-        raise NotImplementedError("EndpointI.transceiver(endp)")
-
-        # endp = EndpointI(
-        #     self._communicator, self._protocol, self._strEndpoint)
-        # trans = TransceiverI(self._communicator, self._protocol)
-        # return endp, trans
-
-    def connectors_async(self, callback):
-        trace()
-
-        raise NotImplementedError("EndpointI.connectors_async()")
-
-        # connectors = [ConnectorI(self._communicator, self._protocol)]
-        # callback.connectors(connectors)
+        raise NotImplementedError("EndpointI.transceiver()")
 
     def acceptor(self):
-        trace()
+        """Return an instance of your Acceptor, if this endpoint is
+        connection oriented. Otherwise, return None."""
 
         raise NotImplementedError("EndpointI.acceptor()")
 
-    def expand(self):
-        trace()
+    def endpoint(self, aceptor):
+        """Return a new endpoint, using the acceptor's information."""
 
-        return [self]
+        raise NotImplementedError("EndpointI.endpoint()")
+
+    def connectors_async(self, callback):
+        """Return a list of connectors for this endpoint"""
+
+        raise NotImplementedError("EndpointI.connectors_async()")
 
 
-# Note: could not create an instance of Ice.ConnectionInfo here
-class ConnectionInfo(object):
-    def __init__(self, incoming, adapterName, connectionId):
-        trace()
+# # Note: could not create an instance of Ice.ConnectionInfo here
+# class ConnectionInfo(object):
+#     def __init__(self, incoming, adapterName, connectionId):
+#         trace()
 
-        self.incoming = incoming
-        self.adapterName = adapterName
-        self.connectionId = connectionId
+#         self.incoming = incoming
+#         self.adapterName = adapterName
+#         self.connectionId = connectionId
 
 
 class NativeInfo(object):
@@ -183,17 +193,17 @@ class NativeInfo(object):
 
 class Acceptor(NativeInfo):
     def listen(self):
-        trace()
+        """Start listening for new clients."""
 
         raise NotImplementedError("Acceptor.listen()")
 
-    def accept(self):
-        trace()
+#     def accept(self):
+#         trace()
 
-        raise NotImplementedError("Acceptor.accept()")
+#         raise NotImplementedError("Acceptor.accept()")
 
     def close(self):
-        trace()
+        """Stop and close your incoming devices"""
 
         raise NotImplementedError("Acceptor.close()")
 
@@ -206,83 +216,83 @@ class ConnectorI(object):
         self._protocol = protocol
         self._type = -1
 
-    def __lt__(self, other):
-        trace()
+#     def __lt__(self, other):
+#         trace()
 
-        return id(self) < id(other)
+#         return id(self) < id(other)
 
-    def getCommunicator(self):
-        trace()
+#     def getCommunicator(self):
+#         trace()
 
-        return self._communicator
+#         return self._communicator
 
-    def type(self):
-        trace()
+#     def type(self):
+#         trace()
 
-        return self._type
+#         return self._type
 
-    def connect(self):
-        trace()
+#     def connect(self):
+#         trace()
 
-        raise NotImplementedError("ConnectorI.connect()")
+#         raise NotImplementedError("ConnectorI.connect()")
 
-        # return TransceiverI(self._communicator, self.protocol, True)
+#         # return TransceiverI(self._communicator, self.protocol, True)
 
 
-class TransceiverI(NativeInfo):
-    def __init__(self, communicator, protocol, connect=False, fd=-1):
-        trace()
+# class TransceiverI(NativeInfo):
+#     def __init__(self, communicator, protocol, connect=False, fd=-1):
+#         trace()
 
-        NativeInfo.__init__(self, fd)
+#         NativeInfo.__init__(self, fd)
 
-        self._communicator = communicator
-        self._protocol = protocol
-        self._connect = connect
+#         self._communicator = communicator
+#         self._protocol = protocol
+#         self._connect = connect
 
-    def __del__(self):
-        trace()
+#     def __del__(self):
+#         trace()
 
-    def getCommunicator(self):
-        trace()
+#     def getCommunicator(self):
+#         trace()
 
-        return self._communicator
+#         return self._communicator
 
-    def toString(self):
-        trace()
+#     def toString(self):
+#         trace()
 
-        raise NotImplementedError("TransceiverI.toString()")
+#         raise NotImplementedError("TransceiverI.toString()")
 
-    def type(self):
-        trace()
+#     def type(self):
+#         trace()
 
-        return self._protocol
+#         return self._protocol
 
-    def getInfo(self):
-        trace()
+#     def getInfo(self):
+#         trace()
 
-        raise NotImplementedError("TransceiverI.getInfo()")
+#         raise NotImplementedError("TransceiverI.getInfo()")
 
-    def initialize(self, retvals):
-        trace()
+#     def initialize(self, retvals):
+#         trace()
 
-        return retvals['SocketOperationNone']
+#         return retvals['SocketOperationNone']
 
-    def getMaxPaquetSize(self):
-        trace()
+#     def getMaxPaquetSize(self):
+#         trace()
 
-        return 256
+#         return 256
 
-    def write(self, buff):
-        trace()
+#     def write(self, buff):
+#         trace()
 
-        raise NotImplementedError("TransceiverI.write")
+#         raise NotImplementedError("TransceiverI.write")
 
-    def read(self, buff):
-        trace()
+#     def read(self, buff):
+#         trace()
 
-        raise NotImplementedError("TransceiverI.read")
+#         raise NotImplementedError("TransceiverI.read")
 
-    def close(self):
-        trace()
+#     def close(self):
+#         trace()
 
-        raise NotImplementedError("TransceiverI.close")
+#         raise NotImplementedError("TransceiverI.close")

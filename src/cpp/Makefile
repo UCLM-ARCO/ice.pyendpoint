@@ -28,8 +28,12 @@ ICEPY_OBJS = Communicator.o \
 	     ImplicitContext.o Types.o Current.o Connection.o ConnectionInfo.o
 
 OBJS       = $(ICEPY_OBJS) \
-	     PyEndpointI.o \
 	     PyFunctions.o \
+	     PyEndpointI.o \
+	     PyTransceiver.o \
+	     PyAcceptor.o \
+	     PyConnectorsCallback.o \
+	     PyConnector.o \
 
 	     # $(PYTHON_ICE) \
 	     # EndpointFactoryManager.o \
