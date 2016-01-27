@@ -9,14 +9,13 @@ PYTHON_VER = python2.7
 
 VER        = 36
 LIB        = libIcePyEndpoint.so.$(VER)
-PYTHON_ICE = /usr/lib/$(PYTHON_VER)/dist-packages/IcePy.so
 CXXFLAGS   = -I. -IIcePy -Wall $$(python-config --includes) $(DEBUG_OPS) -fPIC
 LDFLAGS    = -L. $$(python-config --ldflags) \
 	     -Wl,-soname,$(LIB) -fPIC -shared \
-	     -Wl,--no-undefined -L/home/oscar/repos/ice36-arco/src/python/python
+	     -Wl,--no-undefined
 
 LDLIBS     = $$(python-config --libs) \
-	    -lIcePy -lIce -lIceUtil -lSlice -lIceSSL
+	    -lIce -lIceUtil -lSlice -lIceSSL
 
 
 ICEPY_OBJS = Communicator.o \
@@ -59,7 +58,6 @@ install: all
 	install -d $(DESTDIR)/usr/lib
 	install -m 644 $(LIB) $(DESTDIR)/usr/lib
 	ln -sf $(LIB) $(DESTDIR)/usr/lib/$(LIB:%.$(VER)=%)
-	ln -sf $(PYTHON_ICE) $(DESTDIR)/usr/lib/IcePy.so.$(VER)
 
 
 .PHONY: clean

@@ -184,7 +184,7 @@ PyEndpoint::PyEndpointI::transceiver() const {
 
     // otherwise, return a new transceiver
     return new PyEndpoint::PyTransceiver
-	(const_cast<PyEndpoint::PyEndpointI*>(this),  _instance, pyTransceiver);
+	(const_cast<PyEndpoint::PyEndpointI*>(this), _instance, pyTransceiver);
 }
 
 IceInternal::AcceptorPtr
