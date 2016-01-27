@@ -32,6 +32,9 @@ typedef IceInternal::Handle<PyEndpointI> PyEndpointIPtr;
 class PyAcceptor;
 typedef IceInternal::Handle<PyAcceptor> PyAcceptorPtr;
 
+class PyTransceiver;
+typedef IceInternal::Handle<PyTransceiver> PyTransceiverPtr;
+
 }
 
 #endif /* _PYENDPOINTF_H_ */

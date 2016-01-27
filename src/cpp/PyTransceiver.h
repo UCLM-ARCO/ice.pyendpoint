@@ -26,6 +26,7 @@
 #include "Ice/Transceiver.h"
 #include "Ice/Network.h"
 
+#include "PyEndpointI.h"
 #include "PyHandle.h"
 
 
@@ -40,6 +41,7 @@ public:
     virtual IceInternal::SocketOperation initialize(IceInternal::Buffer&, IceInternal::Buffer&, bool&);
     virtual IceInternal::SocketOperation closing(bool, const Ice::LocalException&);
     virtual void close();
+    virtual IceInternal::EndpointIPtr bind();
     virtual IceInternal::SocketOperation write(IceInternal::Buffer&);
     virtual IceInternal::SocketOperation read(IceInternal::Buffer&, bool&);
     virtual std::string protocol() const;
@@ -51,12 +53,16 @@ public:
 
 private:
     PyTransceiver(const IceInternal::ProtocolInstancePtr&, PyObjectPtr);
+    PyTransceiver(const PyEndpointIPtr&, const IceInternal::ProtocolInstancePtr&, PyObjectPtr);
     virtual ~PyTransceiver() {};
+
+    PyObjectPtr getPy() { return _pyTransceiver; };
 
     friend class PyEndpointI;
     friend class PyConnector;
     friend class PyAcceptor;
 
+    PyEndpointIPtr _endpoint;
     const IceInternal::ProtocolInstancePtr _instance;
     PyObjectPtr _pyTransceiver;
 };

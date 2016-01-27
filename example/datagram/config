@@ -1,5 +1,5 @@
 # -*- mode: conf; coding: utf-8 -*-
 
 Ice.Plugin.PyEndpoint = IcePyEndpoint:addPyEndpointSupport
-PyEndpoint.Module = myEndpoint
-PyEndpoint.Factory = MyEndpointFactoryI
+PyEndpoint.Module = datagram_endpoint
+PyEndpoint.Factory = DatagramEndpointFactoryI

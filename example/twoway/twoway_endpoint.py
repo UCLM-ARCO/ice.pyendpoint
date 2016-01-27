@@ -9,7 +9,7 @@ from pyendpoint import (
     TransceiverI,
     ConnectionInfo,
     Acceptor,
-    log,
+    # log,
     trace
 )
 
@@ -20,6 +20,7 @@ class TwowayEndpointFactoryI(EndpointFactoryI):
     def __init__(self, communicator):
         trace()
         EndpointFactoryI.__init__(self, communicator)
+
         self._type = 20
         self._protocol = "twowayEndp"
 
@@ -30,10 +31,12 @@ class TwowayEndpointFactoryI(EndpointFactoryI):
 
 class TwowayConnectorI(ConnectorI):
     def __init__(self, communicator, protocol):
+        trace()
         ConnectorI.__init__(self, communicator, protocol)
         self.sock = socket.socket(type=socket.SOCK_STREAM)
 
     def connect(self):
+        trace()
         self.sock.connect(("127.0.0.1", 9000))
         return TwowayTransceiverI(self._communicator, self._protocol, self.sock, False)
 
@@ -62,6 +65,8 @@ class TwowayAcceptor(Acceptor):
         self.sock.close()
 
     def accept(self):
+        trace()
+
         self.client, addr = self.sock.accept()
         self._fd = self.client.fileno()
         return TwowayTransceiverI(self._communicator, self._protocol, self.client, True)
@@ -130,11 +135,13 @@ class TwowayTransceiverI(TransceiverI):
         return "twowayEndp -h 127.0.0.1 -p 9000"
 
     def getInfo(self):
+        trace()
         adapterName = ""
         connectionId = ""
         return ConnectionInfo(self.incoming, adapterName, connectionId)
 
     def closing(self, initiator):
+        trace()
         return initiator
 
     def write(self, buff):

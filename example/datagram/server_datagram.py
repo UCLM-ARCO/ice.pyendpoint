@@ -13,7 +13,7 @@ class ObjectI(Ice.Object):
 class Server(Ice.Application):
     def run(self, args):
         ic = self.communicator()
-        endps = "example -p1 param1"
+        endps = "datagramEndp -p1 param1"
 
         oa = ic.createObjectAdapterWithEndpoints("adapter", endps)
         oa.activate()

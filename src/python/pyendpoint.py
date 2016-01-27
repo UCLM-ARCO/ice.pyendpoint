@@ -50,8 +50,9 @@ class EndpointFactoryI(object):
         return self._protocol
 
     def create(self):
-        trace()
-        return EndpointI(self._communicator, self._protocol)
+        """Return a new instance of your Endpoint."""
+
+        raise NotImplementedError("EndpointFactoryI.create()")
 
 #     def read(self, s):
 #         trace()
@@ -181,6 +182,9 @@ class NativeInfo(object):
     def fd(self):
         trace()
 
+        if self._fd < 0 and log.activated:
+            print "WARNING: file descriptor is {}, this could be a problem".format(self._fd)
+
         return self._fd
 
 
@@ -239,8 +243,8 @@ class TransceiverI(NativeInfo):
         self._protocol = protocol
         self._connect = connect
 
-#     def __del__(self):
-#         trace()
+    def __del__(self):
+        trace()
 
 #     def getCommunicator(self):
 #         trace()
@@ -256,11 +260,6 @@ class TransceiverI(NativeInfo):
         trace()
         return self._protocol
 
-#     def type(self):
-#         trace()
-
-#         return self._protocol
-
     def getInfo(self):
         """Return here the ConnectionInfo: incoming:b, adapterName:s, connectionId:s."""
 
@@ -270,15 +269,16 @@ class TransceiverI(NativeInfo):
         trace()
         return 0
 
+    def bind(self):
+        """When communications are not connection oriented, make here the
+        initial binding, and return an Enpoint."""
+
+        raise NotImplementedError("TransceiverI.bind()")
+
     def closing(self, initiator):
         """If not connection oriented, return False. Otherwise, return 'initiator'"""
 
         raise NotImplementedError("TransceiverI.closing()")
-
-#     def getMaxPaquetSize(self):
-#         trace()
-
-#         return 256
 
     def write(self, buff):
         """Write buff data to medium. Return True if all was fine, False if

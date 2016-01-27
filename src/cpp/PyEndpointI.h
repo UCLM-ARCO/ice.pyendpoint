@@ -27,6 +27,7 @@
 
 #include "Ice/EndpointI.h"
 
+#include "PyHandle.h"
 #include "PyEndpointF.h"
 
 
@@ -51,6 +52,7 @@ public:
     virtual bool secure() const;
 
     PyEndpointIPtr endpoint(const PyAcceptorPtr&) const;
+    PyEndpointIPtr endpoint(const PyTransceiverPtr&) const;
 
     virtual const std::string& connectionId() const;
     virtual IceInternal::EndpointIPtr connectionId(const std::string&) const;

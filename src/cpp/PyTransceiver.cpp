@@ -21,6 +21,7 @@
 
 #include <Ice/Connection.h>
 
+#include "PyEndpointI.h"
 #include "PyTransceiver.h"
 #include "PyFunctions.h"
 
@@ -58,6 +59,16 @@ PyEndpoint::PyTransceiver::close() {
     trace();
 
     PyFunc::callMethod(_pyTransceiver, "close");
+}
+
+IceInternal::EndpointIPtr
+PyEndpoint::PyTransceiver::bind() {
+    trace();
+
+    PyFunc::callMethod(_pyTransceiver, "bind");
+
+    _endpoint = _endpoint->endpoint(this);
+    return _endpoint;
 }
 
 IceInternal::SocketOperation
@@ -163,6 +174,19 @@ PyEndpoint::PyTransceiver::setBufferSize(int rcvSize, int sndSize) {
 
 PyEndpoint::PyTransceiver::PyTransceiver(const IceInternal::ProtocolInstancePtr& instance,
 					 PyObjectPtr pyTransceiver) :
+    _instance(instance),
+    _pyTransceiver(pyTransceiver) {
+
+    trace();
+
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "fd");
+    _fd = PyFunc::getAsInteger(result);
+}
+
+PyEndpoint::PyTransceiver::PyTransceiver(const PyEndpointIPtr& endpoint,
+					 const IceInternal::ProtocolInstancePtr& instance,
+					 PyObjectPtr pyTransceiver) :
+    _endpoint(endpoint),
     _instance(instance),
     _pyTransceiver(pyTransceiver) {
 

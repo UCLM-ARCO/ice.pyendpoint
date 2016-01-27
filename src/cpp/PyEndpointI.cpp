@@ -148,6 +148,16 @@ PyEndpoint::PyEndpointI::endpoint(const PyAcceptorPtr& acceptor) const {
     return new PyEndpointI(_instance, pyEndpoint);
 }
 
+PyEndpoint::PyEndpointIPtr
+PyEndpoint::PyEndpointI::endpoint(const PyTransceiverPtr& trans) const {
+    trace();
+
+    PyObjectPtr args = Py_BuildValue("(O)", trans->getPy().get());
+    PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyEndpoint, "endpoint", args);
+
+    return new PyEndpointI(_instance, pyEndpoint);
+}
+
 const std::string&
 PyEndpoint::PyEndpointI::connectionId() const {
     trace();
@@ -172,8 +182,9 @@ PyEndpoint::PyEndpointI::transceiver() const {
         return NULL;
     }
 
-    // otherwise, return the given transceiver
-    return new PyEndpoint::PyTransceiver(_instance, pyTransceiver);
+    // otherwise, return a new transceiver
+    return new PyEndpoint::PyTransceiver
+	(const_cast<PyEndpoint::PyEndpointI*>(this),  _instance, pyTransceiver);
 }
 
 IceInternal::AcceptorPtr
