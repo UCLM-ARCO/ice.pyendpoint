@@ -5,6 +5,7 @@
 
 import Ice
 import sys
+import uuid
 
 import inspect
 
@@ -73,6 +74,7 @@ class EndpointI(object):
 
         self._communicator = communicator
         self._protocol = protocol
+        self._connectionId = uuid.uuid4().get_hex()
 
 #         self._type = -1
 #         self._strEndpoint = strEndpoint
@@ -81,10 +83,9 @@ class EndpointI(object):
 #     def __del__(self):
 #         trace()
 
-#     def __lt__(self, other):
-#         trace()
-
-#         return id(self) < id(other)
+    def __lt__(self, other):
+        trace()
+        return id(self) < id(other)
 
     def initWithOptions(self, args, oaEndpoint):
         """Here you must parse endpoint options."""
@@ -112,16 +113,6 @@ class EndpointI(object):
 
 #         return self._protocol + self._strEndpoint
 
-#     def getCompress(self):
-#         trace()
-
-#         return 0
-
-#     def setCompress(self, compress):
-#         trace()
-
-#         return self
-
 #     def type(self):
 #         trace()
 
@@ -136,15 +127,17 @@ class EndpointI(object):
         trace()
         return self._protocol
 
-    def secure(self):
-        """Return True if this endpoint is secure."""
+    def connectionId(self):
+        trace()
+        return self._connectionId
 
+    def secure(self):
+        trace()
         return False
 
-#     def timeout(self):
-#         trace()
-
-#         return 60
+    def timeout(self):
+        trace()
+        return 60
 
     def transceiver(self):
         """Return an instance of your Transceiver, if this endpoint is not
@@ -169,14 +162,14 @@ class EndpointI(object):
         raise NotImplementedError("EndpointI.connectors_async()")
 
 
-# # Note: could not create an instance of Ice.ConnectionInfo here
-# class ConnectionInfo(object):
-#     def __init__(self, incoming, adapterName, connectionId):
-#         trace()
+# Note: could not create an instance of Ice.ConnectionInfo here
+class ConnectionInfo(object):
+    def __init__(self, incoming, adapterName, connectionId):
+        trace()
 
-#         self.incoming = incoming
-#         self.adapterName = adapterName
-#         self.connectionId = connectionId
+        self.incoming = incoming
+        self.adapterName = adapterName
+        self.connectionId = connectionId
 
 
 class NativeInfo(object):
@@ -216,10 +209,9 @@ class ConnectorI(object):
         self._protocol = protocol
         self._type = -1
 
-#     def __lt__(self, other):
-#         trace()
-
-#         return id(self) < id(other)
+    def __lt__(self, other):
+        trace()
+        return id(self) < id(other)
 
 #     def getCommunicator(self):
 #         trace()
@@ -262,7 +254,6 @@ class TransceiverI(NativeInfo):
 
     def protocol(self):
         trace()
-
         return self._protocol
 
 #     def type(self):
@@ -270,15 +261,19 @@ class TransceiverI(NativeInfo):
 
 #         return self._protocol
 
-#     def getInfo(self):
-#         trace()
+    def getInfo(self):
+        """Return here the ConnectionInfo: incoming:b, adapterName:s, connectionId:s."""
 
-#         raise NotImplementedError("TransceiverI.getInfo()")
+        raise NotImplementedError("TransceiverI.getInfo()")
 
     def initialize(self):
         trace()
-
         return 0
+
+    def closing(self, initiator):
+        """If not connection oriented, return False. Otherwise, return 'initiator'"""
+
+        raise NotImplementedError("TransceiverI.closing()")
 
 #     def getMaxPaquetSize(self):
 #         trace()

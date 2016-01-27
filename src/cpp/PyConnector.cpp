@@ -58,9 +58,18 @@ PyEndpoint::PyConnector::operator!=(const IceInternal::Connector&) const {
 }
 
 bool
-PyEndpoint::PyConnector::operator<(const IceInternal::Connector&) const {
+PyEndpoint::PyConnector::operator<(const IceInternal::Connector& other) const {
     trace();
-    fixme("Not implemented!");
+
+    const PyEndpoint::PyConnector* p = dynamic_cast<const PyEndpoint::PyConnector*>(&other);
+    if (not p) {
+        return type() < other.type();
+    }
+
+    PyObjectPtr pyOther = ((PyEndpoint::PyConnector&)other)._pyConnector;
+    PyObjectPtr args = Py_BuildValue("(O)", pyOther.get());
+    PyObjectPtr result = PyFunc::callMethod(_pyConnector, "__lt__", args);
+    return PyFunc::getAsBool(result);
 }
 
 PyEndpoint::PyConnector::PyConnector(const IceInternal::ProtocolInstancePtr& instance,

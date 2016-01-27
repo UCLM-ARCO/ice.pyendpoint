@@ -67,6 +67,7 @@ PyEndpoint::PyEndpointI::PyEndpointI(const IceInternal::ProtocolInstancePtr& ins
     _pyEndpoint(pyEndpoint) {
 
     _protocol = PyFunc::getAsString(PyFunc::callMethod(_pyEndpoint, "protocol"));
+    _connectionId = PyFunc::getAsString(PyFunc::callMethod(_pyEndpoint, "connectionId"));
 
     trace();
 }
@@ -99,7 +100,8 @@ PyEndpoint::PyEndpointI::protocol() const {
 Ice::Int
 PyEndpoint::PyEndpointI::timeout() const {
     trace();
-    fixme("Not implemented");
+
+    return PyFunc::getAsInteger(PyFunc::callMethod(_pyEndpoint, "timeout"));
 }
 
 IceInternal::EndpointIPtr
@@ -111,13 +113,15 @@ PyEndpoint::PyEndpointI::timeout(Ice::Int) const {
 bool
 PyEndpoint::PyEndpointI::compress() const {
     trace();
-    fixme("Not implemented");
+
+    return false;
 }
 
 IceInternal::EndpointIPtr
-PyEndpoint::PyEndpointI::compress(bool) const {
+PyEndpoint::PyEndpointI::compress(bool enabled) const {
     trace();
-    fixme("Not implemented");
+
+    return const_cast<PyEndpoint::PyEndpointI*>(this);
 }
 
 bool
@@ -147,7 +151,8 @@ PyEndpoint::PyEndpointI::endpoint(const PyAcceptorPtr& acceptor) const {
 const std::string&
 PyEndpoint::PyEndpointI::connectionId() const {
     trace();
-    fixme("Not implemented");
+
+    return _connectionId;
 }
 
 IceInternal::EndpointIPtr
@@ -235,9 +240,27 @@ PyEndpoint::PyEndpointI::operator==(const Ice::LocalObject&) const {
 }
 
 bool
-PyEndpoint::PyEndpointI::operator<(const Ice::LocalObject&) const {
+PyEndpoint::PyEndpointI::operator<(const Ice::LocalObject& other) const {
     trace();
-    fixme("Not implemented");
+
+    const PyEndpoint::PyEndpointI* p
+	= dynamic_cast<const PyEndpoint::PyEndpointI*>(&other);
+
+    if (not p) {
+        const IceInternal::EndpointI* e
+	    = dynamic_cast<const IceInternal::EndpointI*>(&other);
+
+        if (not e) {
+            return false;
+        }
+
+        return type() < e->type();
+    }
+
+    // Py_BuildValue returns a new reference
+    PyObjectPtr pyOther = p->_pyEndpoint;
+    PyObjectPtr args = Py_BuildValue("(O)", pyOther.get());
+    return PyFunc::getAsBool(PyFunc::callMethod(_pyEndpoint, "__lt__", args));
 }
 
 void

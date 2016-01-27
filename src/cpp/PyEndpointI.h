@@ -77,6 +77,7 @@ private:
     PyObjectPtr _pyEndpoint;
 
     std::string _protocol; // needed by method protocol(), it returns a reference
+    std::string _connectionId; // needed by method connectionId(), it returns a reference
 };
 
 class PyEndpointFactory : public IceInternal::EndpointFactory {

@@ -5,7 +5,7 @@ PYTHON_VER = python2.7
 
 # If segfault...
 # DEBUG_OPS += -DEXTRA_DEBUG
-DEBUG_OPS += -DDEBUG -ggdb
+# DEBUG_OPS += -DDEBUG -ggdb
 
 VER        = 36
 LIB        = libIcePyEndpoint.so.$(VER)
@@ -23,9 +23,20 @@ ICEPY_OBJS = Communicator.o \
 	     Util.o \
 	     Properties.o \
 	     Logger.o \
-	     Thread.o Operation.o BatchRequestInterceptor.o ObjectFactory.o \
-	     Proxy.o Endpoint.o EndpointInfo.o ObjectAdapter.o PropertiesAdmin.o \
-	     ImplicitContext.o Types.o Current.o Connection.o ConnectionInfo.o
+	     Thread.o \
+	     Operation.o \
+	     BatchRequestInterceptor.o \
+	     ObjectFactory.o \
+	     Proxy.o \
+	     Endpoint.o \
+	     EndpointInfo.o \
+	     ObjectAdapter.o \
+	     PropertiesAdmin.o \
+	     ImplicitContext.o \
+	     Types.o \
+	     Current.o \
+	     Connection.o \
+	     ConnectionInfo.o
 
 OBJS       = $(ICEPY_OBJS) \
 	     PyFunctions.o \
@@ -34,19 +45,6 @@ OBJS       = $(ICEPY_OBJS) \
 	     PyAcceptor.o \
 	     PyConnectorsCallback.o \
 	     PyConnector.o \
-
-	     # $(PYTHON_ICE) \
-	     # EndpointFactoryManager.o \
-	     # OpaqueEndpointI.o \
-	     # Instance.o \
-	     # Instance.o \
-             # EndpointI.o \
-             # PyFunctions.o \
-	     # ConnectorsCallback.o \
-             # ConnectorI.o \
-	     # TransceiverI.o \
-	     # BasicStream.o \
-	     # AcceptorI.o \
 
 vpath %.cpp IcePy
 

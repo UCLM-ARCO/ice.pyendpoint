@@ -7,13 +7,13 @@ from pyendpoint import (
     EndpointI,
     ConnectorI,
     TransceiverI,
-    # ConnectionInfo,
+    ConnectionInfo,
     Acceptor,
     log,
     trace
 )
 
-log.activated = True
+# log.activated = True
 
 
 class TwowayEndpointFactoryI(EndpointFactoryI):
@@ -129,10 +129,13 @@ class TwowayTransceiverI(TransceiverI):
         trace()
         return "twowayEndp -h 127.0.0.1 -p 9000"
 
-#     def getInfo(self):
-#         adapterName = ""
-#         connectionId = ""
-#         return ConnectionInfo(self.incoming, adapterName, connectionId)
+    def getInfo(self):
+        adapterName = ""
+        connectionId = ""
+        return ConnectionInfo(self.incoming, adapterName, connectionId)
+
+    def closing(self, initiator):
+        return initiator
 
     def write(self, buff):
         trace()

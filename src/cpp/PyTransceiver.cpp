@@ -19,6 +19,8 @@
 // along with PyEndpoint.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#include <Ice/Connection.h>
+
 #include "PyTransceiver.h"
 #include "PyFunctions.h"
 
@@ -41,9 +43,14 @@ PyEndpoint::PyTransceiver::initialize(IceInternal::Buffer&, IceInternal::Buffer&
 }
 
 IceInternal::SocketOperation
-PyEndpoint::PyTransceiver::closing(bool, const Ice::LocalException&) {
+PyEndpoint::PyTransceiver::closing(bool initiator, const Ice::LocalException&) {
     trace();
-    fixme("Not implemented!");
+
+    PyObjectPtr args = Py_BuildValue("(b)", initiator);
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "closing", args);
+    bool sop = PyFunc::getAsBool(result);
+
+    return sop ? IceInternal::SocketOperationRead : IceInternal::SocketOperationNone;
 }
 
 void
@@ -123,13 +130,29 @@ PyEndpoint::PyTransceiver::toDetailedString() const {
 Ice::ConnectionInfoPtr
 PyEndpoint::PyTransceiver::getInfo() const {
     trace();
-    fixme("Not implemented!");
+
+    Ice::ConnectionInfoPtr info = new Ice::ConnectionInfo();
+    PyObjectPtr pyInfo = PyFunc::callMethod(_pyTransceiver, "getInfo");
+
+    info->incoming = PyFunc::getAsBool(PyFunc::getAttr(pyInfo, "incoming"));
+    info->adapterName = PyFunc::getAsString(PyFunc::getAttr(pyInfo, "adapterName"));
+    info->connectionId = PyFunc::getAsString(PyFunc::getAttr(pyInfo, "connectionId"));
+    return info;
 }
 
 void
-PyEndpoint::PyTransceiver::checkSendSize(const IceInternal::Buffer&) {
+PyEndpoint::PyTransceiver::checkSendSize(const IceInternal::Buffer& buf) {
     trace();
-    fixme("Not implemented!");
+
+    // PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver, "getMaxPaquetSize");
+    // const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
+    const int maxPacketSize = 256;
+
+    // FIXME: should this get checked on Python?
+    if (buf.b.size() > maxPacketSize) {
+        IceInternal::Ex::throwMemoryLimitException
+	    (__FILE__, __LINE__, buf.b.size(), maxPacketSize);
+    }
 }
 
 void
