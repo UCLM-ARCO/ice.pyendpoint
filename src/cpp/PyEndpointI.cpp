@@ -24,8 +24,6 @@
 #include <Ice/ProtocolInstance.h>
 #include <Ice/Plugin.h>
 
-#include <IcePy/Communicator.h>
-
 #include "PyUtils.h"
 #include "PyFunctions.h"
 #include "PyEndpointF.h"
@@ -33,7 +31,9 @@
 #include "PyTransceiver.h"
 #include "PyAcceptor.h"
 #include "PyConnectorsCallback.h"
+#include "PyCommunicator.h"
 #include "debug.h"
+
 
 extern "C" {
 
@@ -324,7 +324,7 @@ PyEndpoint::PyEndpointFactory::PyEndpointFactory(const std::string& name,
     // all of this creates new references
     PyObjectPtr module = PyFunc::importModule(moduleName);
     PyObjectPtr factoryClass = PyFunc::getClass(module, factoryName);
-    PyObjectPtr pyCom = IcePy::createCommunicator(ic);
+    PyObjectPtr pyCom = PyEndpoint::createCommunicator(ic);
     PyObjectPtr call_args = Py_BuildValue("(O)", pyCom.get());
 
     _pyFactory = PyFunc::newInstance(factoryClass, call_args);

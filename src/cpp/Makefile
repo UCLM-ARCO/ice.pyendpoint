@@ -17,33 +17,13 @@ LDFLAGS    = -L. $$(python-config --ldflags) \
 LDLIBS     = $$(python-config --libs) \
 	    -lIce -lIceUtil -lSlice -lIceSSL
 
-
-ICEPY_OBJS = Communicator.o \
-	     Util.o \
-	     Properties.o \
-	     Logger.o \
-	     Thread.o \
-	     Operation.o \
-	     BatchRequestInterceptor.o \
-	     ObjectFactory.o \
-	     Proxy.o \
-	     Endpoint.o \
-	     EndpointInfo.o \
-	     ObjectAdapter.o \
-	     PropertiesAdmin.o \
-	     ImplicitContext.o \
-	     Types.o \
-	     Current.o \
-	     Connection.o \
-	     ConnectionInfo.o
-
-OBJS       = $(ICEPY_OBJS) \
-	     PyFunctions.o \
+OBJS       = PyFunctions.o \
 	     PyEndpointI.o \
 	     PyTransceiver.o \
 	     PyAcceptor.o \
 	     PyConnectorsCallback.o \
 	     PyConnector.o \
+	     PyCommunicator.o
 
 vpath %.cpp IcePy
 
