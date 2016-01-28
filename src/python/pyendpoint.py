@@ -2,11 +2,10 @@
 
 # Note: do not remove imoprt Ice: if the endpoint is loaded on C++,
 # both 'engines' (c++ and python) should be connected.
-
 import Ice
+
 import sys
 import uuid
-
 import inspect
 
 
@@ -37,10 +36,6 @@ class EndpointFactoryI(object):
     def __del__(self):
         trace()
 
-#     def getCommunicator(self):
-#         trace()
-#         return self._communicator
-
     def type(self):
         trace()
         return self._type
@@ -54,19 +49,13 @@ class EndpointFactoryI(object):
 
         raise NotImplementedError("EndpointFactoryI.create()")
 
-#     def read(self, s):
-#         trace()
-#         raise NotImplementedError("EndpointFactoryI.read()")
+    def read(self, s):
+        """Read endpoint info from stream and create a new one."""
+
+        raise NotImplementedError("EndpointFactoryI.read()")
 
     def destroy(self):
         trace()
-
-
-# class BasicStream(object):
-#     def __init__(self, data):
-#         trace()
-
-#         self._data = data
 
 
 class EndpointI(object):
@@ -77,12 +66,8 @@ class EndpointI(object):
         self._protocol = protocol
         self._connectionId = uuid.uuid4().get_hex()
 
-#         self._type = -1
-#         self._strEndpoint = strEndpoint
-#         self._oaEndpoint = oaEndpoint
-
-#     def __del__(self):
-#         trace()
+    def __del__(self):
+        trace()
 
     def __lt__(self, other):
         trace()
@@ -99,25 +84,15 @@ class EndpointI(object):
 
         raise NotImplementedError("EndpointI.options()")
 
-#     def streamWrite(self, stream):
-#         trace()
+    def streamWrite(self, stream):
+        """Marshall your endpoint to be sent over the wire."""
 
-#         raise NotImplementedError("EndpointI.streamWrite()")
+        raise NotImplementedError("EndpointI.streamWrite()")
 
-#     def getCommunicator(self):
-#         trace()
+    def toString(self):
+        """Return a string representation of your endpoint."""
 
-#         return self._communicator
-
-#     def toString(self):
-#         trace()
-
-#         return self._protocol + self._strEndpoint
-
-#     def type(self):
-#         trace()
-
-#         return self._type
+        raise NotImplementedError("EndpointI.streamWrite()")
 
     def datagram(self):
         """Return True if this endpoint is datagram oriented (not connection oriented)."""
@@ -217,15 +192,9 @@ class ConnectorI(object):
         trace()
         return id(self) < id(other)
 
-#     def getCommunicator(self):
-#         trace()
-
-#         return self._communicator
-
-#     def type(self):
-#         trace()
-
-#         return self._type
+    def type(self):
+        trace()
+        return self._type
 
     def connect(self):
         """Perform an active conncetion."""
@@ -245,11 +214,6 @@ class TransceiverI(NativeInfo):
 
     def __del__(self):
         trace()
-
-#     def getCommunicator(self):
-#         trace()
-
-#         return self._communicator
 
     def toString(self):
         """Return a string representation of this transceiver."""

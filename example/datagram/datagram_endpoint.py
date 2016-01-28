@@ -80,6 +80,7 @@ class DatagramEndpointI(EndpointI):
 
 class DatagramConnectorI(ConnectorI):
     def connect(self):
+        trace()
         return DatagramTransceiverI(self._communicator, self._protocol, True)
 
 

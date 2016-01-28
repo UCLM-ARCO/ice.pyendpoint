@@ -99,6 +99,7 @@ public:
 private:
 
     IceInternal::ProtocolInstancePtr _instance;
+    PyObjectPtr _pyCommunicator;
     PyObjectPtr _pyFactory;
 };
 

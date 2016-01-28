@@ -32,6 +32,7 @@
 #include "PyAcceptor.h"
 #include "PyConnectorsCallback.h"
 #include "PyCommunicator.h"
+#include "PyBasicStream.h"
 #include "debug.h"
 
 
@@ -53,7 +54,7 @@ addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
     }
 
     PyEndpoint::PyConnectorsCallback_initModule();
-    // BasicStream_initModule();
+    PyEndpoint::BasicStream_initModule();
 
     IceInternal::EndpointFactoryPtr factory = new PyEndpoint::PyEndpointFactory(name, ic);
     return new IceInternal::EndpointFactoryPlugin(ic, factory);
@@ -79,9 +80,12 @@ PyEndpoint::PyEndpointI::getInfo() const {
 }
 
 void
-PyEndpoint::PyEndpointI::streamWrite(IceInternal::BasicStream*) const {
+PyEndpoint::PyEndpointI::streamWrite(IceInternal::BasicStream* s) const {
     trace();
-    fixme("Not implemented");
+
+    PyObjectPtr pyStream = BasicStream_new(s);
+    PyObjectPtr args = Py_BuildValue("(O)", pyStream.get());
+    PyFunc::callMethod(_pyEndpoint, "streamWrite", args);
 }
 
 Ice::Short
@@ -212,8 +216,14 @@ PyEndpoint::PyEndpointI::expand() const {
 }
 
 bool
-PyEndpoint::PyEndpointI::equivalent(const IceInternal::EndpointIPtr&) const {
+PyEndpoint::PyEndpointI::equivalent(const IceInternal::EndpointIPtr& other) const {
     trace();
+
+    const PyEndpoint::PyEndpointI* endp = dynamic_cast<const PyEndpoint::PyEndpointI*>(other.get());
+    if (not endp) {
+	return false;
+    }
+
     fixme("Not implemented");
 }
 
@@ -322,10 +332,10 @@ PyEndpoint::PyEndpointFactory::PyEndpointFactory(const std::string& name,
      	props->getPropertyWithDefault(preffix + ".Factory", "EndpointFactoryI");
 
     // all of this creates new references
+    _pyCommunicator = PyEndpoint::createCommunicator(ic);
     PyObjectPtr module = PyFunc::importModule(moduleName);
     PyObjectPtr factoryClass = PyFunc::getClass(module, factoryName);
-    PyObjectPtr pyCom = PyEndpoint::createCommunicator(ic);
-    PyObjectPtr call_args = Py_BuildValue("(O)", pyCom.get());
+    PyObjectPtr call_args = Py_BuildValue("(O)", _pyCommunicator.get());
 
     _pyFactory = PyFunc::newInstance(factoryClass, call_args);
 
@@ -367,11 +377,20 @@ PyEndpoint::PyEndpointFactory::create(std::vector<std::string>& args, bool oaEnd
 }
 
 IceInternal::EndpointIPtr
-PyEndpoint::PyEndpointFactory::read(IceInternal::BasicStream*) const {
+PyEndpoint::PyEndpointFactory::read(IceInternal::BasicStream* s) const {
     trace();
 
-    fixme("Not implemented");
-    return NULL;
+    PyObjectPtr pyStream = BasicStream_new(s);
+    PyObjectPtr args = Py_BuildValue("(O)", pyStream.get());
+    PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "read", args);
+
+    if (pyEndpoint == Py_None) {
+    	std::cerr << "ValueError, invalid endpoint returned!"
+		  << std::endl;
+	throw PyFunc::RuntimeError();
+    }
+
+    return new PyEndpoint::PyEndpointI(_instance, pyEndpoint);
 }
 
 void

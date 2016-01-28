@@ -40,6 +40,7 @@ PyEndpoint::createCommunicator(const Ice::CommunicatorPtr& ic) {
 
     CommunicatorObject* _ic = reinterpret_cast<CommunicatorObject*>(pyIc.get());
     (*_ic->communicator)->destroy();
+
     _ic->communicator = new Ice::CommunicatorPtr(ic);
 
     return pyIc;

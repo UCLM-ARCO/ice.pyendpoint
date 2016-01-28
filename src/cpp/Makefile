@@ -23,7 +23,8 @@ OBJS       = PyFunctions.o \
 	     PyAcceptor.o \
 	     PyConnectorsCallback.o \
 	     PyConnector.o \
-	     PyCommunicator.o
+	     PyCommunicator.o \
+	     PyBasicStream.o
 
 vpath %.cpp IcePy
 
