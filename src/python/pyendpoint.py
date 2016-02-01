@@ -99,6 +99,13 @@ class EndpointI(object):
 
         raise NotImplementedError("EndpointI.datagram()")
 
+    def type(self):
+        trace()
+        if not hasattr(self, "_type"):
+            raise TypeError("EndpointI._type is missing")
+
+        return self._type
+
     def protocol(self):
         trace()
         return self._protocol

@@ -91,7 +91,9 @@ PyEndpoint::PyEndpointI::streamWrite(IceInternal::BasicStream* s) const {
 Ice::Short
 PyEndpoint::PyEndpointI::type() const {
     trace();
-    fixme("Not implemented");
+
+    PyObjectPtr result = PyFunc::callMethod(_pyEndpoint, "type");
+    return PyFunc::getAsInteger(result);
 }
 
 const std::string&
