@@ -134,6 +134,11 @@ class EndpointI(object):
 
         raise NotImplementedError("EndpointI.acceptor()")
 
+    def equivalent(self, other):
+        """Return True if self and other are equivalent endpoints. Otherwise, return False."""
+
+        raise NotImplementedError("EndpointI.acceptor()")
+
     def endpoint(self, aceptor):
         """Return a new endpoint, using the acceptor's information."""
 

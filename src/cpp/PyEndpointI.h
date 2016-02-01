@@ -75,6 +75,8 @@ public:
 
 private:
 
+    PyObjectPtr getPy() const { return _pyEndpoint; };
+
     IceInternal::ProtocolInstancePtr _instance;
     PyObjectPtr _pyEndpoint;
 

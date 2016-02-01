@@ -226,7 +226,9 @@ PyEndpoint::PyEndpointI::equivalent(const IceInternal::EndpointIPtr& other) cons
 	return false;
     }
 
-    fixme("Not implemented");
+    PyObjectPtr args = Py_BuildValue("(O)", endp->getPy().get());
+    PyObjectPtr retval = PyFunc::callMethod(_pyEndpoint, "equivalent", args);
+    return PyFunc::getAsBool(retval);
 }
 
 Ice::Int
