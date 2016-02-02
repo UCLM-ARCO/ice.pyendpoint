@@ -132,10 +132,13 @@ PyEndpoint::PyTransceiver::toString() const {
     return PyFunc::getAsString(result);
 }
 
+// Used on some Ice.Trace levels
 std::string
 PyEndpoint::PyTransceiver::toDetailedString() const {
     trace();
-    fixme("Not implemented!");
+
+    PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "toDetailedString");
+    return PyFunc::getAsString(result);
 }
 
 Ice::ConnectionInfoPtr

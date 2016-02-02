@@ -239,6 +239,11 @@ class TransceiverI(NativeInfo):
 
         raise NotImplementedError("TransceiverI.toString()")
 
+    def toDetailedString(self):
+        """Return detailed information of this transceiver."""
+
+        raise NotImplementedError("TransceiverI.toDetailedString()")
+
     def protocol(self):
         trace()
         return self._protocol
