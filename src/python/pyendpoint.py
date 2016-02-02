@@ -137,7 +137,7 @@ class EndpointI(object):
     def equivalent(self, other):
         """Return True if self and other are equivalent endpoints. Otherwise, return False."""
 
-        raise NotImplementedError("EndpointI.acceptor()")
+        raise NotImplementedError("EndpointI.equivalent()")
 
     def endpoint(self, aceptor):
         """Return a new endpoint, using the acceptor's information."""
@@ -198,7 +198,6 @@ class ConnectorI(object):
 
         self._communicator = communicator
         self._protocol = protocol
-        self._type = -1
 
     def __lt__(self, other):
         trace()
@@ -206,6 +205,9 @@ class ConnectorI(object):
 
     def type(self):
         trace()
+        if not hasattr(self, "_type"):
+            raise TypeError("EndpointI._type is missing")
+
         return self._type
 
     def connect(self):
