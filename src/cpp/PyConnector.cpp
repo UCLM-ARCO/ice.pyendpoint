@@ -43,9 +43,10 @@ PyEndpoint::PyConnector::type() const {
 std::string
 PyEndpoint::PyConnector::toString() const {
     trace();
-    fixme("Not implemented!");
-}
 
+    PyObjectPtr result = PyFunc::callMethod(_pyConnector, "toString");
+    return PyFunc::getAsString(result);
+}
 
 bool
 PyEndpoint::PyConnector::operator==(const IceInternal::Connector&) const {

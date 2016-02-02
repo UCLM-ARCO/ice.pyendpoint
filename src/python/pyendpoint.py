@@ -210,6 +210,11 @@ class ConnectorI(object):
 
         return self._type
 
+    def toString(self):
+        """Return an stringfied version of this connector."""
+
+        raise NotImplementedError("ConnectorI.toString()")
+
     def connect(self):
         """Perform an active conncetion."""
 
