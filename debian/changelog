@@ -1,3 +1,9 @@
+ice-pyendpoint (0.20160518-1) unstable; urgency=low
+
+  * New release, implements toString
+
+ -- Oscar Aceña Herrera <oscaracena@gmail.com>  Wed, 18 May 2016 11:31:41 +0200
+
 ice-pyendpoint (0.20160429-1) unstable; urgency=low
 
   * New release
