@@ -1,3 +1,9 @@
+ice-pyendpoint (0.20160923-1) unstable; urgency=low
+
+  * New release, ensure GIL on PyType_Ready
+
+ -- Oscar Aceña Herrera <oscaracena@gmail.com>  Fri, 23 Sep 2016 13:13:34 +0200
+
 ice-pyendpoint (0.20160518-1) unstable; urgency=low
 
   * New release, implements toString

@@ -25,37 +25,11 @@
 #include "debug.h"
 
 
-struct BasicStreamObject {
+typedef struct {
 
     PyObject_HEAD
     IceInternal::BasicStream* s;
-};
-
-extern PyTypeObject BasicStreamType;
-
-void
-PyEndpoint::BasicStream_initModule() {
-
-    if(PyType_Ready(&BasicStreamType) < 0) {
-    	std::cerr << "ERROR: could not initialize BasicStream type"
-    		  << std::endl;
-    	throw PyFunc::RuntimeError();
-    }
-}
-
-PyObject*
-PyEndpoint::BasicStream_new(IceInternal::BasicStream* s) {
-
-    IDG std::cout << " - call to BasicStream_new(" << s << ")" << std::endl;
-
-    BasicStreamObject* self = PyObject_New(BasicStreamObject, &BasicStreamType);
-    if(not self) {
-	return 0;
-    }
-
-    self->s = s;
-    return reinterpret_cast<PyObject*>(self);
-}
+} BasicStreamObject;
 
 static PyObject*
 BasicStream_startReadEncaps(BasicStreamObject* self, PyObject* args) {
@@ -183,7 +157,6 @@ static PyMethodDef basicStreamMethods[] = {
       METH_VARARGS, "read a string from stream" },
     { "readBlob", (PyCFunction)BasicStream_readBlob,
       METH_VARARGS, "read n bytes from stream" },
-
     { "startWriteEncaps", (PyCFunction)BasicStream_startWriteEncaps,
       METH_VARARGS, "prepare stream for writing" },
     { "endWriteEncaps", (PyCFunction)BasicStream_endWriteEncaps,
@@ -230,3 +203,29 @@ PyTypeObject BasicStreamType = {
     0,                            /* tp_iternext */
     basicStreamMethods            /* tp_methods */
 };
+
+void
+PyEndpoint::BasicStream_initModule() {
+    trace();
+
+    PyGILEnsurer pge;
+    if (PyType_Ready(&BasicStreamType) < 0) {
+    	std::cerr << "ERROR: could not initialize BasicStream type"
+    		  << std::endl;
+    	throw PyFunc::RuntimeError();
+    }
+}
+
+PyObject*
+PyEndpoint::BasicStream_new(IceInternal::BasicStream* s) {
+
+    IDG std::cout << " - call to BasicStream_new(" << s << ")" << std::endl;
+
+    BasicStreamObject* self = PyObject_New(BasicStreamObject, &BasicStreamType);
+    if (not self) {
+	return 0;
+    }
+
+    self->s = s;
+    return reinterpret_cast<PyObject*>(self);
+}

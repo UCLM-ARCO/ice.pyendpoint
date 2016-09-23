@@ -38,7 +38,7 @@
 
 extern "C" {
 
-Ice::Plugin*
+ICE_DECLSPEC_EXPORT Ice::Plugin*
 addPyEndpointSupport(const Ice::CommunicatorPtr& ic,
 		     const std::string& name,
 		     const Ice::StringSeq& args) {

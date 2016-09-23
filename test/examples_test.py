@@ -14,15 +14,15 @@ class TestDatagram(TestCase):
         gcc.command("make", timeout=20)
 
     def test(self):
-        # run server
+        # run server (expected -11 because Ice segfaults on close)
         server = Task("Run datagram server", detach=True)
-        server.command("./server_datagram.py", cwd="$example", env=self.env)
+        server.command("./server_datagram.py", cwd="$example", env=self.env, expected=-11)
         server.assert_that(server.lastcmd.stdout.content,
                            contains_string("ice_ping() was called"))
 
-        # run client
+        # run client (expected -11 because Ice segfaults on close)
         client = Task("Run datagram client")
-        client.command("./client_datagram.py", cwd="$example", env=self.env)
+        client.command("./client_datagram.py", cwd="$example", env=self.env, expected=-11)
 
 
 class TestTwoway(TestCase):
@@ -35,14 +35,14 @@ class TestTwoway(TestCase):
         gcc.command("make", timeout=20)
 
     def test(self):
-        # run server
+        # run server (expected -11 because Ice segfaults on close)
         server = Task("Run twoway server", detach=True)
-        server.command("./server_twoway.py", cwd="$example", env=self.env)
+        server.command("./server_twoway.py", cwd="$example", env=self.env, expected=-11)
         server.assert_that(server.lastcmd.stdout.content,
                            contains_string("ice_ids() was called"))
 
-        # run client
+        # run client (expected -11 because Ice segfaults on close)
         client = Task("Run twoway client")
-        client.command("./client_twoway.py", cwd="$example", env=self.env)
+        client.command("./client_twoway.py", cwd="$example", env=self.env, expected=-11)
         client.assert_that(client.lastcmd.stdout.content,
                            contains_string("IDS: ['Module::Interface1']"))

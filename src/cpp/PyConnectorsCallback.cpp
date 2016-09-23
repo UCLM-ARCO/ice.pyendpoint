@@ -37,34 +37,6 @@ struct PyConnectorsCallbackObject {
     IceInternal::ProtocolInstancePtr* instance;
 };
 
-extern PyTypeObject PyConnectorsCallbackType;
-
-void
-PyEndpoint::PyConnectorsCallback_initModule() {
-
-    if(PyType_Ready(&PyConnectorsCallbackType) < 0) {
-    	std::cerr << "ERROR: could not initialize PyConnectorsCallback type"
-    		  << std::endl;
-    	throw PyFunc::RuntimeError();
-    }
-}
-
-PyObjectPtr
-PyEndpoint::PyConnectorsCallback_new(const IceInternal::ProtocolInstancePtr& instance,
-				   const IceInternal::EndpointI_connectorsPtr& cb) {
-    trace();
-
-    PyConnectorsCallbackObject* self = PyObject_New(PyConnectorsCallbackObject,
-						  &PyConnectorsCallbackType);
-    if(not self) {
-        return 0;
-    }
-
-    self->instance = new IceInternal::ProtocolInstancePtr(instance);
-    self->cb = new IceInternal::EndpointI_connectorsPtr(cb);
-    return reinterpret_cast<PyObject*>(self);
-}
-
 static void
 PyConnectorsCallback_dealloc(PyConnectorsCallbackObject* self) {
     trace();
@@ -154,3 +126,31 @@ PyTypeObject PyConnectorsCallbackType = {
     0,                                /* tp_iternext */
     PyConnectorsCallbackMethods         /* tp_methods */
 };
+
+void
+PyEndpoint::PyConnectorsCallback_initModule() {
+    trace();
+
+    PyGILEnsurer pge;
+    if (PyType_Ready(&PyConnectorsCallbackType) < 0) {
+    	std::cerr << "ERROR: could not initialize PyConnectorsCallback type"
+    		  << std::endl;
+    	throw PyFunc::RuntimeError();
+    }
+}
+
+PyObjectPtr
+PyEndpoint::PyConnectorsCallback_new(const IceInternal::ProtocolInstancePtr& instance,
+				     const IceInternal::EndpointI_connectorsPtr& cb) {
+    trace();
+
+    PyConnectorsCallbackObject* self = PyObject_New(PyConnectorsCallbackObject,
+						    &PyConnectorsCallbackType);
+    if (not self) {
+        return 0;
+    }
+
+    self->instance = new IceInternal::ProtocolInstancePtr(instance);
+    self->cb = new IceInternal::EndpointI_connectorsPtr(cb);
+    return reinterpret_cast<PyObject*>(self);
+}
