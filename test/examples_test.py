@@ -1,7 +1,7 @@
 # -*- mode: python; coding: utf-8 -*-
 
 from hamcrest import contains_string
-from prego import TestCase, Task, context as ctx
+from prego import TestCase, Task, context as ctx, running
 
 
 class TestDatagram(TestCase):
@@ -22,6 +22,7 @@ class TestDatagram(TestCase):
 
         # run client (expected -11 because Ice segfaults on close)
         client = Task("Run datagram client")
+        client.wait_that(server.lastcmd.stdout.content, contains_string("Proxy"))
         client.command("./client_datagram.py", cwd="$example", env=self.env, expected=-11)
 
 

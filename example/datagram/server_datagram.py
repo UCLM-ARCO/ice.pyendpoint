@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -u
 # -*- mode: python; coding: utf-8 -*-
 
 import sys
@@ -20,7 +20,8 @@ class Server(Ice.Application):
 
         servant = ObjectI()
         oid = ic.stringToIdentity("ServerId")
-        print "Proxy @ '{}'".format(oa.add(servant, oid))
+        print("Proxy @ '{}'".format(oa.add(servant, oid)))
+        sys.stdout.flush()
 
         self.shutdownOnInterrupt()
         ic.waitForShutdown()
