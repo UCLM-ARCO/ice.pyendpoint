@@ -75,6 +75,16 @@ BasicStream_readBlob(BasicStreamObject* self, PyObject* args) {
 }
 
 static PyObject*
+BasicStream_readByte(BasicStreamObject* self, PyObject* args) {
+
+    IDG std::cout << " - call to BasicStream_readByte()" << std::endl;
+
+    Ice::Byte b;
+    self->s->read(b);
+    return PyString_FromStringAndSize((const char*)&b, 1);
+}
+
+static PyObject*
 BasicStream_startWriteEncaps(BasicStreamObject* self, PyObject* args) {
 
     IDG std::cout << " - call to BasicStream_startWriteEncaps()" << std::endl;
@@ -155,6 +165,8 @@ static PyMethodDef basicStreamMethods[] = {
       METH_VARARGS, "notify end of stream reading" },
     { "readString", (PyCFunction)BasicStream_readString,
       METH_VARARGS, "read a string from stream" },
+    { "readByte", (PyCFunction)BasicStream_readByte,
+      METH_VARARGS, "read a byte from stream" },
     { "readBlob", (PyCFunction)BasicStream_readBlob,
       METH_VARARGS, "read n bytes from stream" },
     { "startWriteEncaps", (PyCFunction)BasicStream_startWriteEncaps,

@@ -1,3 +1,9 @@
+ice-pyendpoint (0.20161013-1) unstable; urgency=low
+
+  * New release, added readByte on BasicStream
+
+ -- Oscar Aceña Herrera <oscaracena@gmail.com>  Thu, 13 Oct 2016 15:46:31 +0200
+
 ice-pyendpoint (0.20160923-1) unstable; urgency=low
 
   * New release, ensure GIL on PyType_Ready
