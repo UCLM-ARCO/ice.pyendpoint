@@ -33,7 +33,8 @@ struct CommunicatorObject {
 PyObjectPtr
 PyEndpoint::createCommunicator(const Ice::CommunicatorPtr& ic) {
     trace();
-
+    PyGILEnsurer e;
+    
     PyObjectPtr IcePy = PyFunc::importModule("IcePy");
     PyObjectPtr Communicator = PyFunc::getClass(IcePy, "Communicator");
     PyObjectPtr pyIc = PyFunc::newInstance(Communicator);

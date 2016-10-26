@@ -1,3 +1,9 @@
+ice-pyendpoint (0.20161026-1) unstable; urgency=low
+
+  * New release, ensure GIL on many other places
+
+ -- Oscar Aceña Herrera <oscaracena@gmail.com>  Wed, 26 Oct 2016 14:07:09 +0200
+
 ice-pyendpoint (0.20160923-1) unstable; urgency=low
 
   * New release, ensure GIL on PyType_Ready

@@ -26,7 +26,6 @@
 
 
 typedef struct {
-
     PyObject_HEAD
     IceInternal::BasicStream* s;
 } BasicStreamObject;
@@ -51,7 +50,6 @@ BasicStream_endReadEncaps(BasicStreamObject* self, PyObject* args) {
 
 static PyObject*
 BasicStream_readString(BasicStreamObject* self, PyObject* args) {
-
     IDG std::cout << " - call to BasicStream_readString()" << std::endl;
 
     std::string retval;

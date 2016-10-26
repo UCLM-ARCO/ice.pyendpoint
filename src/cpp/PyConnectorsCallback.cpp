@@ -49,7 +49,8 @@ PyConnectorsCallback_dealloc(PyConnectorsCallbackObject* self) {
 static PyObject*
 PyConnectorsCallback_connectors(PyConnectorsCallbackObject* self, PyObject* args) {
     trace();
-
+    PyGILEnsurer e;
+    
     PyObject* connList;
     if (not PyArg_ParseTuple(args, "O!", &PyList_Type, &connList)) {
 	return NULL;

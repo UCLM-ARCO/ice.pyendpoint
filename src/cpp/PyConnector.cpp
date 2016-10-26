@@ -69,6 +69,7 @@ PyEndpoint::PyConnector::operator<(const IceInternal::Connector& other) const {
         return type() < other.type();
     }
 
+    PyGILEnsurer e;
     PyObjectPtr pyOther = ((PyEndpoint::PyConnector&)other)._pyConnector;
     PyObjectPtr args = Py_BuildValue("(O)", pyOther.get());
     PyObjectPtr result = PyFunc::callMethod(_pyConnector, "__lt__", args);

@@ -82,7 +82,8 @@ PyEndpoint::PyEndpointI::getInfo() const {
 void
 PyEndpoint::PyEndpointI::streamWrite(IceInternal::BasicStream* s) const {
     trace();
-
+    PyGILEnsurer e;
+    
     PyObjectPtr pyStream = BasicStream_new(s);
     PyObjectPtr args = Py_BuildValue("(O)", pyStream.get());
     PyFunc::callMethod(_pyEndpoint, "streamWrite", args);
@@ -147,7 +148,8 @@ PyEndpoint::PyEndpointI::secure() const {
 PyEndpoint::PyEndpointIPtr
 PyEndpoint::PyEndpointI::endpoint(const PyAcceptorPtr& acceptor) const {
     trace();
-
+    PyGILEnsurer e;
+ 
     PyObjectPtr args = Py_BuildValue("(O)", acceptor->getPy().get());
     PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyEndpoint, "endpoint", args);
 
@@ -157,7 +159,8 @@ PyEndpoint::PyEndpointI::endpoint(const PyAcceptorPtr& acceptor) const {
 PyEndpoint::PyEndpointIPtr
 PyEndpoint::PyEndpointI::endpoint(const PyTransceiverPtr& trans) const {
     trace();
-
+    PyGILEnsurer e;
+ 
     PyObjectPtr args = Py_BuildValue("(O)", trans->getPy().get());
     PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyEndpoint, "endpoint", args);
 
@@ -226,6 +229,7 @@ PyEndpoint::PyEndpointI::equivalent(const IceInternal::EndpointIPtr& other) cons
 	return false;
     }
 
+    PyGILEnsurer e;
     PyObjectPtr args = Py_BuildValue("(O)", endp->getPy().get());
     PyObjectPtr retval = PyFunc::callMethod(_pyEndpoint, "equivalent", args);
     return PyFunc::getAsBool(retval);
@@ -250,6 +254,7 @@ PyEndpoint::PyEndpointI::connectors_async(Ice::EndpointSelectionType,
 					  const IceInternal::EndpointI_connectorsPtr& cb) const {
     trace();
 
+    PyGILEnsurer e;
     PyObjectPtr pyCb = PyConnectorsCallback_new(_instance, cb);
 
     // this returns a new reference
@@ -283,6 +288,7 @@ PyEndpoint::PyEndpointI::operator<(const Ice::LocalObject& other) const {
     }
 
     // Py_BuildValue returns a new reference
+    PyGILEnsurer e;    
     PyObjectPtr pyOther = p->_pyEndpoint;
     PyObjectPtr args = Py_BuildValue("(O)", pyOther.get());
     return PyFunc::getAsBool(PyFunc::callMethod(_pyEndpoint, "__lt__", args));
@@ -291,7 +297,8 @@ PyEndpoint::PyEndpointI::operator<(const Ice::LocalObject& other) const {
 void
 PyEndpoint::PyEndpointI::initWithOptions(std::vector<std::string>& args, bool oaEndpoint) {
     trace();
-
+    PyGILEnsurer e;
+    
     // PyTuple_SetItem steals a reference to object
 
     PyObject* args_tuple = PyTuple_New(args.size());
@@ -336,6 +343,7 @@ PyEndpoint::PyEndpointFactory::PyEndpointFactory(const std::string& name,
      	props->getPropertyWithDefault(preffix + ".Factory", "EndpointFactoryI");
 
     // all of this creates new references
+    PyGILEnsurer e;    
     _pyCommunicator = PyEndpoint::createCommunicator(ic);
     PyObjectPtr module = PyFunc::importModule(moduleName);
     PyObjectPtr factoryClass = PyFunc::getClass(module, factoryName);
@@ -383,7 +391,8 @@ PyEndpoint::PyEndpointFactory::create(std::vector<std::string>& args, bool oaEnd
 IceInternal::EndpointIPtr
 PyEndpoint::PyEndpointFactory::read(IceInternal::BasicStream* s) const {
     trace();
-
+    PyGILEnsurer e;
+    
     PyObjectPtr pyStream = BasicStream_new(s);
     PyObjectPtr args = Py_BuildValue("(O)", pyStream.get());
     PyObjectPtr pyEndpoint = PyFunc::callMethod(_pyFactory, "read", args);

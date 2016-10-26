@@ -5,7 +5,8 @@ PYTHON_VER = python2.7
 
 # If segfault...
 # DEBUG_OPS += -DEXTRA_DEBUG
-# DEBUG_OPS += -DDEBUG -ggdb
+# DEBUG_OPS += -DDEBUG
+# DEBUG_OPS += -ggdb
 
 VER        = 36
 LIB        = libIcePyEndpoint.so.$(VER)
