@@ -21,7 +21,7 @@ def trace():
     callframe = inspect.getouterframes(curframe, 2)
     path, line, method = callframe[1][1:4]
 
-    print "PYTHON: {}:{} {}".format(path, line, method)
+    print("PYTHON: {}:{} {}".format(path, line, method))
     sys.stdout.flush()
 
 
@@ -170,7 +170,7 @@ class NativeInfo(object):
         trace()
 
         if self._fd < 0 and log.activated:
-            print "WARNING: file descriptor is {}, this could be a problem".format(self._fd)
+            print("WARNING: file descriptor is {}, this could be a problem".format(self._fd))
 
         return self._fd
 

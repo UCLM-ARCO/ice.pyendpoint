@@ -1,4 +1,4 @@
-#!/usr/bin/python -u
+#!/usr/bin/python3 -u
 # -*- mode: python; coding: utf-8 -*-
 
 import sys
@@ -7,7 +7,7 @@ import Ice
 
 class ObjectI(Ice.Object):
     def ice_ping(self, current=None):
-        print "  ### ice_ping() was called!"
+        print("  ### ice_ping() was called!")
 
 
 class Server(Ice.Application):

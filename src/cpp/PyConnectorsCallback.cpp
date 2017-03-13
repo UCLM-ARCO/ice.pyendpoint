@@ -50,7 +50,7 @@ static PyObject*
 PyConnectorsCallback_connectors(PyConnectorsCallbackObject* self, PyObject* args) {
     trace();
     PyGILEnsurer e;
-    
+
     PyObject* connList;
     if (not PyArg_ParseTuple(args, "O!", &PyList_Type, &connList)) {
 	return NULL;
@@ -97,8 +97,7 @@ static PyMethodDef PyConnectorsCallbackMethods[] = {
 
 PyTypeObject PyConnectorsCallbackType = {
 
-    PyObject_HEAD_INIT(0)
-    0,                                /* ob_size */
+    PyVarObject_HEAD_INIT(NULL, 0)
     "PyEndpoint.PyConnectorsCallback",  /* tp_name */
     sizeof(PyConnectorsCallbackObject), /* tp_basicsize */
     0,                                /* tp_itemsize */

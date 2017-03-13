@@ -2,13 +2,13 @@ Source: ice-pyendpoint
 Section: devel
 Priority: extra
 Maintainer: Oscar Aceña Herrera <oscaracena@gmail.com>
-Build-Depends: debhelper (>= 8.0.0), python, libzeroc-ice-dev
+Build-Depends: debhelper (>= 8.0.0), python3, libzeroc-ice-dev
 Standards-Version: 3.9.6
 Homepage: https://bitbucket.org/arco_group/ice-pyendpoint
 
 Package: ice-pyendpoint
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}
 Description: Plugin for ZeroC-Ice
  It allows building new endpoints using Python, and use it on other
  languages. Provides a plugin, and a base class to implement new

@@ -1,7 +1,6 @@
 # -*- mode: makefile-gmake; coding: utf-8 -*-
 
 CXX        = g++
-PYTHON_VER = python2.7
 
 # If segfault...
 # DEBUG_OPS += -DEXTRA_DEBUG
@@ -10,12 +9,12 @@ PYTHON_VER = python2.7
 
 VER        = 36
 LIB        = libIcePyEndpoint.so.$(VER)
-CXXFLAGS   = -I. -IIcePy -Wall $$(python-config --includes) $(DEBUG_OPS) -fPIC
-LDFLAGS    = -L. $$(python-config --ldflags) \
+CXXFLAGS   = -I. -IIcePy -Wall $$(python3-config --includes) $(DEBUG_OPS) -fPIC
+LDFLAGS    = -L. $$(python3-config --ldflags) \
 	     -Wl,-soname,$(LIB) -fPIC -shared \
 	     -Wl,--no-undefined
 
-LDLIBS     = $$(python-config --libs) \
+LDLIBS     = $$(python3-config --libs) \
 	    -lIce -lIceUtil -lSlice -lIceSSL
 
 OBJS       = PyFunctions.o \

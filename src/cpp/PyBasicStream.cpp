@@ -54,7 +54,7 @@ BasicStream_readString(BasicStreamObject* self, PyObject* args) {
 
     std::string retval;
     self->s->read(retval);
-    return PyString_FromStringAndSize(retval.data(), retval.size());
+    return PyUnicode_FromStringAndSize(retval.data(), retval.size());
 }
 
 static PyObject*
@@ -69,7 +69,7 @@ BasicStream_readBlob(BasicStreamObject* self, PyObject* args) {
 
     const Ice::Byte* blob;
     self->s->readBlob(blob, size);
-    return PyString_FromStringAndSize((const char*)blob, size);
+    return PyUnicode_FromStringAndSize((const char*)blob, size);
 }
 
 static PyObject*
@@ -171,8 +171,7 @@ static PyMethodDef basicStreamMethods[] = {
 
 PyTypeObject BasicStreamType = {
 
-    PyObject_HEAD_INIT(0)
-    0,                            /* ob_size */
+    PyVarObject_HEAD_INIT(NULL, 0)
     "PyEndpoint.BasicStream",     /* tp_name */
     sizeof(BasicStreamObject),    /* tp_basicsize */
     0,                            /* tp_itemsize */

@@ -47,7 +47,7 @@ IceInternal::SocketOperation
 PyEndpoint::PyTransceiver::closing(bool initiator, const Ice::LocalException&) {
     trace();
     PyGILEnsurer e;
-    
+
     PyObjectPtr args = Py_BuildValue("(b)", initiator);
     PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "closing", args);
     bool sop = PyFunc::getAsBool(result);
@@ -77,7 +77,7 @@ PyEndpoint::PyTransceiver::write(IceInternal::Buffer& buf) {
     trace();
     PyGILEnsurer e;
 
-    PyObjectPtr pyBuf = PyBuffer_FromMemory(buf.i, buf.b.size());
+    PyObjectPtr pyBuf = PyMemoryView_FromMemory((char*)buf.i, buf.b.size(), PyBUF_READ);
     PyObjectPtr args = Py_BuildValue("(O)", pyBuf.get());
     PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "write", args);
     bool ok = PyFunc::getAsBool(result);
@@ -89,7 +89,7 @@ IceInternal::SocketOperation
 PyEndpoint::PyTransceiver::read(IceInternal::Buffer& buf, bool&) {
     trace();
     PyGILEnsurer e;
-    
+
     // PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver, "getMaxPaquetSize");
     // const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
     const int maxPacketSize = 256;
@@ -98,7 +98,7 @@ PyEndpoint::PyTransceiver::read(IceInternal::Buffer& buf, bool&) {
     buf.b.resize(maxPacketSize);
     buf.i = buf.b.begin();
 
-    PyObjectPtr pyBuf = PyBuffer_FromReadWriteMemory(buf.i, buf.b.size());
+    PyObjectPtr pyBuf = PyMemoryView_FromMemory((char*)buf.i, buf.b.size(), PyBUF_WRITE);
     PyObjectPtr args = Py_BuildValue("(O)", pyBuf.get());
     PyObjectPtr result = PyFunc::callMethod(_pyTransceiver, "read", args);
 
