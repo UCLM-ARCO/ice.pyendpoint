@@ -17,11 +17,15 @@ def trace():
     if not log.activated:
         return
 
-    curframe = inspect.currentframe()
-    callframe = inspect.getouterframes(curframe, 2)
-    path, line, method = callframe[1][1:4]
+    try:
+        c = sys._getframe(1).f_code
+        print("PYTHON: {}:{} {}".format(c.co_filename, c.co_firstlineno, c.co_name))
+    except ValueError:
+        print " - No enough info for stack trace"
 
-    print("PYTHON: {}:{} {}".format(path, line, method))
+    # curframe = inspect.currentframe()
+    # callframe = inspect.getouterframes(curframe, 2)
+    # path, line, method = callframe[1][1:4]
     sys.stdout.flush()
 
 
@@ -170,7 +174,7 @@ class NativeInfo(object):
         trace()
 
         if self._fd < 0 and log.activated:
-            print("WARNING: file descriptor is {}, this could be a problem".format(self._fd))
+            print "WARNING: file descriptor is {}, this could be a problem".format(self._fd)
 
         return self._fd
 
