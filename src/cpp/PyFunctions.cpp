@@ -29,10 +29,7 @@ PyFunc::importModule(std::string name) {
     PyGILEnsurer e;
 
     // this returns a new reference
-    PyObjectPtr nameObj = PyUnicode_FromString(name.c_str());
-
-    // this returns a new reference
-    PyObjectPtr moduleObj = PyImport_Import(nameObj);
+    PyObjectPtr moduleObj = PyImport_ImportModule(name.c_str());
 
     if (not moduleObj) {
 	PyErr_Print();
@@ -169,15 +166,14 @@ std::string
 PyFunc::getAsString(PyObjectPtr value) {
     PyGILEnsurer e;
 
-    Py_ssize_t length = 0;
-    char* buffer;
-    PyBytes_AsStringAndSize(value, &buffer, &length);
+    // this returns a new reference
+    PyObjectPtr ascii_value = PyUnicode_AsASCIIString(value);
+    std::string retval = PyBytes_AsString(ascii_value);
 
     if (PyErr_Occurred()) {
      	PyErr_Print();
     	throw PyFunc::RuntimeError();
     }
 
-    std::string retval(buffer, length);
     return retval;
 }

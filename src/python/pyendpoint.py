@@ -10,7 +10,7 @@ import inspect
 
 
 class log(object):
-    activated = False
+    activated = True
 
 
 def trace():
@@ -21,7 +21,7 @@ def trace():
         c = sys._getframe(1).f_code
         print("PYTHON: {}:{} {}".format(c.co_filename, c.co_firstlineno, c.co_name))
     except ValueError:
-        print " - No enough info for stack trace"
+        print(" - No enough info for stack trace")
 
     # curframe = inspect.currentframe()
     # callframe = inspect.getouterframes(curframe, 2)
@@ -68,7 +68,7 @@ class EndpointI(object):
 
         self._communicator = communicator
         self._protocol = protocol
-        self._connectionId = uuid.uuid4().get_hex()
+        self._connectionId = uuid.uuid4().hex[:]
 
     def __del__(self):
         trace()
@@ -174,7 +174,7 @@ class NativeInfo(object):
         trace()
 
         if self._fd < 0 and log.activated:
-            print "WARNING: file descriptor is {}, this could be a problem".format(self._fd)
+            print("WARNING: file descriptor is {}, this could be a problem".format(self._fd))
 
         return self._fd
 

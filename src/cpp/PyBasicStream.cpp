@@ -79,7 +79,7 @@ BasicStream_readByte(BasicStreamObject* self, PyObject* args) {
 
     Ice::Byte b;
     self->s->read(b);
-    return PyString_FromStringAndSize((const char*)&b, 1);
+    return PyBytes_FromStringAndSize((const char*)&b, 1);
 }
 
 static PyObject*
