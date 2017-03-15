@@ -8,11 +8,11 @@ from pyendpoint import (
     ConnectorI,
     TransceiverI,
     ConnectionInfo,
-    # log,
+    log,
     trace
 )
 
-# log.activated = True
+log.activated = False
 
 
 class DatagramEndpointFactoryI(EndpointFactoryI):

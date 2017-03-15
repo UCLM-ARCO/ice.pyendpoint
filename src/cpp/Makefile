@@ -4,8 +4,8 @@ CXX        = g++
 
 # If segfault...
 # DEBUG_OPS += -DEXTRA_DEBUG
-DEBUG_OPS += -DDEBUG
-DEBUG_OPS += -ggdb
+# DEBUG_OPS += -DDEBUG
+# DEBUG_OPS += -ggdb
 
 VER        = 36
 LIB        = libIcePyEndpoint.so.$(VER)

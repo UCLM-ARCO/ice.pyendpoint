@@ -1,4 +1,4 @@
-#!/usr/bin/python -u
+#!/usr/bin/python3 -u
 # -*- mode: python; coding: utf-8 -*-
 
 import sys
@@ -12,7 +12,7 @@ class ObjectI(Ice.Object):
     def ice_ids(self, current=None):
         self.count += 1
 
-        print "  ### ice_ids() was called!"
+        print("  ### ice_ids() was called!")
         return ["Module::Interface{0}".format(self.count)]
 
 
@@ -26,7 +26,7 @@ class Server(Ice.Application):
 
         servant = ObjectI()
         oid = ic.stringToIdentity("ServerId")
-        print "Proxy @ '{}'".format(oa.add(servant, oid))
+        print("Proxy @ '{}'".format(oa.add(servant, oid)))
 
         self.shutdownOnInterrupt()
         ic.waitForShutdown()

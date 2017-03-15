@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3 -u
 # -*- mode: python; coding: utf-8 -*-
 
 import sys
@@ -10,7 +10,7 @@ class Client(Ice.Application):
         ic = self.communicator()
         proxy = ic.stringToProxy("ServerId -t:twowayEndp -h 127.0.0.1 -p 9999")
 
-        print "IDS:", proxy.ice_ids()
+        print("IDS:", proxy.ice_ids())
 
         # import time
         # while True:

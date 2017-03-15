@@ -6,11 +6,13 @@ import Ice
 
 import sys
 import uuid
-import inspect
+# import inspect
+
+assert sys.version_info.major >= 3, "Only Python 3 supported!"
 
 
 class log(object):
-    activated = True
+    activated = False
 
 
 def trace():
@@ -35,7 +37,7 @@ class EndpointFactoryI(object):
 
         self._communicator = communicator
         self._type = -1
-        self._protocol = ""
+        self._protocol = u""
 
     def __del__(self):
         trace()

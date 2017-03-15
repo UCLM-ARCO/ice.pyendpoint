@@ -4,12 +4,12 @@ all:
 	$(MAKE) -C src $@
 
 .PHONY: test
-test:
+tests:
 	-prego -veo test/*_test.py
 
-install:
+install: clean
 	$(MAKE) -C src $@
-	python setup.py install \
+	python3 setup.py install \
 	--prefix=$(DESTDIR)/usr/ \
         --install-layout=deb
 
@@ -18,3 +18,4 @@ clean:
 	$(MAKE) -C src $@
 	$(RM) -rf build/
 	find -name "*.pyc" -delete
+	find -name "__pycache__" -delete
