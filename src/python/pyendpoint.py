@@ -197,6 +197,16 @@ class Acceptor(NativeInfo):
 
         raise NotImplementedError("Acceptor.close()")
 
+    def toString(self):
+        """Return a string representation of this object"""
+
+        raise NotImplementedError("Acceptor.toString()")
+
+    def toDetailedString(self):
+        """Return a detailed string representation of this object (mainly for tracing purposes)"""
+
+        raise NotImplementedError("Acceptor.toDetailedString()")
+
 
 class ConnectorI(object):
     def __init__(self, communicator, protocol):

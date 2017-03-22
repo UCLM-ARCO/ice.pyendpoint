@@ -66,13 +66,17 @@ PyEndpoint::PyAcceptor::protocol() const {
 std::string
 PyEndpoint::PyAcceptor::toString() const {
     trace();
-    fixme("Not implemented!");
+
+    PyObjectPtr result = PyFunc::callMethod(_pyAcceptor, "toString");
+    return PyFunc::getAsString(result);
 }
 
 std::string
 PyEndpoint::PyAcceptor::toDetailedString() const {
     trace();
-    fixme("Not implemented!");
+
+    PyObjectPtr result = PyFunc::callMethod(_pyAcceptor, "toDetailedString");
+    return PyFunc::getAsString(result);
 }
 
 PyEndpoint::PyAcceptor::PyAcceptor(const PyEndpointIPtr& endpoint,

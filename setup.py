@@ -3,10 +3,12 @@
 
 from distutils.core import setup
 
+
 def get_version():
     with open('debian/changelog', errors='ignore') as chlog:
         line = chlog.readline()
         return line.split()[1][1:-1]
+
 
 setup(name         = 'Ice-PyEndpoint',
       version      = get_version(),
