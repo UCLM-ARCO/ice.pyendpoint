@@ -15,12 +15,12 @@ class log(object):
     activated = False
 
 
-def trace():
+def trace(frame=1):
     if not log.activated:
         return
 
     try:
-        c = sys._getframe(1).f_code
+        c = sys._getframe(frame).f_code
         print("PYTHON: {}:{} {}".format(c.co_filename, c.co_firstlineno, c.co_name))
     except ValueError:
         print(" - No enough info for stack trace")
