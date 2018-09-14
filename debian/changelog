@@ -1,3 +1,9 @@
+ice-pyendpoint (0.20180914-1) unstable; urgency=low
+
+  * New release, retrieve maxPacketSize from Python implementation
+
+ -- Oscar Aceña Herrera <oscaracena@gmail.com>  Fri, 14 Sep 2018 11:20:10 +0200
+
 ice-pyendpoint (0.20170406-1) unstable; urgency=low
 
   * New release

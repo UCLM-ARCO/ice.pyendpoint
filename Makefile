@@ -9,6 +9,7 @@ tests:
 
 install: clean
 	$(MAKE) -C src $@
+	find -name "__pycache__" -delete
 	python3 setup.py install \
 	--prefix=$(DESTDIR)/usr/ \
         --install-layout=deb

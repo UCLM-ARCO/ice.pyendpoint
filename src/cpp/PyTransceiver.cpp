@@ -90,9 +90,9 @@ PyEndpoint::PyTransceiver::read(IceInternal::Buffer& buf, bool&) {
     trace();
     PyGILEnsurer e;
 
-    // PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver, "getMaxPaquetSize");
-    // const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
-    const int maxPacketSize = 256;
+    PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver, "getMaxPaquetSize");
+    const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
+    // const int maxPacketSize = 256;
 
     assert(buf.i == buf.b.begin());
     buf.b.resize(maxPacketSize);
@@ -161,9 +161,9 @@ void
 PyEndpoint::PyTransceiver::checkSendSize(const IceInternal::Buffer& buf) {
     trace();
 
-    // PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver, "getMaxPaquetSize");
-    // const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
-    const int maxPacketSize = 256;
+    PyObjectPtr maxSizeResult = PyFunc::callMethod(_pyTransceiver, "getMaxPaquetSize");
+    const int maxPacketSize = PyFunc::getAsInteger(maxSizeResult);
+    // const int maxPacketSize = 256;
 
     // FIXME: should this get checked on Python?
     if (buf.b.size() > maxPacketSize) {

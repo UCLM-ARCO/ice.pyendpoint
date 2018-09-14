@@ -269,6 +269,10 @@ class TransceiverI(NativeInfo):
 
         raise NotImplementedError("TransceiverI.getInfo()")
 
+    def getMaxPaquetSize(self):
+        trace()
+        return 256
+
     def initialize(self):
         trace()
         return 0
